@@ -22,66 +22,68 @@
 <script>
   $( function() {
   	 $('#tanggal').datepicker({
-        format: "dd-mm-yyyy",
+        format: "yyyy-mm-dd",
         autoclose:true,
         maxDate: "now"
     });  	
   } );
 </script>
 <div class="container ">
+
+	
 	<h1 class="text-center"><a href="home">LOGO</a></h1>
 	<h3 class="text-center"><strong>Daftarkan akunmu</strong></h3>
 	<p class="text-center"> Sudah mempunyai akun? Masuk <a href="">disini</a></p>
-
-	<div class="col-md-6 col-md-offset-3">
-		<div class="row">
-			<div class="form-group has-feedback register">
-			    <input type="text" class="form-control" placeholder="Nama Lengkap" />
-			    <i class="glyphicon glyphicon-user form-control-feedback"></i>
-			</div>
-		</div>
-		<div class="row">
-			
+	<form action="http://localhost/resto/utama/registerpelanggan/kirim" method="POST">
+		<div class="col-md-6 col-md-offset-3">
+			<div class="row">
 				<div class="form-group has-feedback register">
-	                <input type="text" class="form-control" name="tanggal" id="tanggal" placeholder="Tanggal Lahir" />
-	                <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
-	            </div>
-		</div>
-		<div class="row">
-			<div class="form-group has-feedback register">
-				<label class="radio-inline"> <input type="radio" name="gender" value="Pria">Pria</input></label>
-				<label class="radio-inline" > <input type="radio" name="gender" value="Wanita">Wanita</input></label>
-			</div>
-		</div>
-		<div class="row">
-				<div class="form-group has-feedback register">
-				    <input type="text" class="form-control" placeholder="Nomor Handphone" />
-				    <i class="glyphicon glyphicon-phone form-control-feedback"></i>
+				    <input type="text" class="form-control" placeholder="Nama Lengkap"  name="nama" maxlength="35"/>
+				    <i class="glyphicon glyphicon-user form-control-feedback"></i>
 				</div>
-		</div>
-		<div class="row">
-			<div class="form-group has-feedback register">
-			    <input type="text" class="form-control" placeholder="Alamat Email" />
-			    <i class="glyphicon glyphicon-envelope form-control-feedback"></i>
 			</div>
-		</div>
-		<div class="row">
-			<div class="form-group has-feedback register">
-			    <input type="password" class="form-control" placeholder="Password" />
-			    <i class="glyphicon glyphicon-lock form-control-feedback"></i>
+			<div class="row">
+					<div class="form-group has-feedback register">
+		                <input type="text" class="form-control" name="tanggal" id="tanggal" placeholder="Tanggal Lahir" maxlength="10" name="tanggal"/>
+		                <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
+		            </div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="form-group has-feedback register">
-			    <input type="password" class="form-control" placeholder="Ulang Password" />
-			    <i class="glyphicon glyphicon-lock form-control-feedback"></i>
+			<div class="row">
+				<div class="form-group has-feedback register">
+					<label class="radio-inline"> <input type="radio" name="gender" value="Pria">Pria</input></label>
+					<label class="radio-inline" > <input type="radio" name="gender" value="Wanita">Wanita</input></label>
+				</div>
 			</div>
+			<div class="row">
+					<div class="form-group has-feedback register">
+					    <input type="text" class="form-control" placeholder="Nomor Handphone" name="nohp" maxlength="25"/>
+					    <i class="glyphicon glyphicon-phone form-control-feedback"></i>
+					</div>
+			</div>
+			<div class="row">
+				<div class="form-group has-feedback register">
+				    <input type="text" class="form-control" placeholder="Alamat Email" name="email" maxlength="30"/>
+				    <i class="glyphicon glyphicon-envelope form-control-feedback"></i>
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group has-feedback register">
+				    <input type="password" class="form-control" placeholder="Password" name="password" maxlength="25"/>
+				    <i class="glyphicon glyphicon-lock form-control-feedback"></i>
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group has-feedback register">
+				    <input type="password" class="form-control" placeholder="Ulang Password" name="konfpassword"/>
+				    <i class="glyphicon glyphicon-lock form-control-feedback"></i>
+				</div>
+			</div>
+			
+			
+			<h6>Dengan mendaftarkan akun ini, saya menyatakan setuju dengan <a href="">peraturan</a> dan <a href="">kebijakan keamanan</a> dari blabla.com</h6>
+			<div class="row"><button class="btn btn-large btn-block btn-success paling bawah" type="submit" name="daftar">DAFTAR</button></div>
 		</div>
-		
-		
-		<h6>Dengan mendaftarkan akun ini, saya menyatakan setuju dengan <a href="">peraturan</a> dan <a href="">kebijakan keamanan</a> dari blabla.com</h6>
-		<div class="row"><button class="btn btn-large btn-block btn-success paling bawah" type="button">DAFTAR</button></div>
-	</div>
+	</form>
 </div>
 </body>
 </html>
