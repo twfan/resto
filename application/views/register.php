@@ -29,12 +29,10 @@
   } );
 </script>
 <div class="container ">
-
-	
 	<h1 class="text-center"><a href="home">LOGO</a></h1>
 	<h3 class="text-center"><strong>Daftarkan akunmu</strong></h3>
 	<p class="text-center"> Sudah mempunyai akun? Masuk <a href="">disini</a></p>
-	<form action="http://localhost/resto/utama/registerpelanggan/kirim" method="POST">
+	<form action="http://localhost/resto/utama/registerpelanggan" method="POST">
 		<div class="col-md-6 col-md-offset-3">
 			<div class="row">
 				<div class="form-group has-feedback register">
@@ -78,8 +76,6 @@
 				    <i class="glyphicon glyphicon-lock form-control-feedback"></i>
 				</div>
 			</div>
-			
-			
 			<h6>Dengan mendaftarkan akun ini, saya menyatakan setuju dengan <a href="">peraturan</a> dan <a href="">kebijakan keamanan</a> dari blabla.com</h6>
 			<div class="row"><button class="btn btn-large btn-block btn-success paling bawah" type="submit" name="daftar">DAFTAR</button></div>
 		</div>

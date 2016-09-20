@@ -13,7 +13,7 @@ class Utama extends CI_Controller {
 
 	}
 
-	public function registerpelanggan($param=null)
+	public function registerpelanggan()
 	{
 		$this->load->model('db_model');
 		$post = $this->input->post();
@@ -32,8 +32,7 @@ class Utama extends CI_Controller {
 
 		if($konfpassword==$password)
 		{
-			if($param=='kirim')
-			{
+			
 				if(!empty($post['nama']) && !empty($post['tanggal']) && !empty($post['gender']) && !empty($post['nohp']) && !empty($post['email']) && !empty($post['password']) )
 				{
 					$jumlahdata = $this->db_model->jumlah_data('user_login');
@@ -47,8 +46,6 @@ class Utama extends CI_Controller {
 						'email_user' => $post['email'],
 						'password' => $post['password']
 						);
-
-					
 					$this->db_model->tambah_data('user_login',$data);
 					redirect('utama/home');
 					//print_r($data);
@@ -58,17 +55,14 @@ class Utama extends CI_Controller {
 					//berarti ada yang kosong field nya
 				}
 				
-			}else
-			{
-				//kalo belom ada parameter kirim
-				$this->load->view('register');
-			}
+			
 
 		}else
 		{
 			//kalo password ga sama
 			$this->load->view('register');
 		}
+		$this->load->view('register');
 		
 	}
 
