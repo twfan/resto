@@ -22,4 +22,9 @@ class Utama extends CI_Controller {
 		$data = array()
 		$this->load->view('register');
 	}
+
+	public function home()
+	{
+		$this->load->view('home');
+	}
 }
