@@ -21,7 +21,7 @@
 
 <!-- NAVBAR -->
 
-	<nav class="navbar navbar-default">
+	<nav class="navbar navbar-default" style="background-color: #D2D7D3;">
 	  <div class="container">
 	    <!-- Brand and toggle get grouped for better mobile display -->
 	    <div class="navbar-header">
@@ -82,19 +82,19 @@
 		  <!-- Wrapper for slides -->
 		  <div class="carousel-inner" role="listbox">
 		    <div class="item active">
-		      <img src="http://lorempixel.com/1500/600/food/1" alt="Testing 1">
+		      <img src="<?php echo base_url(); ?>assets/img/banner/1.jpg" alt="Testing 1">
 		      <div class="carousel-caption">
 		        Gambar 1
 		      </div>
 		    </div>
 		    <div class="item">
-		      <img src="http://lorempixel.com/1500/600/food/2" alt="Testing 2">
+		      <img src="<?php echo base_url(); ?>assets/img/banner/2.jpg" alt="Testing 2">
 		      <div class="carousel-caption">
 		       Gambar 2
 		      </div>
 		    </div>
 		    <div class="item">
-		      <img src="http://lorempixel.com/1500/600/food/3" alt="Testing 3">
+		      <img src="<?php echo base_url(); ?>assets/img/banner/3.jpg" alt="Testing 3">
 		      <div class="carousel-caption">
 		      Gambar 3
 		      </div>
@@ -116,7 +116,21 @@
 
 
 <!-- END OF SLIDER -->
-
+<div class="row" id="combobox_pencarian">
+	<div class="col-md-3">
+		<div class="dropdown" >
+		    <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown" style="width:250px;height:50px;">Tutorials
+		    <span class="caret"></span></button>
+		    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" style="width:250px;">
+		      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
+		      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
+		      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
+		      <li role="presentation" class="divider"></li>
+		      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
+		    </ul>
+		 </div>
+	</div>
+</div>
 
 <!-- CONTENT -->
 

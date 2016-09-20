@@ -10,7 +10,7 @@ class Utama extends CI_Controller {
 	}
 	public function index()
 	{
-
+		$this->load->view('home');
 	}
 
 	public function registerpelanggan()
@@ -47,7 +47,7 @@ class Utama extends CI_Controller {
 						'password' => $post['password']
 						);
 					$this->db_model->tambah_data('user_login',$data);
-					redirect('utama/home');
+					redirect('utama');
 					//print_r($data);
 				}
 				else
@@ -68,6 +68,6 @@ class Utama extends CI_Controller {
 
 	public function home()
 	{
-		$this->load->view('home');
+		
 	}
 }
