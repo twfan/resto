@@ -1,21 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Home</title>
+	<title>RESTO</title>
 
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/style.css">
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.css">
+	<!-- <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/combobox/css/bootstrap-combobox.css"> -->
+	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/jqueryui/jquery-ui.css">
+	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/datepicker/css/datepicker.css">
 	
 	<script src="http://code.jquery.com/jquery.min.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.js"></script>
+	<script src="<?php echo base_url(); ?>assets/plugin/jqueryui/jquery-ui.js"></script>
+	<script src="<?php echo base_url(); ?>assets/plugin/datepicker/js/bootstrap-datepicker.js"></script>
+	
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
+	
+<script type="text/javascript">
+  $(document).ready(function(){
+    /*$('.combobox').combobox();*/
+    $('#tanggal').datepicker({
+        format: "dd-mm-yyyy",
+        autoclose:true,
+        maxDate: "now",
+        startDate: "+1d"
+    });  	
+  });
+</script>
+
 </head>
+
 <body>
 
 
@@ -53,7 +73,7 @@
 	        </li>
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
-	        <li><a href="registerpelanggan">Register</a></li>
+	        <li><a href="utama/registerpelanggan">Register</a></li>
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
@@ -112,27 +132,100 @@
 		  </a>
 		</div>
 	</div>
+
+
+
+
 	
 
 
 <!-- END OF SLIDER -->
-<div class="row" id="combobox_pencarian">
+
+
+
+<div class="row">
+
+</div>
+<h2>Buat reservasi meja mu dengan mudah</h2>
+<div class="row style-combobox" >
 	<div class="col-md-3">
-		<div class="dropdown" >
-		    <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown" style="width:250px;height:50px;">Tutorials
-		    <span class="caret"></span></button>
-		    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" style="width:250px;">
-		      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
-		      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
-		      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
-		      <li role="presentation" class="divider"></li>
-		      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
-		    </ul>
-		 </div>
+		<div class="form-group has-feedback">
+			<select class="combobox" style="width:250px;height:50px;" prompt="Jumlah kursi yang dipesan">
+				<option value="" disabled selected>Jumlah kursi</option>
+				<option value="1">1 Orang</option>
+				<option value="2">2 Orang</option>
+				<option value="3">3 Orang</option>
+				<option value="4">4 Orang</option>
+				<option value="5">5 Orang</option>
+				<option value="6">6 Orang</option>
+				<option value="7">7 Orang</option>
+				<option value="8">8 Orang</option>
+				<option value="9">9 Orang</option>
+				<option value="10">10 Orang</option>
+				<option value="11">11 Orang</option>
+				<option value="12">12 Orang</option>
+				<option value="13">13 Orang</option>
+				<option value="14">14 Orang</option>
+				<option value="15">15 Orang</option>
+				<option value="16">16 Orang</option>
+				<option value="17">17 Orang</option>
+				<option value="18">18 Orang</option>
+				<option value="19">19 Orang</option>
+				<option value="20">20 Orang</option>
+				<option value="pesta">Pesta besar</option>
+				
+			</select>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="form-group has-feedback">
+			<input type="text" class="form-control" name="tanggal" id="tanggal" placeholder="Tanggal" maxlength="20" name="tanggal" style="width:250px;height:50px;"/>
+		 	<!-- <i class="glyphicon glyphicon-chevron-down form-control-feedback"></i> -->
+		</div>
+		 
+	</div>
+	<div class="col-md-3">
+		<select class="combobox" style="width:250px;height:50px;" prompt="Jumlah kursi yang dipesan">
+			<option value="" disabled selected>Jam acara</option>
+			<option value="10">10.00 AM</option>
+			<option value="11">11.00 AM</option>
+			<option value="12">12.00 AM</option>
+			<option value="13">13.00 PM</option>
+			<option value="14">14.00 PM</option>
+			<option value="15">15.00 PM</option>
+			<option value="16">16.00 PM</option>
+			<option value="17">17.00 PM</option>
+			<option value="18">18.00 PM</option>
+			<option value="19">19.00 PM</option>
+			<option value="20">20.00 PM</option>
+			<option value="21">21.00 PM</option>
+		</select>
+	</div>
+
+	<div class="col-md-3">
+		<button class="btn btn-block btn-success paling bawah" type="submit" name="cari" style="width:250px;height:50px;" >CARI</button>
 	</div>
 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- CONTENT -->
+
 
 <div class="row" id="berita">
 	<div class="col-md-6">
@@ -170,7 +263,7 @@
 <div class="container-fluid" style="background-color:grey;">
 	<div class="container" >
 		<div class="row" >
-			<div class="col-md-4 text-left"><h4>Blabla.com</h4></div>
+			<div class="col-md-4 text-left"><h4>resto.com</h4></div>
 			<div class="col-md-4 col-md-offset-4 text-right" ><h4>Footer</h4></div>
 		</div>
 	</div>

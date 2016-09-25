@@ -11,22 +11,14 @@ class Utama extends CI_Controller {
 	public function index()
 	{
 		$this->load->view('home');
+
 	}
 
 	public function registerpelanggan()
 	{
 		$this->load->model('db_model');
 		$post = $this->input->post();
-		
-		/*if($param=='kirim')
-		{
-			echo "asdasdsadasasdsasdsasadas";
-			$jumlahdata = $this->db_model->jumlah_data('user_login');
-			echo $jumlahdata + 1;	
-		}else
-		{
-			$this->load->view('register');
-		}*/
+	
 		$password= $this->input->post('password');
 		$konfpassword= $this->input->post('konfpassword');
 
@@ -48,6 +40,7 @@ class Utama extends CI_Controller {
 						);
 					$this->db_model->tambah_data('user_login',$data);
 					redirect('utama');
+					
 					//print_r($data);
 				}
 				else
@@ -66,8 +59,8 @@ class Utama extends CI_Controller {
 		
 	}
 
-	public function home()
+	public function register_resto()
 	{
-		
+		$this->load->view('register_resto');
 	}
 }
