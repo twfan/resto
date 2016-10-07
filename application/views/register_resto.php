@@ -31,43 +31,53 @@
 <div class="container ">
 	<div class="col-md-6 col-md-offset-3">
 			<h1 class="text-center"><a href="home">RESTO</a></h1>
-			<h3 class="text-center" ><strong>Awali sukses restauran mu dengan Resto</strong></h3>
+			<h3 class="text-center" ><strong>Awali sukses restauranmu dengan Resto</strong></h3>
 			<p class="text-center"> Kita senang berbincang-bincang dengan para kustomer tentang bisnis unik mereka, telpon kami di <a href="">031-8381400</a>, kirim email ke <a href="">marketing@resto.com</a> atau deskripsikan restauranmu di bawah ini.</p>
 			<form action="http://localhost/resto/utama/registerpelanggan/kirim" method="POST">
 			<hr>
 			<div class="row">
 				<div class="col-md-6">
-					<input type="text" class="form-control" placeholder="Nama depan"  name="nama" maxlength="35"/>
+					<input type="text" class="form-control" placeholder="Nama depan"  name="nama_depan" maxlength="35"/>
 				</div>
 				<div class="col-md-6">
-					<input type="text" class="form-control" placeholder="Nama belakang"  name="nama" maxlength="35"/>
+					<input type="text" class="form-control" placeholder="Nama belakang"  name="nama_belakang" maxlength="35"/>
 				</div>
 			</div>
 			<div class="row" style="margin-top:10px;">
 				<div class="col-md-6">
-					<input type="text" class="form-control" placeholder="Nomor telpon"  name="nama" maxlength="35"/>
+					<input type="text" class="form-control" placeholder="Nomor telpon"  name="telpon" maxlength="35"/>
 				</div>
 				<div class="col-md-6">
-					<input type="text" class="form-control" placeholder="Alamat Email"  name="nama" maxlength="35"/>
+					<input type="text" class="form-control" placeholder="Alamat Email"  name="email" maxlength="35"/>
 				</div>
 			</div>
 			<div class="row" style="margin-top:10px;">
 				<div class="col-md-6">
-					<input type="text" class="form-control" placeholder="Nama Restaurant"  name="nama" maxlength="35"/>
+					<input type="text" class="form-control" placeholder="Nama Restaurant"  name="nama_resto" maxlength="35"/>
 				</div>
 				<div class="col-md-6">
-					<input type="text" class="form-control" placeholder="Alamat Restaurant"  name="nama" maxlength="35"/>
+					<input type="text" class="form-control" placeholder="Alamat Restaurant"  name="alamat_resto" maxlength="35"/>
 				</div>
 			</div>
 			<div class="row" style="margin-top:10px;">
 				<div class="col-md-4">
-					<input type="text" class="form-control" placeholder="Kode pos"  name="nama" maxlength="35"/>
+					<input type="text" class="form-control" placeholder="Kode pos"  name="kode_pos" maxlength="35"/>
 				</div>
 				<div class="col-md-4">
-					<input type="text" class="form-control" placeholder="Kota"  name="nama" maxlength="35"/>
+					<!-- <input type="text" class="form-control" placeholder="Kota"  name="nama" maxlength="35"/> -->
+					<select class="combobox form-control" style="height:33px;" prompt="Kota">
+						<option value="" disabled selected>Kota</option>
+						<option value="SBY">Kota Surabaya</option>
+						<option value="SDA">Kab. Sidoarjo</option>
+						<option value="MLG">Kota Malang</option>
+						<option value="PRO">Kota Probolinggo</option>
+					</select>
 				</div>
 				<div class="col-md-4">
-					<input type="text" class="form-control" placeholder="provinsi"  name="nama" maxlength="35"/>
+					<select class="combobox form-control" style="height:33px;" prompt="Provinsi">
+						<option value="" disabled selected>Provinsi</option>
+						<option value="JATIM">Jawa Timur</option>
+					</select>
 				</div>
 			</div>
 			
@@ -77,45 +87,10 @@
 				</div>
 				
 			</div>
-			<!-- <div class="row">
-				<div class="form-group has-feedback register">
-				    <input type="text" class="form-control" placeholder="Nama Lengkap"  name="nama" maxlength="35"/>
-				    <i class="glyphicon glyphicon-user form-control-feedback"></i>
-				</div>
-			</div>
-			<div class="row">
-					<div class="form-group has-feedback register">
-					    <input type="text" class="form-control" placeholder="Nomor Handphone" name="nohp" maxlength="25"/>
-					    <i class="glyphicon glyphicon-phone form-control-feedback"></i>
-					</div>
-			</div>
-			<div class="row">
-				<div class="form-group has-feedback register">
-				    <input type="text" class="form-control" placeholder="Alamat Email" name="email" maxlength="30"/>
-				    <i class="glyphicon glyphicon-envelope form-control-feedback"></i>
-				</div>
-			</div>
-			<div class="row">
-				<div class="form-group has-feedback register">
-				    <input type="text" class="form-control" placeholder="Nama restaurant" name="nama_resto" maxlength="35"/>
-				    <i class="glyphicon glyphicon-cutlery form-control-feedback"></i>
-				</div>
-			</div>
-			<div class="row">
-				<div class="form-group has-feedback register">
-				    <input type="text" class="form-control" placeholder="Provinsi" name="nama_resto" maxlength="35"/>
-				    <i class="glyphicon glyphicon-cutlery form-control-feedback"></i>
-				</div>
-			</div>
-			<div class="row">
-				<div class="form-group has-feedback register">
-				    <input type="text" class="form-control" placeholder="Nama restaurant" name="nama_resto" maxlength="35"/>
-				    <i class="glyphicon glyphicon-cutlery form-control-feedback"></i>
-				</div>
-			</div> -->
 			
-			<h6>Dengan mendaftarkan akun ini, saya menyatakan setuju dengan <a href="">peraturan</a> dan <a href="">kebijakan keamanan</a> dari blabla.com</h6>
-			<div class="row"><button class="btn btn-large btn-block btn-success paling bawah" type="submit" name="daftar">DAFTAR</button></div>
+			
+			<h6>Dengan mendaftarkan akun ini, saya menyatakan setuju dengan <a href="">peraturan</a> dan <a href="">kebijakan keamanan</a> dari resto.com</h6>
+			<div class="row"><button class="btn btn-large btn-block btn-success paling bawah" type="submit" name="daftar">Kirim ke Resto</button></div>
 		</div>
 	</form>
 </div>

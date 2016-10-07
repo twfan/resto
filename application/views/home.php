@@ -150,7 +150,7 @@
 <div class="row style-combobox" >
 	<div class="col-md-3">
 		<div class="form-group has-feedback">
-			<select class="combobox" style="width:250px;height:50px;" prompt="Jumlah kursi yang dipesan">
+			<select class="combobox form-control" style="width:250px;height:50px;" prompt="Jumlah kursi yang dipesan">
 				<option value="" disabled selected>Jumlah kursi</option>
 				<option value="1">1 Orang</option>
 				<option value="2">2 Orang</option>
@@ -185,7 +185,7 @@
 		 
 	</div>
 	<div class="col-md-3">
-		<select class="combobox" style="width:250px;height:50px;" prompt="Jumlah kursi yang dipesan">
+		<select class="combobox form-control" style="width:250px;height:50px;" prompt="Jumlah kursi yang dipesan">
 			<option value="" disabled selected>Jam acara</option>
 			<option value="10">10.00 AM</option>
 			<option value="11">11.00 AM</option>

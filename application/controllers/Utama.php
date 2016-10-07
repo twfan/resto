@@ -14,6 +14,11 @@ class Utama extends CI_Controller {
 
 	}
 
+	public function home()
+	{
+		redirect("utama/");
+	}
+
 	public function registerpelanggan()
 	{
 		$this->load->model('db_model');
