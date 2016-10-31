@@ -31,18 +31,27 @@
 <div class="container ">
 	<h1 class="text-center"><a href="home">LOGO</a></h1>
 	<h3 class="text-center"><strong>Daftarkan akunmu</strong></h3>
-	<p class="text-center"> Sudah mempunyai akun? Masuk <a href="">disini</a></p>
-	<form action="http://localhost/resto/utama/registerpelanggan/kirim" method="POST">
-		<div class="col-md-6 col-md-offset-3">
+	<p class="text-center"> Sudah mempunyai akun? Masuk <a href="login">disini</a></p>
+	<form action="http://localhost/resto/utama/registerpelanggan" method="POST">
+		<div class="col-md-4 col-md-offset-4">
+			<?php
+			if($this->session->flashdata('email_kembar')!=''){
+			?>
+			<div class="row">
+				<?php echo $this->session->flashdata('email_kembar'); ?>
+			</div>
+			<?php
+			}
+			?>
 			<div class="row">
 				<div class="form-group has-feedback register">
-				    <input type="text" class="form-control" placeholder="Nama Lengkap"  name="nama" maxlength="35"/>
+				    <input type="text" class="form-control" placeholder="Nama Lengkap"  name="nama" maxlength="35" value="<?php echo set_value('nama'); ?>"/>
 				    <i class="glyphicon glyphicon-user form-control-feedback"></i>
 				</div>
 			</div>
 			<div class="row">
 					<div class="form-group has-feedback register">
-		                <input type="text" class="form-control" name="tanggal" id="tanggal" placeholder="Tanggal Lahir" maxlength="10" name="tanggal"/>
+		                <input type="text" class="form-control" name="tanggal" id="tanggal" placeholder="Tanggal Lahir" maxlength="10" name="tanggal" value="<?php echo set_value('tanggal'); ?>"/>
 		                <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
 		            </div>
 			</div>
@@ -54,19 +63,19 @@
 			</div>
 			<div class="row">
 					<div class="form-group has-feedback register">
-					    <input type="text" class="form-control" placeholder="Nomor Handphone" name="nohp" maxlength="25"/>
+					    <input type="text" class="form-control" placeholder="Nomor Handphone" name="nohp" maxlength="25" value="<?php echo set_value('nohp'); ?>"/>
 					    <i class="glyphicon glyphicon-phone form-control-feedback"></i>
 					</div>
 			</div>
 			<div class="row">
 				<div class="form-group has-feedback register">
-				    <input type="text" class="form-control" placeholder="Alamat Email" name="email" maxlength="30"/>
+				    <input type="text" class="form-control" placeholder="Alamat Email" name="email" maxlength="30" value="<?php echo set_value('email'); ?>"/>
 				    <i class="glyphicon glyphicon-envelope form-control-feedback"></i>
 				</div>
 			</div>
 			<div class="row">
 				<div class="form-group has-feedback register">
-				    <input type="password" class="form-control" placeholder="Password" name="password" maxlength="25"/>
+				    <input type="password" class="form-control" placeholder="Password" name="password" maxlength="25" />
 				    <i class="glyphicon glyphicon-lock form-control-feedback"></i>
 				</div>
 			</div>
@@ -76,7 +85,10 @@
 				    <i class="glyphicon glyphicon-lock form-control-feedback"></i>
 				</div>
 			</div>
-			<h6>Dengan mendaftarkan akun ini, saya menyatakan setuju dengan <a href="">peraturan</a> dan <a href="">kebijakan keamanan</a> dari resto.com</h6>
+			<div class="row">
+				<h6 style="text-align:center;">Dengan mendaftarkan akun ini, saya menyatakan setuju dengan <a href="">peraturan</a> dan <a href="">kebijakan keamanan</a> dari resto.com</h6>
+			</div>
+			
 			<div class="row"><button class="btn btn-large btn-block btn-success paling bawah" type="submit" name="daftar">DAFTAR</button></div>
 		</div>
 	</form>

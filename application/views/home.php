@@ -73,7 +73,9 @@
 	        </li>
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
-	        <li><a href="utama/registerpelanggan">Register</a></li>
+	        <li><a href="utama/registerpelanggan">Daftar</a></li>
+	        <li><a href="utama/login">Login</a></li>
+	        
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
