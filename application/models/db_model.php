@@ -23,9 +23,9 @@ class Db_model extends CI_Model{
 	}
 
 	function login($table,$data){
-		$email_user = $data['email_user'];
+		$email_user = $data['email'];
 		$password_user = $data['password'];
-		$q = $this->db-> get_where ($table,array('email_user'=>$email_user,'password'=>$password_user));
+		$q = $this->db-> get_where ($table,array('email_resto'=>$email_user,'password'=>$password_user));
 		$hasil_data = $q->result_array();
 		return $hasil_data;
 	}
