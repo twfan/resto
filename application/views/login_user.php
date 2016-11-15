@@ -33,7 +33,7 @@
   } );
 </script>
 <div class="container" id="login">
-	<h1 class="text-center"><a href="home">LOGO</a></h1>
+	<h1 class="text-center"><a href="">LOGO</a></h1>
 	<h3 class="text-center"><strong>Ayo mulai !</strong></h3>
 	<!-- <p class="text-center"> Sudah mempunyai akun? Masuk <a href="">disini</a></p> -->
 	<form action="http://localhost/resto/utama/login" method="POST">

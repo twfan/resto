@@ -75,16 +75,16 @@
 	<div class="row" style="background-color:#F2F1EF;">
 		<div class="col-md-2 panel_kiri">
 			<div class="row">
-				<a href=""><div class="col-md-12 menu"><li >Kelola resto</li></div></a>
+				<a href=""><div class="col-md-12 menu"><li >Reservation</li></div></a>
 			</div>
 			<div class="row">
-				<a href=""><div class="col-md-12 menu"><li >List pesanan</li></div></a>
+				<a href=""><div class="col-md-12 menu"><li >About</li></div></a>
 			</div>
 			<div class="row">
-				<a href=""><div class="col-md-12 menu"><li >Detail Resto</li></div></a>
+				<a href=""><div class="col-md-12 menu"><li >Photos</li></div></a>
 			</div>
 			<div class="row">
-				<a href=""><div class="col-md-12 menu"><li >History Pesanan</li></div></a>
+				<a href=""><div class="col-md-12 menu"><li >Menu</li></div></a>
 			</div>
 		</div>
 		<div class="col-md-10">
