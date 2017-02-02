@@ -29,6 +29,30 @@ class Db_model extends CI_Model{
 		$hasil_data = $q->result_array();
 		return $hasil_data;
 	}
+
+	function read_data($table,$parameter)
+	{
+		$hasil_data = $this->db->get_where($table, array('kode_resto' => $parameter));
+		if($hasil_data->num_rows() > 0)
+		{
+			return "data ada";
+		}else
+		{
+			return "data tidak ada";
+		}
+	}
+
+	function cari_data($table,$parameter)
+	{
+		$hasil_data = $this->db->get_where($table, array('kode_resto' => $parameter));
+		return $hasil_data->result();
+	}
+
+	function update_data($kode_resto,$data)
+	{
+		$this->db->where('kode_resto', $kode_resto);
+		$this->db->update('about_resto', $data);
+	}
 }
 
 

@@ -69,32 +69,26 @@
 <body>
 <div class="container-fluid wrapper" >
 	<div class="row header">
-		<div class="col-md-10  "> <h3>Dashboard User Resto</h3></div>
+		<div class="col-md-10  "> <h3><a href="<?= base_url('owner/dashboard_owner') ?>">Dashboard User Resto </a></h3></div>
 		<a href="log_out"> <div class="col-md-2 sign-out"><h5>Sign Out  <span class="glyphicon glyphicon-log-out" ></span></h5></div></a>
 	</div>
 	<div class="row" style="background-color:#F2F1EF;">
 		<div class="col-md-2 panel_kiri">
 			<div class="row">
-				<a href=""><div class="col-md-12 menu"><li >Reservation</li></div></a>
+				<a href="<?= base_url('owner/dashboard_owner') ?>"><div class="col-md-12 menu"><li >Reservation</li></div></a>
 			</div>
 			<div class="row">
-				<a href=""><div class="col-md-12 menu"><li >About</li></div></a>
+				<a href="<?= base_url('owner/dashboard_about') ?>"><div class="col-md-12 menu"><li>About</li></div></a>
 			</div>
-			<div class="row">
-				<a href=""><div class="col-md-12 menu"><li >Photos</li></div></a>
-			</div>
-			<div class="row">
-				<a href=""><div class="col-md-12 menu"><li >Menu</li></div></a>
-			</div>
+			
+			
 		</div>
 		<div class="col-md-10">
 			<div class="content_panel">
 				<div class="col-md-12">
 					<div class="row">
+						
 						<div class="col-md-4">Selamat datang <?php echo $this->session->userdata('user'); ?></div>
-						<!-- <div class="col-md-4" style="background-color:red">asdasdsad asdasdasd asdasdasdasdsad asdasdasd asdasdasdasdsad asdasdasd asdasdasdasdsad asdasdasd asdasdasdasdsad asdasdasd asdasdasdasdsad asdasdasd asdasdasdasdsad asdasdasd asdasd</div>
-						<div class="col-md-4" style="background-color:green">asdasdadasdasdsad asdasdasd asdasdasdasdsad asdasdasd asdasdasdasdsad asdasdasd asdasdasdasdsad asdasdasd asdasd</div>
-						<div class="col-md-4" style="background-color:blue">asdasdasdasdsad asdasdasd asdasdasdasdsad asdasdasd asdasdasdasdsad asdasdasd asdasd</div> -->
 					</div>	
 				</div>
 			</div>

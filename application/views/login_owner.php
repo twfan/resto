@@ -61,7 +61,7 @@
 		                <i class="glyphicon glyphicon-lock form-control-feedback"></i>
 		            </div>
 			</div>
-			<div class="col-md-7 col-md-offset-7"><h6><a href="owner/register_resto">Belum mempunyai akun?</a></h6></div>
+			<div class="col-md-7 col-md-offset-7"><h6><a href="register_resto">Belum mempunyai akun?</a></h6></div>
 			
 			<div class="row"><button class="btn btn-large btn-block btn-success paling bawah" type="submit" name="daftar">Masuk ke Resto</button></div>
 		</div>

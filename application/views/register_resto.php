@@ -74,42 +74,10 @@
 				<input type="password" class="form-control" placeholder="Ketik ulang password"  name="konf_password"  maxlength="25"/>
 			</div>
 		</div>
-		<div class="row" style="margin-top:10px;">
-			<div class="col-md-6">
-				<input type="text" class="form-control" placeholder="Nama Restaurant"  name="nama_resto" value="<?php echo set_value('nama_resto'); ?>"maxlength="35"/>
-			</div>
-			<div class="col-md-6">
-				<input type="text" class="form-control" placeholder="Alamat Restaurant"  name="alamat_resto" value="<?php echo set_value('alamat_resto'); ?>" maxlength="35"/>
-			</div>
-		</div>
-		<div class="row" style="margin-top:10px;">
-			<div class="col-md-4">
-				<input type="text" class="form-control" placeholder="Kode pos"  name="kode_pos" value="<?php echo set_value('kode_pos'); ?>" maxlength="35"/>
-			</div>
-			
-			<div class="col-md-4">
-				<select class="combobox form-control" style="height:33px;" prompt="Provinsi" name="provinsi" value="<?php echo set_value('provinsi'); ?>">
-					<option value="" disabled selected>Provinsi</option>
-					<option value="JATIM">Jawa Timur</option>
-				</select>
-			</div>
-			<div class="col-md-4">
-				<!-- <input type="text" class="form-control" placeholder="Kota"  name="nama" maxlength="35"/> -->
-				<select class="combobox form-control" style="height:33px;" prompt="Kota" name="kota" value="<?php echo set_value('kota'); ?>">
-					<option value="" disabled selected>Kota</option>
-					<option value="SBY">Kota Surabaya</option>
-					<option value="SDA">Kab. Sidoarjo</option>
-					<option value="MLG">Kota Malang</option>
-					<option value="PRO">Kota Probolinggo</option>
-				</select>
-			</div>
-		</div>
 		
-		<div class="row" style="margin-top:10px;">
-			<div class="col-md-12">
-				<textarea class="form-control" rows="4" cols="74" name="deskripsi" value="<?php echo set_value('deskripsi'); ?>" placeholder="Ceritakan sekilas tentang restoran yang anda miliki"></textarea>
-			</div>
-		</div>
+		
+		
+		
 		<h6>Dengan mendaftarkan akun ini, saya menyatakan setuju dengan <a href="">peraturan</a> dan <a href="">kebijakan keamanan</a> dari resto.com</h6>
 		<div class="row"><button class="btn btn-large btn-block btn-success paling_bawah" type="submit" name="daftar">Kirim ke Resto</button></div>
 		</form>
