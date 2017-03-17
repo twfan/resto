@@ -9,6 +9,7 @@
 	<!-- <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/combobox/css/bootstrap-combobox.css"> -->
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/jqueryui/jquery-ui.css">
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/datepicker/css/datepicker.css">
+	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/sweetalert-master/dist/sweetalert.css">
 	
 	<script src="http://code.jquery.com/jquery.min.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery/jquery-1.11.3.min.js"></script>
@@ -17,20 +18,47 @@
 	<script src="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/jqueryui/jquery-ui.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/datepicker/js/bootstrap-datepicker.js"></script>
+	<script src="<?php echo base_url(); ?>assets/plugin/sweetalert-master/dist/sweetalert.min.js"></script>
 	
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	
 <script type="text/javascript">
+ 
+
   $(document).ready(function(){
+  	var base_url = $('.baseurl').text();
+  	/*swal({
+	  title: "Error!",
+	  text: "Here's my error message!",
+	  type: "error",
+	  confirmButtonText: "Cool"
+	});*/
     /*$('.combobox').combobox();*/
     $('#tanggal').datepicker({
         format: "dd-mm-yyyy",
         autoclose:true,
         maxDate: "now",
         startDate: "+1d"
-    });  	
+    });
+    $('.tes').click(function(){
+    	swal({
+		  title: "Are you sure?",
+		  text: "You will not be able to recover this imaginary file!",
+		  type: "warning",
+		  showCancelButton: true,
+		  confirmButtonColor: "#DD6B55",
+		  confirmButtonText: "Yes, delete it!",
+		  closeOnConfirm: false
+		},
+		function(){
+			
+		  	/*window.location.replace(base_url);*/
+		  	alert(base_url);
+		});
+    });
+    
   });
 </script>
 
@@ -42,6 +70,7 @@
 <!-- NAVBAR -->
 
 	<nav class="navbar navbar-default" style="background-color: #D2D7D3;">
+		<div class="baseurl hidden" ?><?php echo base_url('utama').'/' ?></div>
 	  <div class="container">
 	    <!-- Brand and toggle get grouped for better mobile display -->
 	    <div class="navbar-header">
@@ -51,13 +80,13 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <a class="navbar-brand" href="#">Brand</a>
+	      <a class="navbar-brand" href="<?php echo base_url('utama/logged_in'); ?>">Resto.com</a>
 	    </div>
 
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	      <ul class="nav navbar-nav">
-	        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+	      <!-- <ul class="nav navbar-nav">
+	        <li class=""><a href="#">Link <span class="sr-only">(current)</span></a></li>
 	        <li><a href="#">Link</a></li>
 	        <li class="dropdown">
 	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
@@ -71,10 +100,11 @@
 	            <li><a href="#">One more separated link</a></li>
 	          </ul>
 	        </li>
-	      </ul>
+	      </ul> -->
 	      <ul class="nav navbar-nav navbar-right">
-	        <li><a href="utama/registerpelanggan">Daftar</a></li>
-	        <li><a href="utama/login">Login</a></li>
+	        <li><a href="<?= base_url('utama/login')?>">Login</a></li>
+	        <li><a href="<?= base_url('utama/registerpelanggan')?>">Register</a></li>
+	        <li><a class="tes">Register</a></li>
 	        
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
@@ -90,8 +120,9 @@
 
 
 <!-- SLIDER -->
-
-
+	<div style="color:red;font-style:italic;margin-top:10px;margin-bottom:25px;">	<?php echo $this->session->flashdata('pesanan_berhasil'); ?></div>
+	<div style="color:red;font-style:italic;margin-top:10px;margin-bottom:25px;">	<?php echo $this->session->flashdata('berhasil_verifikasi'); ?></div>
+	<div style="color:red;font-style:italic;margin-top:10px;margin-bottom:25px;">	<?php echo $this->session->flashdata('email_sent'); ?></div>
 	<div class="row">
 		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 		  <!-- Indicators -->
@@ -135,7 +166,8 @@
 		</div>
 	</div>
 
-
+<br>
+<br>
 
 
 	
@@ -145,10 +177,8 @@
 
 
 
-<div class="row">
 
-</div>
-<h2>Buat reservasi meja mu dengan mudah</h2>
+<!-- <h2>Buat reservasi meja mu dengan mudah</h2>
 <div class="row style-combobox" >
 	<div class="col-md-3">
 		<div class="form-group has-feedback">
@@ -182,7 +212,7 @@
 	<div class="col-md-3">
 		<div class="form-group has-feedback">
 			<input type="text" class="form-control" name="tanggal" id="tanggal" placeholder="Tanggal" maxlength="20" name="tanggal" style="width:250px;height:50px;"/>
-		 	<!-- <i class="glyphicon glyphicon-chevron-down form-control-feedback"></i> -->
+		 	
 		</div>
 		 
 	</div>
@@ -207,7 +237,7 @@
 	<div class="col-md-3">
 		<button class="btn btn-block btn-success paling bawah" type="submit" name="cari" style="width:250px;height:50px;" >CARI</button>
 	</div>
-</div>
+</div> -->
 
 
 
@@ -229,35 +259,57 @@
 <!-- CONTENT -->
 
 
-<div class="row" id="berita">
-	<div class="col-md-6">
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	</div>
-
-	<div class="col-md-4">
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	</div>
-
-	<div class="col-md-2">
-		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-		tempor incididunt ut labore.
-	</div>
-</div>
 
 
+ 
 </div>
 <!-- END OF CONTENT -->
+<div class="container">
+    <div class="row">
+        <h1 class="text-center">Vote for your favorite</h1>
+        <div class="list-group">
 
+        	<?php if(!empty($record_resto)): ?>
+				<?php foreach ($record_resto as $row):?>
+    				<!-- <tr>
+    					<td><?php echo $row->nama_makanan; ?></td>
+    					<td><?php echo $row->harga; ?></td>
+    					<td><img src="<?php echo $row->foto_makanan; ?>" style="width:100px;height:100px;"></td>
+    					<td><a href="<?php echo base_url('owner/edit_menu/'.$row->kode_menu) ?>">Edit</a> | <a href="<?php echo base_url('owner/hapus_makanan/'.$row->kode_menu) ?>">Hapus</a></td>
+    				</tr> -->
+
+
+		    		<a href="<?php echo base_url('utama/home_resto/'). '/'.$row->kode_resto; ?>" class="list-group-item">
+		                <div class="media col-md-3">
+		                    <figure class="pull-left">
+		                        <img class="media-object img-rounded img-responsive"  src="<?php echo $row->foto_resto; ?>" style="width:244px;height:174px;" >
+		                    </figure>
+		                </div>
+		                <div class="col-md-6">
+		                    <h4 class="list-group-item-heading"> <?php echo $row->nama_resto ?> </h4>
+		                    <p class="list-group-item-text"><?php echo $row->alamat_resto ?></p>
+		                </div>
+		                <div class="col-md-3 text-center">
+		                    <h2> 14240 <small> votes </small></h2>
+		                    <button type="button" class="btn btn-primary btn-lg btn-block"> Vote Now! </button>
+		                    <div class="stars">
+		                        <span class="glyphicon glyphicon-star"></span>
+		                        <span class="glyphicon glyphicon-star"></span>
+		                        <span class="glyphicon glyphicon-star"></span>
+		                        <span class="glyphicon glyphicon-star"></span>
+		                        <span class="glyphicon glyphicon-star-empty"></span>
+		                    </div>
+		                    <p> Average 4.5 <small> / </small> 5 </p>
+		                </div>
+		        	</a>
+				<?php endforeach; ?>
+			<?php endif; ?>
+
+
+          
+        </div>
+	</div>
+</div>
 
 
 

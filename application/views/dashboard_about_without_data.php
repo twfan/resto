@@ -88,7 +88,8 @@
 						<ul class="nav nav-tabs">
 						    <li class="active"><a data-toggle="tab" href="#about">Resto Profile</a></li>
 						    <li><a data-toggle="tab" href="#makanan">Menu Makanan</a></li>
-						    <li><a data-toggle="tab" href="#menu2">Fasilitas</a></li>
+						    <li><a data-toggle="tab" href="#foto">Foto Restauran</a></li>
+						    
 						</ul>
 					  	<div class="tab-content">
 						    <div id="about" class="tab-pane fade in active">
@@ -101,6 +102,17 @@
 								        	<div class="form-group">
 								        		<input type="text" class="form-control" placeholder="Nama resto"  name="namaresto" maxlength="35" value=""/>
 								        	</div>
+								        </div>
+							        </div>
+							        <div class="row">
+							        	<div class="col-md-2"> Foto Resto</div>
+								        <div class="col-md-2">
+								        	<div class="form-group">
+								        		<input type="file" class="" name="userfile" size="20"/>
+								        	</div>
+								        </div>
+								        <div class="col-md-2">
+								        	<img src="<?php echo $detail->foto_resto;?>" style="height:200px;width:200px;">
 								        </div>
 							        </div>
 							        <div class="row">
@@ -145,7 +157,7 @@
 										        	</div>
 									        	</div>
 									        	<div class="col-md-1"> <h5>~</h5> </div>
-									        	<div class="col-md-6">
+									        	<div class="col-md-5">
 									        		<div class="form-group">
 										        		<input type="text" class="form-control" placeholder="Tertinggi"  name="tertinggi" maxlength="35" value=""/>
 										        	</div>
@@ -171,13 +183,78 @@
 							    </form>
 							</div>
 						    <div id="makanan" class="tab-pane fade">
-						    	<h3>Daftar makanan dan minuman</h3>
-						    	
-						    	<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+						    	<h3 style="margin-bottom:15px;">Daftar makanan dan minuman</h3>
+						    	<form action="http://localhost/resto/owner/about_system_makanan" method="POST">
+						    		<div class="row">
+							        	<div class="col-md-2"> Nama Makanan</div>
+								        <div class="col-md-4">
+								        	<div class="form-group">
+								        		<input type="text" class="form-control" placeholder="Nama makanan atau minuman"  name="namamakanan" maxlength="35" value=""/>
+								        	</div>
+								        </div>
+							        </div>
+							        <div class="row">
+							        	<div class="col-md-2"> Deskripsi makanan</div>
+								        <div class="col-md-4">
+								        	<div class="form-group">
+								        		<textarea class="form-control" rows="4" cols="74" name="deskripsimakanan" value="" placeholder="Deskripsi makanan"></textarea>
+								        	</div>
+								        </div>
+							        </div>
+							        <div class="row">
+							        	<div class="col-md-2"> Harga Makanan</div>
+								        <div class="col-md-2">
+								        	<div class="form-group">
+								        		<input type="text" class="form-control" placeholder="Harga"  name="hargamakanan" maxlength="35" value=""/>
+								        	</div>
+								        </div>
+							        </div>
+							        <div class="row">
+							        	<div class="col-md-2"></div>
+							        	<div class="col-md-2 ">
+							        		<button class="btn btn-large btn btn-success center  " type="submit" name="tambahdata" >Tambahkan</button>
+							        	</div>
+							        </div>
+							        <div class="row">
+							        	<div class="col-md-2"> Gambar Makanan</div>
+								        <div class="col-md-2">
+								        	<div class="form-group">
+								        		<input type="file" class="" name="userfile" size="20"/>
+								        	</div>
+								        </div>
+							        </div>
+						    	</form>
+						    	<div class="table-responsive">
+						    		<table class="table">
+						    			<thead>
+						    				<tr>
+						    					<th>Nama Makanan</th>
+						    					<th>Harga</th>
+						    					<th>Aksi</th>
+						    				</tr>	
+						    			</thead>
+						    			<tbody>
+						    			
+						    			</tbody>
+
+						    		</table>
+						    	</div>
 						    </div>
-						    <div id="menu2" class="tab-pane fade">
-						      <h3>Menu 2</h3>
-						      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+						    <div id="foto" class="tab-pane fade">
+						    	<h3 style="margin-bottom:15px;">Kumpulan foto Resto (Max 10 foto)</h3>
+						      <table class="table">
+						    			<thead>
+						    				<tr>
+						    					
+						    					<th>Foto</th>
+						    					<th>Aksi</th>
+						    				</tr>	
+						    			</thead>
+						    			<tbody>
+						    			
+						    			</tbody>
+
+						    		</table>
 						    </div>
 						    <div id="menu3" class="tab-pane fade">
 						      <h3>Menu 3</h3>

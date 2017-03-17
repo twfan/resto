@@ -62,9 +62,6 @@
 		padding-right: 20px;
 		padding-bottom: 20px;
 	}
-
-
-
 </style>
 </head>
 <body>
@@ -88,7 +85,8 @@
 						<ul class="nav nav-tabs">
 						    <li class="active"><a data-toggle="tab" href="#about">Resto Profile</a></li>
 						    <li><a data-toggle="tab" href="#makanan">Menu Makanan</a></li>
-						    <li><a data-toggle="tab" href="#menu2">Fasilitas</a></li>
+						    <li><a data-toggle="tab" href="#foto">Foto Restauran</a></li>
+						   
 						</ul>
 					  	<div class="tab-content">
 						    <div id="about" class="tab-pane fade in active">
@@ -98,13 +96,28 @@
 						        		 foreach($record as $detail){
 
 						        	?>
-						        <form action="http://localhost/resto/owner/about_system" method="POST">
+						        <?php echo form_open_multipart(base_url("owner/about_system"), 'method="POST"') ?>
 						        	<div class="row">
 							        	<div class="col-md-2"> Nama Resto</div>
 								        <div class="col-md-4">
 								        	<div class="form-group">
 								        		<input type="text" class="form-control" placeholder="Nama resto"  name="namaresto" maxlength="35" value="<?php echo $detail->nama_resto;?>"/>
 								        	</div>
+								        </div>
+							        </div>
+							        <div class="row">
+							        	<div class="col-md-2"> Foto Resto</div>
+								        <div class="col-md-2">
+								        	<div class="form-group">
+								        		<input type="file" class="" name="userfile" size="20"/>
+								        	</div>
+								        </div>
+								        
+							        </div>
+							        <div class="row">
+							        	<div class="col-md-2"></div>
+							        	<div class="col-md-2">
+								        	<img src="<?php echo $detail->foto_resto;?>" style="height:200px;width:200px;margin-bottom:10px;">
 								        </div>
 							        </div>
 							        <div class="row">
@@ -149,7 +162,7 @@
 										        	</div>
 									        	</div>
 									        	<div class="col-md-1"> <h5>~</h5> </div>
-									        	<div class="col-md-6">
+									        	<div class="col-md-5">
 									        		<div class="form-group">
 										        		<input type="text" class="form-control" placeholder="Tertinggi"  name="tertinggi" maxlength="35" value="<?php echo $detail->harga_tertinggi; ?>"/>
 										        	</div>
@@ -172,12 +185,13 @@
 							        		<button class="btn btn-large btn btn-success center  " type="submit" name="input" >Simpan Data</button>
 							        	</div>
 							        </div>
-							    </form>
+							   <?php echo form_close(); ?>
 							        <?php } ?>
 							</div>
 						    <div id="makanan" class="tab-pane fade">
 						    	<h3 style="margin-bottom:15px;">Daftar makanan dan minuman</h3>
-						    	<form action="http://localhost/resto/owner/about_system_makanan" method="POST">
+						    	<?php echo form_open_multipart(base_url("owner/about_system_makanan"), 'method="POST"') ?>
+						    	
 						    		<div class="row">
 							        	<div class="col-md-2"> Nama Makanan</div>
 								        <div class="col-md-4">
@@ -203,16 +217,88 @@
 								        </div>
 							        </div>
 							        <div class="row">
+							        	<div class="col-md-2"> Gambar Makanan</div>
+								        <div class="col-md-2">
+								        	<div class="form-group">
+								        		<input type="file" class="" name="userfile" size="20"/>
+								        	</div>
+								        </div>
+							        </div>
+							        <div class="row">
 							        	<div class="col-md-2"></div>
 							        	<div class="col-md-2 ">
 							        		<button class="btn btn-large btn btn-success center  " type="submit" name="tambahdata" >Tambahkan</button>
 							        	</div>
 							        </div>
-						    	</form>
+						    	 <?php echo form_close(); ?>
+						    	<div class="table-responsive">
+						    		<table class="table">
+						    			<thead>
+						    				<tr>
+						    					<th>Nama Makanan</th>
+						    					<th>Harga</th>
+						    					<th>Foto</th>
+						    					<th>Aksi</th>
+						    				</tr>	
+						    			</thead>
+						    			<tbody>
+						    			<?php if(!empty($record_menu)): ?>
+						    					<?php foreach ($record_menu as $row):?>
+								    				<tr>
+								    					<td><?php echo $row->nama_makanan; ?></td>
+								    					<td><?php echo $row->harga; ?></td>
+								    					<td><img src="<?php echo $row->foto_makanan; ?>" style="width:100px;height:100px;"></td>
+								    					<td><a href="<?php echo base_url('owner/edit_menu/'.$row->kode_menu) ?>">Edit</a> | <a href="<?php echo base_url('owner/hapus_makanan/'.$row->kode_menu) ?>">Hapus</a></td>
+								    				</tr>
+						    					<?php endforeach; ?>
+						    				<?php endif; ?>
+						    			</tbody>
+
+						    		</table>
+						    	</div>
 						    </div>
-						    <div id="menu2" class="tab-pane fade">
-						      <h3>Menu 2</h3>
-						      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+						    <div id="foto" class="tab-pane fade">
+						    	<h3 style="margin-bottom:15px;">Kumpulan foto Resto (Max 10 foto)</h3>
+						    	<?php echo form_open_multipart(base_url("owner/about_system_foto"), 'method="POST"') ?>
+						    	
+							        <div class="row">
+							        	<div class="col-md-2"> Foto Restauran</div>
+								        <div class="col-md-2">
+								        	<div class="form-group">
+								        		<input type="file" class="" name="userfile" size="20"/>
+								        	</div>
+								        </div>
+							        </div>
+							        <div class="row">
+							        	<div class="col-md-2"></div>
+							        	<div class="col-md-2 ">
+							        		<button class="btn btn-large btn btn-success center  " type="submit" name="tambahdata" >Tambahkan</button>
+							        	</div>
+							        </div>
+						    	<?php echo form_close(); ?>
+						    	<div class="table-responsive">
+						    		<table class="table">
+						    			<thead>
+						    				<tr>
+						    					
+						    					<th>Foto</th>
+						    					<th>Aksi</th>
+						    				</tr>	
+						    			</thead>
+						    			<tbody>
+						    			<?php if(!empty($record_foto)): ?>
+						    					<?php foreach ($record_foto as $row):?>
+								    				<tr>
+								    					
+								    					<td><img src="<?php echo $row->path_foto; ?>" style="width:100px;height:100px;"></td>
+								    					<td> <a href="<?php echo base_url('owner/hapus_foto/'.$row->id_foto) ?>">Hapus</a></td>
+								    				</tr>
+						    					<?php endforeach; ?>
+						    				<?php endif; ?>
+						    			</tbody>
+
+						    		</table>
+						    	</div>
 						    </div>
 						    <div id="menu3" class="tab-pane fade">
 						      <h3>Menu 3</h3>
