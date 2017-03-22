@@ -8,7 +8,7 @@ class Owner extends CI_Controller {
 		parent::__construct();
 		$this->load->helper(array('array','form'));
 		$this->load->library(array('session'));
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$kode_resto = $this->session->userdata('kode_resto');
 	}
 
@@ -19,7 +19,7 @@ class Owner extends CI_Controller {
 
 	public function register_resto()
 	{
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$post = $this->input->post();
 		$password = $this->input->post('password');
 		$konfpassword = $this->input->post('konf_password');
@@ -27,7 +27,7 @@ class Owner extends CI_Controller {
 		{
 			if(!empty($post['nama_depan']) && !empty($post['nama_belakang']) && !empty($post['telpon']) && !empty($post['email'])  )
 			{
-				$jumlahdata = $this->db_model->jumlah_data('owner_resto');
+				$jumlahdata = $this->Db_model->jumlah_data('owner_resto');
 				$idresto = 'OR' . ($jumlahdata+1);
 				$data=array(
 					'kode_resto' => $idresto,
@@ -37,7 +37,7 @@ class Owner extends CI_Controller {
 					'password' => $post['password'],
 					'status_akun' => 'TRUE'
 					);
-				$this->db_model->tambah_data('owner_resto',$data);
+				$this->Db_model->tambah_data('owner_resto',$data);
 				redirect('owner/dashboard_owner');
 			}	
 		}else
@@ -54,17 +54,17 @@ class Owner extends CI_Controller {
 		if($this->session->userdata('user_owner')==NULL)
 		{
 			$this->load->view('login_owner');
-			$this->load->model('db_model');
+			$this->load->model('Db_model');
 			$post = $this->input->post();
 			if(!empty($post['email_login']) && !empty($post['password_login']))
 			{
-				/*$this->db_model->login($post['email'],$post['password']);*/
+				/*$this->Db_model->login($post['email'],$post['password']);*/
 				/*redirect('utama/');*/
 				$data=array(
 					'email' => $post['email_login'],
 					'password' => $post['password_login']
 					);
-				$hasil = $this->db_model->login('owner_resto',$data);
+				$hasil = $this->Db_model->login('owner_resto',$data);
 				echo count($hasil);
 				
 				if(count($hasil)==1)
@@ -97,7 +97,7 @@ class Owner extends CI_Controller {
 
 			$kode_resto = $this->session->userdata('kode_resto');
 			$data = array(
-				'record_pesanan' => $this->db_model->baca_data_pesanan_untuk_owner($kode_resto)
+				'record_pesanan' => $this->Db_model->baca_data_pesanan_untuk_owner($kode_resto)
 			);
 			$this->load->view('dashboard_blank',$data);
 		}
@@ -111,30 +111,30 @@ class Owner extends CI_Controller {
 		}else
 		{
 			$kode_resto = $this->session->userdata('kode_resto');
-			$cek_data = $this->db_model->read_data('about_resto',$kode_resto);
+			$cek_data = $this->Db_model->read_data('about_resto',$kode_resto);
 			if($cek_data=="data ada")
 			{
 				/*echo "benar1";*/
-				$cek_data = $this->db_model->read_data('menu_resto',$kode_resto);
+				$cek_data = $this->Db_model->read_data('menu_resto',$kode_resto);
 				if($cek_data=="data ada")
 				{
 					/*echo "benar2";*/
-					$cek_data = $this->db_model->read_data('foto_resto',$kode_resto);
+					$cek_data = $this->Db_model->read_data('foto_resto',$kode_resto);
 					if($cek_data=="data ada")
 					{
 						/*echo "benar3";*/
 						$data = array(
-							'record' => $this->db_model->cari_data('about_resto',$kode_resto),
-							'record_menu' => $this->db_model->read('menu_resto',$kode_resto),
-							'record_foto' => $this->db_model->read('foto_resto',$kode_resto)
+							'record' => $this->Db_model->cari_data('about_resto',$kode_resto),
+							'record_menu' => $this->Db_model->read('menu_resto',$kode_resto),
+							'record_foto' => $this->Db_model->read('foto_resto',$kode_resto)
 						);
 						$this->load->view('dashboard_about',$data);
 					}else
 					{
 						/*echo "salah3";*/
 						$data = array(
-							'record' => $this->db_model->cari_data('about_resto',$kode_resto),
-							'record_menu' => $this->db_model->read('menu_resto',$kode_resto)
+							'record' => $this->Db_model->cari_data('about_resto',$kode_resto),
+							'record_menu' => $this->Db_model->read('menu_resto',$kode_resto)
 						);
 						$this->load->view('dashboard_about',$data);
 					}
@@ -142,7 +142,7 @@ class Owner extends CI_Controller {
 				{
 					/*echo "salah2";*/
 					$data = array(
-							'record' => $this->db_model->cari_data('about_resto',$kode_resto)
+							'record' => $this->Db_model->cari_data('about_resto',$kode_resto)
 						);
 						$this->load->view('dashboard_about',$data);
 				}
@@ -159,10 +159,10 @@ class Owner extends CI_Controller {
 
 	public function about_system()
 	{
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$post = $this->input->post();
 		$kode_resto = $this->session->userdata('kode_resto');
-		$cek_data = $this->db_model->read_data('about_resto',$kode_resto);
+		$cek_data = $this->Db_model->read_data('about_resto',$kode_resto);
 
 		$config['upload_path'] = './uploads/resto_profile/';
 		$config['allowed_types'] = 'gif|jpg|png';
@@ -195,11 +195,11 @@ class Owner extends CI_Controller {
 							'metode_pembayaran' => $post['pembayaran'],
 							'status' => 'TRUE'
 							);
-				$this->db_model->update_data($kode_resto,$data);
+				$this->Db_model->update_data($kode_resto,$data);
 				redirect('owner/dashboard_owner');
 		}else
 		{
-			$jumlahdata = $this->db_model->jumlah_data('about_resto');
+			$jumlahdata = $this->Db_model->jumlah_data('about_resto');
 			if(!empty($post['namaresto']) && !empty($post['alamatresto']) && !empty($post['notelfonresto']) && !empty($post['jadwal']) && !empty($post['sajian']) && !empty($post['terendah']) && !empty($post['tertinggi']) && !empty($post['terendah']) && !empty($post['pembayaran']))
 			{
 				if($this->upload->do_upload('userfile'))
@@ -222,7 +222,7 @@ class Owner extends CI_Controller {
 							'metode_pembayaran' => $post['pembayaran'],
 							'status' => 'TRUE'
 							);
-				$this->db_model->tambah_data('about_resto',$data);
+				$this->Db_model->tambah_data('about_resto',$data);
 				redirect('owner/dashboard_owner');
 			}
 		}
@@ -235,11 +235,11 @@ class Owner extends CI_Controller {
 
 	public function about_system_makanan()
 	{
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$post = $this->input->post();
 		$kode_resto = $this->session->userdata('kode_resto');
 		
-		$jumlahdata = $this->db_model->jumlah_data('menu_resto');
+		$jumlahdata = $this->Db_model->jumlah_data('menu_resto');
 		if(!empty($post['namamakanan']) && !empty($post['deskripsimakanan']) && !empty($post['hargamakanan']))
 		{
 			$idmenu = 'ME'.($jumlahdata+1);
@@ -269,7 +269,7 @@ class Owner extends CI_Controller {
 						'status' => 'TRUE'
 				);
 			echo print_r($data);
-			$this->db_model->tambah_data('menu_resto',$data);
+			$this->Db_model->tambah_data('menu_resto',$data);
 			redirect('owner/dashboard_owner_menu');
 			}else
 			{
@@ -285,12 +285,12 @@ class Owner extends CI_Controller {
 
 	public function about_system_foto()
 	{
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$post = $this->input->post();
 		$kode_resto = $this->session->userdata('kode_resto');
-		if($this->db_model->read_jumlah_data_batasan('foto_resto',$kode_resto)=="bisa")
+		if($this->Db_model->read_jumlah_data_batasan('foto_resto',$kode_resto)=="bisa")
 		{
-			$jumlahdata = $this->db_model->jumlah_data('foto_resto');
+			$jumlahdata = $this->Db_model->jumlah_data('foto_resto');
 		
 			$config['upload_path'] = './uploads/foto_resto/';
 			$config['allowed_types'] = 'gif|jpg|png';
@@ -312,7 +312,7 @@ class Owner extends CI_Controller {
 							'status' => 'TRUE'
 					);
 				//echo print_r($data);
-				$this->db_model->tambah_data('foto_resto',$data);
+				$this->Db_model->tambah_data('foto_resto',$data);
 				redirect('owner/dashboard_owner_foto');
 			}else
 			{
@@ -327,20 +327,20 @@ class Owner extends CI_Controller {
 
 	public function dashboard_owner_foto()
 	{
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$kode_resto = $this->session->userdata('kode_resto');
 		if($this->session->userdata('user_owner')==NULL)
 		{
 			redirect('owner/login');
 		}else
 		{
-			$cek_data = $this->db_model->read_data('about_resto',$kode_resto);
+			$cek_data = $this->Db_model->read_data('about_resto',$kode_resto);
 			if($cek_data=="data ada")
 			{
 				$data = array(
-					'record' => $this->db_model->cari_data('about_resto',$kode_resto),
-					'record_menu' => $this->db_model->read('menu_resto',$kode_resto),
-					'record_foto' => $this->db_model->read('foto_resto',$kode_resto)
+					'record' => $this->Db_model->cari_data('about_resto',$kode_resto),
+					'record_menu' => $this->Db_model->read('menu_resto',$kode_resto),
+					'record_foto' => $this->Db_model->read('foto_resto',$kode_resto)
 				);
 
 				$this->load->view('dashboard_about_foto',$data);
@@ -354,26 +354,26 @@ class Owner extends CI_Controller {
 
 	public function hapus_foto($id="")
 	{
-		$this->load->model('db_model');
-		$this->db_model->delete_foto($id);
+		$this->load->model('Db_model');
+		$this->Db_model->delete_foto($id);
 		redirect(base_url('owner/dashboard_owner_foto'));
 	}
 
 	public function dashboard_owner_menu()
 	{
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$kode_resto = $this->session->userdata('kode_resto');
 		if($this->session->userdata('user_owner')==NULL)
 		{
 			redirect('owner/login');
 		}else
 		{
-			$cek_data = $this->db_model->read_data('about_resto',$kode_resto);
+			$cek_data = $this->Db_model->read_data('about_resto',$kode_resto);
 			if($cek_data=="data ada")
 			{
 				$data = array(
-					'record' => $this->db_model->cari_data('about_resto',$kode_resto),
-					'record_menu' => $this->db_model->read('menu_resto',$kode_resto)
+					'record' => $this->Db_model->cari_data('about_resto',$kode_resto),
+					'record_menu' => $this->Db_model->read('menu_resto',$kode_resto)
 				);
 
 				$this->load->view('dashboard_about_menu',$data);
@@ -388,20 +388,20 @@ class Owner extends CI_Controller {
 	public function edit_menu($id="")
 	{
 		
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$kode_resto = $this->session->userdata('kode_resto');
 		if($id!="" && !empty($id)){
 			$data = array(
-					'record' => $this->db_model->cari_data('about_resto',$kode_resto),
-					'record_menu' => $this->db_model->read('menu_resto',$kode_resto),
-					'record_edit' => $this->db_model->edit($id,'menu_resto')
+					'record' => $this->Db_model->cari_data('about_resto',$kode_resto),
+					'record_menu' => $this->Db_model->read('menu_resto',$kode_resto),
+					'record_edit' => $this->Db_model->edit($id,'menu_resto')
 				);
 			$this->load->view('dashboard_about_menu_edit',$data);
 		}else
 		{
 			$data = array(
-					'record' => $this->db_model->cari_data('about_resto',$kode_resto),
-					'record_menu' => $this->db_model->read('menu_resto',$kode_resto)
+					'record' => $this->Db_model->cari_data('about_resto',$kode_resto),
+					'record_menu' => $this->Db_model->read('menu_resto',$kode_resto)
 				);
 
 				$this->load->view('dashboard_about_menu',$data);
@@ -426,7 +426,7 @@ class Owner extends CI_Controller {
 
 
 		if(!empty($post['namamakanan']) && !empty($post['deskripsimakanan']) && !empty($post['hargamakanan'])){
-			$this->load->model('db_model');
+			$this->load->model('Db_model');
 
 			if($this->upload->do_upload('userfile'))
 			{
@@ -439,7 +439,7 @@ class Owner extends CI_Controller {
 					'harga' => $post['hargamakanan']
 				);		
 				
-			$this->db_model->update($post['id'],$data,'menu_resto');
+			$this->Db_model->update($post['id'],$data,'menu_resto');
 			redirect(base_url('owner/dashboard_owner_menu'));
 			}else
 			{
@@ -448,15 +448,15 @@ class Owner extends CI_Controller {
 
 
 			/*
-			$this->db_model->update($post['id'],$data,'menu_resto');
+			$this->Db_model->update($post['id'],$data,'menu_resto');
 			redirect(base_url('owner/dashboard_owner_menu'));*/
 		}
 	}
 
 	public function hapus_makanan($id="")
 	{
-		$this->load->model('db_model');
-		$this->db_model->delete_menu($id);
+		$this->load->model('Db_model');
+		$this->Db_model->delete_menu($id);
 		redirect(base_url('owner/dashboard_owner_menu'));
 	}
 
@@ -509,11 +509,11 @@ class Owner extends CI_Controller {
 
 	public function terima_pemesanan($idpemesanan)
 	{
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$data = array(
 			'status_pemesanan' => 'lanjut pembayaran'
 		);
-		$this->db_model->update_data_bener($idpemesanan,'pesanan_pelanggan','id_pesanan',$data);
+		$this->Db_model->update_data_bener($idpemesanan,'pesanan_pelanggan','id_pesanan',$data);
 		redirect('owner/dashboard_owner');
 	}
 

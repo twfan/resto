@@ -229,6 +229,8 @@
 							        	</div>
 							        </div>
 							        <?php echo form_close(); ?>
+
+							         <!-- ini nampilin makanannya di tabel -->
 						    	<div class="table-responsive">
 						    		<table class="table">
 						    			<thead>
@@ -254,6 +256,7 @@
 
 						    		</table>
 						    	</div>
+						    	 <!-- sampai ini nampilin makanannya di tabel -->
 
 						    </div>
 						    <div id="foto" class="tab-pane fade">

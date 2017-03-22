@@ -104,8 +104,6 @@
 	      <ul class="nav navbar-nav navbar-right">
 	        <li><a href="<?= base_url('utama/login')?>">Login</a></li>
 	        <li><a href="<?= base_url('utama/registerpelanggan')?>">Register</a></li>
-	        <li><a class="tes">Register</a></li>
-	        
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->

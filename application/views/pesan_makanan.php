@@ -39,7 +39,7 @@
     /*$('.combobox').combobox();*/
    $('html, body').scrollTop($('.nama').offset().top);
    var kode_resto = $(".kode_resto").val();
-
+   alert(kode_resto);
     $.ajax({
     	type:"post",
     	dataType:"json",
@@ -48,51 +48,48 @@
     	success:function(html)
     	{
     		for (var i = 0; i < html.length; i++) {
-				var table = "<tr><td>"+html[i].nama_makanan+"</td><td>"+html[i].deskripsi+"</td><td>"+html[i].harga+"</td><td><img src='"+html[i].foto_makanan+"' style='width:50px;height:50px;' /></td><td><button class='button_kurang' value='"+html[i].kode_menu+"'>-</button><input type='text' class='jumlah_pesan text-center' value='0' style='width:30px;'></input><button class='button_tambah' value='"+html[i].kode_menu+"'>+</button></td></tr>";
+				var table = $("<tr><td>"+html[i].nama_makanan+"</td><td>"+html[i].deskripsi+"</td><td>"+html[i].harga+"</td><td><img src='"+html[i].foto_makanan+"' style='width:50px;height:50px;' /></td><td><button class='button_kurang' value='"+html[i].kode_menu+"'>-</button><input type='text' class='jumlah_pesan text-center' value='0' style='width:30px;'></input><button class='button_tambah' value='"+html[i].kode_menu+"'>+</button></td></tr>");
+				$(table).find('.button_tambah').click(function(){
+					$(table).find('input').val()
+					// var kode_menu = $(this).val();
+					// var hidden_menu = $(".hidden_menu").val();
+					// var hidden_harga = $(".hidden_harga").val();
+					// var jumlah_pesan = $(".jumlah_pesan").val();
+					// var count_pesan = parseInt(jumlah_pesan) + 1;
+					// $(".jumlah_pesan").val(count_pesan);
+					// $.ajax({
+					// 	type:"post",
+					// 	url:"<?php echo base_url('utama/ajax_baca_harga')  ?>",
+			  //           data:{kode_menu:kode_menu},
+			  //           success:function(html){
+			  //           	var total_harga = parseInt(hidden_harga)+parseInt(html[0].harga);
+			  //           	/*alert(total_harga);*/
+			  //           	$(".hidden_harga").val(total_harga);
+			  //           	$(".total_harga").text(total_harga);
+			  //           }
+					// });
+				})
+				$(table).find('.button_kurang').click(function(){
+					// var kode_menu = $(this).val();
+					// var hidden_menu = $(".hidden_menu").val();
+					// var hidden_harga = $(".hidden_harga").val();
+					// var jumlah_pesan = $(".jumlah_pesan").val();
+					// var count_pesan = parseInt(jumlah_pesan) - 1;
+					// $(".jumlah_pesan").val(count_pesan);
+					// $.ajax({
+					// 	type:"post",
+					// 	url:"<?php echo base_url('utama/ajax_baca_harga')  ?>",
+			  //           data:{kode_menu:kode_menu},
+			  //           success:function(html){
+			  //           	var total_harga = parseInt(hidden_harga)-parseInt(html[0].harga);
+			  //           	/*alert(total_harga);*/
+			  //           	$(".hidden_harga").val(total_harga);
+			  //           	$(".total_harga").text(total_harga);
+			  //           }
+					// });
+				})
 				$(".data-makanan").append(table)
 			};
-
-			$(".button_tambah").click(function(){
-				
-				var kode_menu = $(this).val();
-				var hidden_menu = $(".hidden_menu").val();
-				var hidden_harga = $(".hidden_harga").val();
-				var jumlah_pesan = $(".jumlah_pesan").val();
-				var count_pesan = parseInt(jumlah_pesan) + 1;
-				$(".jumlah_pesan").val(count_pesan);
-				$.ajax({
-					type:"post",
-					url:"<?php echo base_url('utama/ajax_baca_harga')  ?>",
-		            data:{kode_menu:kode_menu},
-		            success:function(html){
-		            	var total_harga = parseInt(hidden_harga)+parseInt(html[0].harga);
-		            	/*alert(total_harga);*/
-		            	$(".hidden_harga").val(total_harga);
-		            	$(".total_harga").text(total_harga);
-		            }
-				});
-			})
-
-			$(".button_kurang").click(function(){
-				
-				var kode_menu = $(this).val();
-				var hidden_menu = $(".hidden_menu").val();
-				var hidden_harga = $(".hidden_harga").val();
-				var jumlah_pesan = $(".jumlah_pesan").val();
-				var count_pesan = parseInt(jumlah_pesan) - 1;
-				$(".jumlah_pesan").val(count_pesan);
-				$.ajax({
-					type:"post",
-					url:"<?php echo base_url('utama/ajax_baca_harga')  ?>",
-		            data:{kode_menu:kode_menu},
-		            success:function(html){
-		            	var total_harga = parseInt(hidden_harga)-parseInt(html[0].harga);
-		            	/*alert(total_harga);*/
-		            	$(".hidden_harga").val(total_harga);
-		            	$(".total_harga").text(total_harga);
-		            }
-				});
-			})
 			
     	}
     });

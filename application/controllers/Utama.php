@@ -8,6 +8,7 @@ class Utama extends CI_Controller {
 		parent::__construct();
 		$this->load->helper(array('array','form'));
 		$this->load->library(array('session'));
+		$this->load->model('Db_model');
 	}
 
 	public function json()
@@ -19,8 +20,8 @@ class Utama extends CI_Controller {
 	{
 		$post = $this->input->post();
 		$kodepelanggan = $post['kode_pelanggan'];
-		$this->load->model('db_model');
-		$data = $this->db_model->baca_seluruh_table('user_login');
+		$this->load->model('Db_model');
+		$data = $this->Db_model->baca_seluruh_table('user_login');
 		header('Content-Type:application/json');
 		echo json_encode($data);
 
@@ -31,11 +32,11 @@ class Utama extends CI_Controller {
 		$query ="SELECT user_login.nama_user, review_pelanggan.judul_review, review_pelanggan.review_pelanggan, review_pelanggan.rating, review_pelanggan.tanggal_review FROM review_pelanggan, user_login WHERE review_pelanggan.id_resto='$kode_resto' AND user_login.id_user = review_pelanggan.id_pelanggan";
 		if($this->session->userdata('id_pelanggan')!=NULL)
 		{
-			$this->load->model('db_model');
+			$this->load->model('Db_model');
 			$data = array(
-				'record_resto' =>  $this->db_model->cari_data('about_resto',$kode_resto),
-				'record_foto' => $this->db_model->cari_data('foto_resto',$kode_resto),
-				'record_review' => $this->db_model->baca_data_dengan_query_custom($query)
+				'record_resto' =>  $this->Db_model->cari_data('about_resto',$kode_resto),
+				'record_foto' => $this->Db_model->cari_data('foto_resto',$kode_resto),
+				'record_review' => $this->Db_model->baca_data_dengan_query_custom($query)
 			);
 			$this->load->view('pesan_makanan',$data);
 		}else
@@ -49,17 +50,20 @@ class Utama extends CI_Controller {
 	{
 		$post = $this->input->post();
 		$koderesto = $post['kode_resto'];
-		$this->load->model('db_model');
-		$data = $this->db_model->cari_data_bener('menu_resto','kode_resto',$koderesto);
+		$this->load->model('Db_model');
+		$data = array(
+			'kode_resto' => $koderesto
+		);	
+		$data_hasil = $this->Db_model->cari_data_bener('menu_resto',$data);
 		header('Content-Type:application/json');
-		echo json_encode($data);
+		echo json_encode($data_hasil);
 	}
 	public function ajax_baca_harga()
 	{
 		$post = $this->input->post();
 		$kode_menu = $post['kode_menu'];
-		$this->load->model('db_model');
-		$data = $this->db_model->cari_data_bener('menu_resto','kode_menu',$kode_menu);
+		$this->load->model('Db_model');
+		$data = $this->Db_model->cari_data_bener('menu_resto','kode_menu',$kode_menu);
 		header('Content-Type:application/json');
 		echo json_encode($data);
 	}
@@ -67,9 +71,9 @@ class Utama extends CI_Controller {
 
 	public function index()
 	{
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$data = array(
-			'record_resto' => $this->db_model->baca_seluruh_table('about_resto')
+			'record_resto' => $this->Db_model->baca_seluruh_table('about_resto')
 		);
 		$this->load->view('home',$data);
 	}
@@ -81,9 +85,9 @@ class Utama extends CI_Controller {
 
 	public function logged_in()
 	{
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$data = array(
-			'record_resto' => $this->db_model->baca_seluruh_table('about_resto')
+			'record_resto' => $this->Db_model->baca_seluruh_table('about_resto')
 		);
 		$this->load->view('home_loggedin',$data);
 	}
@@ -93,17 +97,17 @@ class Utama extends CI_Controller {
 		if($this->session->userdata('user_pelanggan')==NULL)
 		{
 			$this->load->view('login_user');
-			$this->load->model('db_model');
+			$this->load->model('Db_model');
 			$post = $this->input->post();
 			if(!empty($post['email_login']) && !empty($post['password_login']))
 			{
-				/*$this->db_model->login($post['email'],$post['password']);*/
+				/*$this->Db_model->login($post['email'],$post['password']);*/
 				/*redirect('utama/');*/
 				$data=array(
 					'email' => $post['email_login'],
 					'password' => $post['password_login']
 					);
-				$hasil = $this->db_model->login('user_login',$data);
+				$hasil = $this->Db_model->login('user_login',$data);
 				echo count($hasil);
 				
 				if(count($hasil)==1)
@@ -131,11 +135,11 @@ class Utama extends CI_Controller {
 		$query ="SELECT user_login.nama_user, review_pelanggan.judul_review, review_pelanggan.review_pelanggan, review_pelanggan.rating, review_pelanggan.tanggal_review FROM review_pelanggan, user_login WHERE review_pelanggan.id_resto='$kode_resto' AND user_login.id_user = review_pelanggan.id_pelanggan";
 		if($this->session->userdata('id_pelanggan')!=NULL)
 		{
-			$this->load->model('db_model');
+			$this->load->model('Db_model');
 			$data = array(
-				'record_resto' =>  $this->db_model->cari_data('about_resto',$kode_resto),
-				'record_foto' => $this->db_model->cari_data('foto_resto',$kode_resto),
-				'record_review' => $this->db_model->baca_data_dengan_query_custom($query)
+				'record_resto' =>  $this->Db_model->cari_data('about_resto',$kode_resto),
+				'record_foto' => $this->Db_model->cari_data('foto_resto',$kode_resto),
+				'record_review' => $this->Db_model->baca_data_dengan_query_custom($query)
 			);
 			$this->load->view('home_resto',$data);
 		}else
@@ -150,10 +154,10 @@ class Utama extends CI_Controller {
 	{
 		if($this->session->userdata('id_pelanggan')!=NULL)
 		{
-			$this->load->model('db_model');
+			$this->load->model('Db_model');
 			$idpelanggan = $this->session->userdata('id_pelanggan');
 			$data = array(
-				'record_pesanan' =>  $this->db_model->baca_data_pesanan_untuk_pelanggan($idpelanggan)
+				'record_pesanan' =>  $this->Db_model->baca_data_pesanan_untuk_pelanggan($idpelanggan)
 			);
 			$this->load->view('homepage_user_pesanan',$data);
 		}else
@@ -167,10 +171,10 @@ class Utama extends CI_Controller {
 	{
 		if($this->session->userdata('id_pelanggan')!=NULL)
 		{
-			$this->load->model('db_model');
+			$this->load->model('Db_model');
 			$iduser = $this->session->userdata('id_pelanggan');
 			$data = array(
-				'record' => $this->db_model->cari_data_bener('user_login','id_user',$iduser)
+				'record' => $this->Db_model->cari_data_bener('user_login','id_user',$iduser)
 			);
 			 $this->load->view('homepage_user_data_diri',$data);
 		}else
@@ -181,7 +185,7 @@ class Utama extends CI_Controller {
 	}
 	public function update_data_diri()
 	{
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$post = $this->input->post();
 		$password = $post['password'];
 		$confpassword = $post['confpassword'];
@@ -196,7 +200,7 @@ class Utama extends CI_Controller {
 					'email' => $post['email'],
 					'password' => $post['password']
 					);
-				$this->db_model->update_data_bener($iduser,'user_login','id_user',$data);
+				$this->Db_model->update_data_bener($iduser,'user_login','id_user',$data);
 				$this->session->set_flashdata('berhasil','Update berhasil');
 				redirect('utama/pelanggan_data_diri');
 			}
@@ -207,10 +211,7 @@ class Utama extends CI_Controller {
 		}
 	}
 
-	public function top_up_saldo()
-	{
-		$this->load->view('pembayaran');
-	}
+	
 
 
 	public function logout()
@@ -248,7 +249,7 @@ class Utama extends CI_Controller {
         }*/
 
 
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$post = $this->input->post();
 		$this->load->library('form_validation');
 		$password= $this->input->post('password');
@@ -258,7 +259,7 @@ class Utama extends CI_Controller {
 			
 				if(!empty($post['nama']) && !empty($post['tanggal']) && !empty($post['gender']) && !empty($post['nohp']) && !empty($post['email']) && !empty($post['password']) )
 				{
-					$cekemail = $this->db_model->cek_email($post['email']);
+					$cekemail = $this->Db_model->cek_email($post['email']);
 					//echo count($cekemail);
 					if(count($cekemail)>=1)
 					{
@@ -267,8 +268,11 @@ class Utama extends CI_Controller {
 					}else
 					{
 						//echo "masuk siniiiiiiiiiii";
-						$jumlahdata = $this->db_model->jumlah_data('user_login');
+						$jumlahdata = $this->Db_model->jumlah_data('user_login');
 						$iduser = 'UL' . ($jumlahdata+1);
+						$jumlahdata = $this->Db_model->jumlah_data('user_login');
+						$idsaldo = 'IS' . ($jumlahdata+1);
+
 						$data=array(
 							'id_user' => $iduser,
 							'nama_user' => $post['nama'],
@@ -279,7 +283,16 @@ class Utama extends CI_Controller {
 							'password' => $post['password'],
 							'status_verifikasi' => '0',
 							);
-						$this->db_model->tambah_data('user_login',$data);
+						$this->Db_model->tambah_data('user_login',$data);
+						
+						
+						$data = array(
+							'id_saldo' => $idsaldo,
+							'id_user' => $iduser,
+							'saldo' => '0',
+							'status' => 'TRUE'
+							);
+						$this->Db_model->tambah_data('user_saldo_pelanggan',$data);
 						
 						
 						
@@ -318,17 +331,17 @@ class Utama extends CI_Controller {
 
 	public function verifikasi($id)
 	{
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$data =array(
 			'status_verifikasi' => '1'
 		);
-		$this->db_model->update_data_bener($id,'user_login','id_user',$data);
+		$this->Db_model->update_data_bener($id,'user_login','id_user',$data);
 		$this->session->set_flashdata('berhasil_verifikasi', 'Terima kasih anda telah melakukan verifikasi email.');
 		redirect('utama');
 	}
 
 	public function pesan_meja($id){
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$post = $this->input->post();
 		$namapelanggan = $this->session->userdata['user_pelanggan'];
 		$idpelanggan = $this->session->userdata['id_pelanggan'];
@@ -337,7 +350,7 @@ class Utama extends CI_Controller {
 		{
 			
 			//echo "masuk siniiiiiiiiiii";
-			$jumlahdata = $this->db_model->jumlah_data('pesanan_pelanggan');
+			$jumlahdata = $this->Db_model->jumlah_data('pesanan_pelanggan');
 			$idpesanan = 'PP' . ($jumlahdata+1);
 			$data=array(
 				'id_pesanan' => $idpesanan,
@@ -348,9 +361,9 @@ class Utama extends CI_Controller {
 				'jam_acara' => $post['jam_acara'],
 				'status_pemesanan' => 'belum disetujui'
 				);
-			$this->db_model->tambah_data('pesanan_pelanggan',$data);
+			$this->Db_model->tambah_data('pesanan_pelanggan',$data);
 
-			 $record_resto = $this->db_model->cari_data_resto($id);
+			 $record_resto = $this->Db_model->cari_data_resto($id);
 			 foreach ($record_resto as $row){
 			 	$no_handphone_resto = $row->no_telp;
 			 	$nama_owner = $row->nama_depan;
@@ -375,7 +388,7 @@ class Utama extends CI_Controller {
 
 			
 
-			$record_pelanggan = $this->db_model->cari_data_pelanggan($idpelanggan);
+			$record_pelanggan = $this->Db_model->cari_data_pelanggan($idpelanggan);
 			 foreach ($record_pelanggan as $row){
 			 	$no_handphone_pelanggan = $row->no_handphone;
 			 }
@@ -427,12 +440,12 @@ class Utama extends CI_Controller {
 	{
 		if($this->session->userdata('id_pelanggan')!=NULL)
 		{
-			$this->load->model('db_model');
+			$this->load->model('Db_model');
 			$idpelanggan = $this->session->userdata('id_pelanggan');
 			$data = array(
-				'record_pelanggan' => $this->db_model->cari_data_bener('user_login','id_user',$idpelanggan),
-				'record_resto' =>  $this->db_model->cari_data('about_resto',$kode_resto),
-				'record_foto' => $this->db_model->cari_data('foto_resto',$kode_resto)
+				'record_pelanggan' => $this->Db_model->cari_data_bener('user_login','id_user',$idpelanggan),
+				'record_resto' =>  $this->Db_model->cari_data('about_resto',$kode_resto),
+				'record_foto' => $this->Db_model->cari_data('foto_resto',$kode_resto)
 				
 			);
 			$this->load->view('tulis_review',$data);
@@ -444,10 +457,10 @@ class Utama extends CI_Controller {
 
 	public function simpan_review()
 	{
-		$this->load->model('db_model');
+		$this->load->model('Db_model');
 		$post = $this->input->post();
 		$koderesto = $post['koderesto'];
-		$jumlahdata = $this->db_model->jumlah_data('review_pelanggan');
+		$jumlahdata = $this->Db_model->jumlah_data('review_pelanggan');
 		$review = 'RP' . ($jumlahdata+1);
 		$data=array(
 			'id_review' => $review,
@@ -458,7 +471,7 @@ class Utama extends CI_Controller {
 			'rating' => $post['rating'],
 			'status' => "TRUE"
 			);
-		$this->db_model->tambah_data('review_pelanggan',$data);
+		$this->Db_model->tambah_data('review_pelanggan',$data);
 		$this->session->set_flashdata("terima_kasih","Terima kasih telah memberikan review, review anda akan ditampilkan pada halaman resto ini.");
 		redirect('utama/home_resto/'.$koderesto);
 	}
@@ -493,6 +506,48 @@ class Utama extends CI_Controller {
         } else {
             show_error($this->email->print_debugger());
         }
+	}
+
+
+	public function top_up_saldo()
+	{
+		$table = 'user_saldo_pelanggan_detail';
+		$id_pelanggan = $this->session->userdata['id_pelanggan'];
+		$data = array(
+			'id_user' => $id_pelanggan,
+
+		);
+		$data = array(
+			'record' => $this->Db_model->read_data_bener($table,$data)
+			
+		);
+
+		$this->load->view('pembayaran',$data);
+	}
+
+	public function proses_top_up_saldo()
+	{
+
+		$post = $this->input->post();
+		if(!empty($post['nama']) && !empty($post['nama']) && !empty($post['nama']) )
+		$jumlahtransfer = $post['jumlahtransfer'];
+		$namarekening = $post['namarekening'];
+		$tanggal = $post['tanggal'];
+		$iduser = $this->session->userdata('id_pelanggan');
+		$jumlahdata = $this->Db_model->jumlah_data('user_saldo_pelanggan_detail');
+		$id_topup = 'IT' . ($jumlahdata+1);
+		$data = array(
+			'id_top_up' => $id_topup,
+			'id_user' => $iduser,
+			'jumlah_top_up_saldo' => $post['jumlahtransfer'],
+			'nama_rekening' => $post['namarekening'],
+			'tanggal_transfer' => $post['tanggal'],
+			'status_transaksi' => 'belum konfirmasi admin'
+		);
+		$this->Db_model->tambah_data('user_saldo_pelanggan_detail',$data);
+		$this->load->view('pembayaran');
+		/*header('Content-Type:application/json');
+		echo json_encode($data);*/
 	}
 
 	

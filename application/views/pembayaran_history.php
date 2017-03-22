@@ -155,82 +155,52 @@
 								    <li class=""><a data-toggle="tab" href="#history">History Top Up</a></li>
 								</ul>
 							  	<div class="tab-content">
-									    <div id="about" class="tab-pane fade in active">
-									    	<?php echo form_open_multipart(base_url("utama/proses_top_up_saldo"), 'method="POST"') ?>
-							  				<h3 style="margin-bottom:15px;">Konfirmasi Top Up Saldo</h3>
-									        <div class="row">
-									        	<div class="col-md-2"> Nama Email</div>
-										        <div class="col-md-4">
-										        	<div class="form-group">
-										        		<?php echo $this->session->userdata('email'); ?>
-										        	</div>
-										        </div>
-									        </div>
-									        <div class="row">
-									        	<div class="col-md-2"> Jumlah Transfer</div>
-										        <div class="col-md-3">
-										        	<div class="form-group">
-										        		<input type="text" class="form-control" placeholder="Jumlah yang ditransfer"  name="jumlahtransfer" maxlength="35" value=""/>
-										        	</div>
-										        </div>
-									        </div>
-									        <div class="row">
-									        	<div class="col-md-2"> Nama Rekening</div>
-										        <div class="col-md-6">
-										        	<div class="form-group">
-										        		<input type="text" class="form-control" placeholder="Nama pemilik rekening"  name="namarekening" maxlength="35" />
-										        	</div>
-										        </div>
-									        </div>
-									        <div class="row">
-									        	<div class="col-md-2"> Tanggal Transfer</div>
-										        <div class="col-md-4">
-											        <div class="form-group has-feedback">
-														<input type="text" class="form-control"  id="tanggal" name="tanggal" placeholder="Tanggal" maxlength="20"  />
-													</div>
-										        </div>
-									        </div>
-									        <div class="row">
-									        	<div class="col-md-2"></div>
-									        	<div class="col-md-2 ">
-									        		<button class="btn btn-large btn btn-success center  " type="submit" id="topup"  style='margin-bottom:20px;'>Verifikasi</button>
+								    <div id="about" class="tab-pane fade">
+								    	<?php echo form_open_multipart(base_url("utama/proses_top_up_saldo"), 'method="POST"') ?>
+						  				<h3 style="margin-bottom:15px;">Konfirmasi Top Up Saldo</h3>
+								        <div class="row">
+								        	<div class="col-md-2"> Nama Email</div>
+									        <div class="col-md-4">
+									        	<div class="form-group">
+									        		<?php echo $this->session->userdata('email'); ?>
 									        	</div>
 									        </div>
-									        <?php echo form_close(); ?>
-										</div>
-							  		
-							  		<div id="history" class="tab-pane fade">
-								      <h3>History Top up</h3>
-								      <div class="table-responsive">
-							    		<table class="table">
-							    			<thead>
-							    				<tr>
-							    					<th>Jumlah Top Up</th>
-							    					<th>Nama Rekening</th>
-							    					<th>Tanggal Transfer</th>
-							    					<th>Keterangan</th>
-							    				</tr>	
-							    			</thead>
-							    			<tbody>
-							    			<?php if(!empty($record)): ?>
-							    					<?php foreach ($record as $row):?>
-									    				<tr>
-									    					<td><?php echo $row->jumlah_top_up_saldo; ?></td>
-									    					<td><?php echo $row->nama_rekening; ?></td>
-									    					<td><?php echo $row->tanggal_transfer; ?></td>
-									    					<?php if($row->status_transaksi=="belum konfirmasi admin"){ ?>
-									    					<td ><a href="#" class="btn btn-info btn-xs disabled" style="width:100px;"><span class="glyphicon glyphicon-refresh"></span> Proses</a></td>
-									    					<?php }elseif($row->status_transaksi=="sudah konfirmasi admin") {?>
-									    					<td ><a href="#" class="btn btn-success btn-xs disabled" style="width:100px;"><span class="glyphicon glyphicon-ok"></span> Selesai</a></td>
-									    					<?php } ?>
-									    					
-									    				</tr>
-							    					<?php endforeach; ?>
-							    				<?php endif; ?>
-							    			</tbody>
-
-							    		</table>
-							    	</div>
+								        </div>
+								        <div class="row">
+								        	<div class="col-md-2"> Jumlah Transfer</div>
+									        <div class="col-md-3">
+									        	<div class="form-group">
+									        		<input type="text" class="form-control" placeholder="Jumlah yang ditransfer"  name="jumlahtransfer" maxlength="35" value=""/>
+									        	</div>
+									        </div>
+								        </div>
+								        <div class="row">
+								        	<div class="col-md-2"> Nama Rekening</div>
+									        <div class="col-md-6">
+									        	<div class="form-group">
+									        		<input type="text" class="form-control" placeholder="Nama pemilik rekening"  name="namarekening" maxlength="35" />
+									        	</div>
+									        </div>
+								        </div>
+								        <div class="row">
+								        	<div class="col-md-2"> Tanggal Transfer</div>
+									        <div class="col-md-4">
+										        <div class="form-group has-feedback">
+													<input type="text" class="form-control"  id="tanggal" name="tanggal" placeholder="Tanggal" maxlength="20"  />
+												</div>
+									        </div>
+								        </div>
+								        <div class="row">
+								        	<div class="col-md-2"></div>
+								        	<div class="col-md-2 ">
+								        		<button class="btn btn-large btn btn-success center  " type="submit" id="topup"  style='margin-bottom:20px;'>Verifikasi</button>
+								        	</div>
+								        </div>
+								        <?php echo form_close(); ?>
+									</div>
+							  		<div id="history" class="tab-pane fade in active">
+								      <h3>Menu 3</h3>
+								      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
 								    </div> 
 								</div>
 							</div>	
