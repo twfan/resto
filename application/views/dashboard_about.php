@@ -78,6 +78,7 @@
 			<div class="row">
 				<a href="<?= base_url('owner/dashboard_about') ?>"><div class="col-md-12 menu"><li >About</li></div></a>
 			</div>
+			
 		</div>
 		<div class="col-md-10 content_panel " style="min-height: 100%;">
 				<div class="col-md-12">
@@ -178,7 +179,38 @@
 								        	</div>
 								        </div>
 							        </div>
-							        
+							        <div class="row">
+							        	<div class="col-md-2"> Biaya tiap kursi</div>
+								        <div class="col-md-4">
+								        	<div class="form-group">
+								        		<input type="number" class="form-control" placeholder="Harga yang dibebankan tiap kursi"  name="hargakursi" maxlength="35" value="<?php echo $detail->biaya_kursi; ?>"/>
+								        	</div>
+								        </div>
+							        </div>
+							        <div class="row">
+							        	<div class="col-md-2"> Kuota Harian</div>
+								        <div class="col-md-2">
+								        	<div class="form-group">
+								        		<input type="number" class="form-control" placeholder="Kuota transaksi"  name="kuota" max="5" value="<?php echo $detail->kuota_harian; ?>"/>
+								        	</div>
+								        </div>
+							        </div>
+							        <div class="row">
+							        	
+							        	<div class="col-md-2"> Pemberitahuan SMS</div>
+								        <div class="col-md-1">
+								        	<?php if($detail->sms=="1"){ ?>
+								        		<div class="form-group">
+									        		<input type="checkbox"  name="sms" value="1" checked=" "/> Ya
+									        	</div>
+								        	<?php }else {?>
+								        		<div class="form-group">
+									        		<input type="checkbox"  name="sms" value="1"/> Ya
+									        	</div>
+								        	<?php } ?>
+								        	
+								        </div>
+							        </div>
 							        <div class="row">
 							        	<div class="col-md-2"></div>
 							        	<div class="col-md-2 ">

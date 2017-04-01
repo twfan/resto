@@ -78,51 +78,37 @@
 			<div class="row">
 				<a href="<?= base_url('owner/dashboard_about') ?>"><div class="col-md-12 menu"><li >About</li></div></a>
 			</div>
-			
+			<div class="row">
+				<a href="<?= base_url('owner/dashboard_setting_reservasi') ?>"><div class="col-md-12 menu"><li >Setting Reservasi</li></div></a>
+			</div>
 		</div>
 		<div class="col-md-10 content_panel " style="min-height: 100%;">
 			<div class="col-md-12">
-				<h3 class="row" style="margin-bottom:15px;">Daftar pesanan yang masuk</h3>
+				<h3 class="row" style="margin-bottom:15px;">Setting Pesanan</h3>
 				<div class="row">
-					<div class="table-responsive">
-			    		<table class="table"
-			    			<thead>
-			    				<tr>
-			    					<th>Id pesanan</th>
-			    					<th>Atas nama</th>
-			    					<th>Jumlah kursi</th>
-			    					<th>Tanggal acara</th>
-			    					<th>Jam acara</th>
-			    					<th>Bukti pembayaran</th>
-			    					<th>Status pemesanan</th>
-			    					<th>Tanggal Transaksi</th>
-			    					<th>Aksi</th>
-			    				</tr>	
-			    			</thead>
-			    			<tbody>
-			    			<?php if(!empty($record_pesanan)){ ?>
-								<?php foreach ($record_pesanan as $row){?>
-				    				<tr>
-				    					<td><?php echo $row->id_pesanan; ?></td>
-				    					<td><?php echo $row->nama_user; ?></td>
-				    					<td><?php echo $row->jumlah_kursi; ?></td>
-				    					<td><?php echo $row->tanggal_acara; ?></td>
-				    					<td><?php echo $row->jam_acara; ?></td>
-				    					<td><img src="<?php echo $row->bukti_bayar; ?>" style="width:100px;height:100px;"></td>
-				    					<td><?php echo $row->status_pemesanan; ?></td>
-				    					<td><?php echo $row->tanggal_transaksi; ?></td>
-				    					<?php if($row->status_pemesanan=='belum disetujui'){?>
-				    					<td><a href="<?php echo base_url('owner/terima_pemesanan/'.$row->id_pesanan) ?>" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-ok"></span> Lanjut Pembayaran</a><br/><br/>
-				    					<a href="<?php echo base_url('owner/tolak_pemesanan/'.$row->id_pesanan) ?>" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Tolak Pemesanan</a></td>
-				    					<?php }elseif($row->status_pemesanan=='lanjut pembayaran') {?>
-				    					<td><a href="<?php echo base_url('owner/terima_pemesanan/'.$row->id_pesanan) ?>" class="btn btn-warning btn-xs disabled"><span class="glyphicon glyphicon-usd"></span> Menunggu Pembayaran</a></td>
-				    					<?php } ?>
-								<?php } ?>
-							<?php } ?>
-			    			</tbody>
-			    		</table>
-					</div>
-				</div>
+		        	<div class="col-md-2"> Biaya tiap kursi</div>
+			        <div class="col-md-4">
+			        	<div class="form-group">
+			        		<input type="number" class="form-control" placeholder="Harga yang dibebankan tiap kursi"  name="hargakursi" maxlength="35" value=""/>
+			        	</div>
+			        </div>
+		        </div>
+		        <div class="row">
+		        	<div class="col-md-2"> Kuota pemesanan</div>
+			        <div class="col-md-2">
+			        	<div class="form-group">
+			        		<input type="number" class="form-control" placeholder="Kuota transaksi"  name="kuota" maxlength="35" value=""/>
+			        	</div>
+			        </div>
+		        </div>
+		        <div class="row">
+		        	<div class="col-md-2"> Pemberitahuan SMS</div>
+			        <div class="col-md-1">
+			        	<div class="form-group">
+			        		<input type="checkbox"  name="kuota" /> Ya
+			        	</div>
+			        </div>
+		        </div>
 			</div>
 		</div>
 	</div>

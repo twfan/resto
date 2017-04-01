@@ -40,9 +40,22 @@ class Admin extends CI_Controller {
 	}
 	public function proses_register()
 	{
+		$config['protocol'] = "smtp";
+        $config['smtp_host'] = "ssl://smtp.gmail.com";
+        $config['smtp_port'] = "465";
+        $config['smtp_user'] = "resto.stts@gmail.com";
+        $config['smtp_pass'] = "12041995";
+        $config['charset'] = "utf-8";
+        $config['mailtype'] = "html";
+        $config['newline'] = "\r\n";
+
+        $this->load->library('email');
+		$this->email->initialize($config);
 		
+
 		$post = $this->input->post();
 		$password = $post['password'];
+		$email = $post['email'];
 		
 		$jumlahdata = $this->Db_model->jumlah_data('user_admin');
 		$iduser = 'ADM' . ($jumlahdata+1);
@@ -57,36 +70,26 @@ class Admin extends CI_Controller {
 			'email' => $post['email'],
 			'status' => 'belum verifikasi'
 		);
-		$this->Db_model->tambah_data('user_admin',$data);
-
-		$this->load->library('email');
-		$post = $this->input->post();
-		$email = $post['email'];
-		$config['protocol'] = "smtp";
-        $config['smtp_host'] = "ssl://smtp.gmail.com";
-        $config['smtp_port'] = "465";
-        $config['smtp_user'] = "resto.stts@gmail.com";
-        $config['smtp_pass'] = "12041995";
-        $config['charset'] = "utf-8";
-        $config['mailtype'] = "html";
-        $config['newline'] = "\r\n";
-
-		$this->email->initialize($config);
+		
+		
 		$link = base_url('admin/verifikasi/'.$username_string);
-		$htmlContent = '<h1>Terima kasih telah mendaftar</h1>';
+		$htmlContent = '<h3>Terima kasih telah mendaftar</h3>';
 		$htmlContent .= "<div>Silahkan klik link berikut untuk melakukan verifikasi email </div> <a href='$link'>$link</a>";
 		
+		
 		$this->email->from('resto.stts@gmail.com', 'Resto.com');
-		$this->email->to($email);
+		$this->email->to($post['email']);
 		$this->email->subject('Verifikasi email');
 		$this->email->message($htmlContent);
 
 		if ($this->email->send()) {
-			header('Content-Type:application/json');
-			echo json_encode($data);
-        } else {
-            show_error($this->email->print_debugger());
-        }
+			$this->Db_model->tambah_data('user_admin',$data);
+			$this->session->set_flashdata('email_sent','Email verifikasi telah dikirim, silahkan cek email anda untuk verifikasi email.');
+		   	redirect('admin');
+		} else {
+		    show_error($this->email->print_debugger());
+		}
+		
 	}
 
 	public function verifikasi($id)

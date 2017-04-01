@@ -12,6 +12,10 @@ class Owner extends CI_Controller {
 		$kode_resto = $this->session->userdata('kode_resto');
 	}
 
+	public function dashboard_setting_reservasi()
+	{
+		$this->load->view('dashboard_setting_reservasi');
+	}
 	public function index()
 	{
 		$this->load->view('login_owner');
@@ -178,12 +182,14 @@ class Owner extends CI_Controller {
 		//echo $cek_data;
 		if($cek_data=="data ada")
 		{
-			if($this->upload->do_upload('userfile'))
+			if($upload_data['file_name']!="")
 			{
-				$upload_data = $this->upload->data();
-				$gambar_resto = base_url()."uploads/resto_profile/". $upload_data['file_name'];
-			}
-			$data=array(
+				if($this->upload->do_upload('userfile'))
+				{
+					$upload_data = $this->upload->data();
+					$gambar_resto = base_url()."uploads/resto_profile/". $upload_data['file_name'];
+				}
+				$data=array(
 							'nama_resto' => $post['namaresto'],
 							'foto_resto' => $gambar_resto,
 							'alamat_resto' => $post['alamatresto'],
@@ -193,10 +199,32 @@ class Owner extends CI_Controller {
 							'harga_terendah' => $post['terendah'],
 							'harga_tertinggi' => $post['tertinggi'],
 							'metode_pembayaran' => $post['pembayaran'],
+							'biaya_kursi' => $post['hargakursi'],
+							'kuota_harian' => $post['kuota'],
+							'sms' => $post['sms'],
 							'status' => 'TRUE'
 							);
+			
+			}else
+			{
+				$data=array(
+							'nama_resto' => $post['namaresto'],
+							'alamat_resto' => $post['alamatresto'],
+							'no_telfon' => $post['notelfonresto'],
+							'jadwal_buka' => $post['jadwal'],
+							'tipe_sajian' => $post['sajian'],
+							'harga_terendah' => $post['terendah'],
+							'harga_tertinggi' => $post['tertinggi'],
+							'metode_pembayaran' => $post['pembayaran'],
+							'biaya_kursi' => $post['hargakursi'],
+							'kuota_harian' => $post['kuota'],
+							'sms' => $post['sms'],
+							'status' => 'TRUE'
+							);
+			}
+			
 				$this->Db_model->update_data($kode_resto,$data);
-				redirect('owner/dashboard_owner');
+				redirect('owner/dashboard_about');
 		}else
 		{
 			$jumlahdata = $this->Db_model->jumlah_data('about_resto');
@@ -220,10 +248,13 @@ class Owner extends CI_Controller {
 							'harga_terendah' => $post['terendah'],
 							'harga_tertinggi' => $post['tertinggi'],
 							'metode_pembayaran' => $post['pembayaran'],
+							'biaya_kursi' => $post['hargakursi'],
+							'kuota_harian' => $post['kuota'],
+							'sms' => $post['sms'],
 							'status' => 'TRUE'
 							);
 				$this->Db_model->tambah_data('about_resto',$data);
-				redirect('owner/dashboard_owner');
+				redirect('owner/dashboard_about');
 			}
 		}
 		
