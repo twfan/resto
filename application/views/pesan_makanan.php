@@ -16,7 +16,7 @@
 	
 	
 	<script src="http://code.jquery.com/jquery.min.js"></script>
-	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery/jquery-2.2.3.min.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.js"></script>
@@ -39,7 +39,6 @@
     /*$('.combobox').combobox();*/
    $('html, body').scrollTop($('.nama').offset().top);
    var kode_resto = $(".kode_resto").val();
-   alert(kode_resto);
     $.ajax({
     	type:"post",
     	dataType:"json",
@@ -48,45 +47,47 @@
     	success:function(html)
     	{
     		for (var i = 0; i < html.length; i++) {
-				var table = $("<tr><td>"+html[i].nama_makanan+"</td><td>"+html[i].deskripsi+"</td><td>"+html[i].harga+"</td><td><img src='"+html[i].foto_makanan+"' style='width:50px;height:50px;' /></td><td><button class='button_kurang' value='"+html[i].kode_menu+"'>-</button><input type='text' class='jumlah_pesan text-center' value='0' style='width:30px;'></input><button class='button_tambah' value='"+html[i].kode_menu+"'>+</button></td></tr>");
-				$(table).find('.button_tambah').click(function(){
-					$(table).find('input').val()
-					// var kode_menu = $(this).val();
-					// var hidden_menu = $(".hidden_menu").val();
-					// var hidden_harga = $(".hidden_harga").val();
-					// var jumlah_pesan = $(".jumlah_pesan").val();
-					// var count_pesan = parseInt(jumlah_pesan) + 1;
-					// $(".jumlah_pesan").val(count_pesan);
-					// $.ajax({
-					// 	type:"post",
-					// 	url:"<?php echo base_url('utama/ajax_baca_harga')  ?>",
-			  //           data:{kode_menu:kode_menu},
-			  //           success:function(html){
-			  //           	var total_harga = parseInt(hidden_harga)+parseInt(html[0].harga);
-			  //           	/*alert(total_harga);*/
-			  //           	$(".hidden_harga").val(total_harga);
-			  //           	$(".total_harga").text(total_harga);
-			  //           }
-					// });
+    			let template = "<tr>" + 
+    								"<td>"+html[i].nama_makanan+"</td>" +
+    								"<td>"+html[i].deskripsi+"</td>" +
+    								"<td class='harga'>"+html[i].harga+"</td>" +
+    								"<td><img src='"+html[i].foto_makanan+"' style='width:50px;height:50px;' /></td>" +
+    								"<td>" +
+    									"<input type='hidden' class='harga_satuan' name='harga_satuan[]' value='"+html[i].harga+"'>" +
+    									"<input type='hidden' class='sub_total_harga' name='sub_total_harga[]'>" +
+    									"<input type='hidden' class='nama_makanan' name='nama_makanan[]' value='"+html[i].nama_makanan+"'>" +
+    									"<button type='button' class='button_kurang' value='"+html[i].kode_menu+"'>-</button>" +
+    									"<input type='number' name='qty[]' class='qty text-center' value='0' style='width:40px;' readonly>" +
+    									"<button type='button' class='button_tambah' value='"+html[i].kode_menu+"'>+</button>" +
+    								"</td>" +
+    							"</tr>"
+				let table = $(template);
+				$(table).find('.qty').on('keyup', function() {
+					if ($(this).val() == '') {
+						$(this).val(0)
+					}
+					generate_total_harga()
+				})
+				$(table).find('.button_tambah').on('click', function() {
+					// Nambah qty
+					var qty = $(table).find('.qty').val()
+					$(table).find('.qty').val(parseInt(qty) + 1)
+					// Tambah total harga
+					generate_total_harga()
+					// Atur ulang sub total harga
+					var harga_satuan = $(table).find('.harga_satuan').val()
+					$(table).find('.sub_total_harga').val((parseInt(qty) + 1) * parseInt(harga_satuan))
 				})
 				$(table).find('.button_kurang').click(function(){
-					// var kode_menu = $(this).val();
-					// var hidden_menu = $(".hidden_menu").val();
-					// var hidden_harga = $(".hidden_harga").val();
-					// var jumlah_pesan = $(".jumlah_pesan").val();
-					// var count_pesan = parseInt(jumlah_pesan) - 1;
-					// $(".jumlah_pesan").val(count_pesan);
-					// $.ajax({
-					// 	type:"post",
-					// 	url:"<?php echo base_url('utama/ajax_baca_harga')  ?>",
-			  //           data:{kode_menu:kode_menu},
-			  //           success:function(html){
-			  //           	var total_harga = parseInt(hidden_harga)-parseInt(html[0].harga);
-			  //           	/*alert(total_harga);*/
-			  //           	$(".hidden_harga").val(total_harga);
-			  //           	$(".total_harga").text(total_harga);
-			  //           }
-					// });
+					var qty = $(table).find('.qty').val()
+					if ((parseInt(qty) - 1) >= 0) {
+					     $(table).find('.qty').val(parseInt(qty) - 1)
+					}
+					// Tambah total harga
+					generate_total_harga()
+					// Atur ulang sub total harga
+					var harga_satuan = $(table).find('.harga_satuan').val()
+					$(table).find('.sub_total_harga').val((parseInt(qty) + 1) * parseInt(harga_satuan))
 				})
 				$(".data-makanan").append(table)
 			};
@@ -94,15 +95,17 @@
     	}
     });
 
+    function generate_total_harga() {
+    	var total_harga = 0
+    	$('.data-makanan').find('tr').each(function() {
+    		var qty = parseInt($(this).find('.qty').val())
+    		var harga = parseInt($(this).find('.harga').html())
+    		total_harga += qty * harga
+    	})
+    	$('.total_bayar').html(total_harga)
+    }
+
     
-
-
-    /*var pgwSlideshow = $('.pgwSlideshow').pgwSlideshow();
-    pgwSlideshow.reload({
-	    maxHeight:400,
-	    intervalDuration:5000
-	});
-    pgwSlideshow.startSlide();*/
     $('#tanggal').datepicker({
         startDate: "+1d"
     });
@@ -164,28 +167,37 @@
 					<div class="row">
 						<div class="col-md-12 pesan"><h1>Pesan makanan</h1></div>
 					</div>
-					<div class="table-responsive">
-						<table class="table">
-							<thead>
-								<tr>
-									<td>Nama Makanan</td>
-									<td>Deskripsi</td>
-									<td>Harga</td>
-									<td>Foto</td>
-									<td></td>
-								</tr>
-							</thead>
-							<tbody class="data-makanan">
-								
-							</tbody>
-						</table>
-						<input type="hidden" class="hidden_menu" value="">
-						<input type="hidden" class="hidden_harga" value="0">
+					<div class="">
+						<?php echo $id_pesanan; ?>
+						<?php echo $kode_resto; ?>
+						<form method="post" action="<?php echo base_url('utama/proses_pesan_makan/'.$kode_resto.'/'.$id_pesanan); ?>">
+							<table class="table table-responsive">
+								<thead>
+									<tr>
+										<td>Nama Makanan</td>
+										<td>Deskripsi</td>
+										<td>Harga</td>
+										<td>Foto</td>
+										<td></td>
+									</tr>
+								</thead>
+								<tbody class="data-makanan">
+									
+								</tbody>
+							</table>
+							<div class="row">
+								<div class="col-md-4"><h4>Harga Total</h4></div>
+								<div class=" col-md-offset-5 col-md-3 text-right"><h3>Rp <span class="total_bayar" name="total_bayar"></span></h3></div>
+							</div>
+							<div class="row">
+								<div class="col-md-offset-10 col-md-1">
+									<button class="btn btn-success" type="submit" style="margin-bottom:15px;">Pesan</button>
+								</div>
+							</div>
+							
+						</form>
 					</div>
-					<div class="row">
-						<div class="col-md-4"><h4>Harga Total</h4></div>
-						<div class=" col-md-offset-5 col-md-3 text-right"><h3 class="total_harga">Rp 100000</h3></div>
-					</div>	
+					
 				</div>
 			</div>
 		</div>
@@ -215,7 +227,7 @@
 	</div>
 </div>
 <!-- FOOTER -->
-<div class="container-fluid" style="background-color:grey;">
+<div class="container-fluid" style="background-color:grey;margin-top:15px;">
 	<div class="container" >
 		<div class="row" >
 			<div class="col-md-4 text-left"><h4>resto.com</h4></div>

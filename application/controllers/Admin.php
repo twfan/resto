@@ -19,6 +19,7 @@ class Admin extends CI_Controller {
 
 	public function proses_login()
 	{
+		$this->load->model('Model_admin');
 		$post = $this->input->post();
 		$username = $post['username'];
 		$password = $post['password'];
@@ -28,9 +29,11 @@ class Admin extends CI_Controller {
 			'password' => $password,
 			'status' => 'sudah verifikasi'
 		);
-		$hasil = $this->Db_model->cari_data_bener($table,$data);
-		header('Content-Type:application/json');
-		echo json_encode($hasil);
+		$hasil = $this->Model_admin->cari_data_bener($table,$data);
+		if(count($hasil)>0)
+		{
+			redirect('admin/home');
+		}
 	}
 
 
@@ -40,22 +43,9 @@ class Admin extends CI_Controller {
 	}
 	public function proses_register()
 	{
-		$config['protocol'] = "smtp";
-        $config['smtp_host'] = "ssl://smtp.gmail.com";
-        $config['smtp_port'] = "465";
-        $config['smtp_user'] = "resto.stts@gmail.com";
-        $config['smtp_pass'] = "12041995";
-        $config['charset'] = "utf-8";
-        $config['mailtype'] = "html";
-        $config['newline'] = "\r\n";
-
-        $this->load->library('email');
-		$this->email->initialize($config);
 		
-
 		$post = $this->input->post();
 		$password = $post['password'];
-		$email = $post['email'];
 		
 		$jumlahdata = $this->Db_model->jumlah_data('user_admin');
 		$iduser = 'ADM' . ($jumlahdata+1);
@@ -70,26 +60,36 @@ class Admin extends CI_Controller {
 			'email' => $post['email'],
 			'status' => 'belum verifikasi'
 		);
-		
-		
+		$this->Db_model->tambah_data('user_admin',$data);
+
+		$this->load->library('email');
+		$post = $this->input->post();
+		$email = $post['email'];
+		$config['protocol'] = "smtp";
+        $config['smtp_host'] = "ssl://smtp.gmail.com";
+        $config['smtp_port'] = "465";
+        $config['smtp_user'] = "resto.stts@gmail.com";
+        $config['smtp_pass'] = "12041995";
+        $config['charset'] = "utf-8";
+        $config['mailtype'] = "html";
+        $config['newline'] = "\r\n";
+
+		$this->email->initialize($config);
 		$link = base_url('admin/verifikasi/'.$username_string);
-		$htmlContent = '<h3>Terima kasih telah mendaftar</h3>';
+		$htmlContent = '<h1>Terima kasih telah mendaftar</h1>';
 		$htmlContent .= "<div>Silahkan klik link berikut untuk melakukan verifikasi email </div> <a href='$link'>$link</a>";
 		
-		
 		$this->email->from('resto.stts@gmail.com', 'Resto.com');
-		$this->email->to($post['email']);
+		$this->email->to($email);
 		$this->email->subject('Verifikasi email');
 		$this->email->message($htmlContent);
 
 		if ($this->email->send()) {
-			$this->Db_model->tambah_data('user_admin',$data);
-			$this->session->set_flashdata('email_sent','Email verifikasi telah dikirim, silahkan cek email anda untuk verifikasi email.');
-		   	redirect('admin');
-		} else {
-		    show_error($this->email->print_debugger());
-		}
-		
+			header('Content-Type:application/json');
+			echo json_encode($data);
+        } else {
+            show_error($this->email->print_debugger());
+        }
 	}
 
 	public function verifikasi($id)
@@ -101,12 +101,22 @@ class Admin extends CI_Controller {
 
 	public function home()
 	{
-		$query = "SELECT user_saldo_pelanggan_detail.id_top_up , user_saldo_pelanggan_detail.id_user, user_login.nama_user, user_saldo_pelanggan_detail.jumlah_top_up_saldo, user_saldo_pelanggan_detail.nama_rekening, user_saldo_pelanggan_detail.tanggal_transfer, user_saldo_pelanggan_detail.tanggal_konfirmasi, user_saldo_pelanggan_detail.status_transaksi  FROM `user_saldo_pelanggan_detail`, `user_login` WHERE user_saldo_pelanggan_detail.id_user = user_login.id_user";
+		$this->load->model('Model_saldo_detail');
 		
 		$data = array(
-			'record' => $this->Db_model->baca_data_dengan_query_custom($query)
+			'record' => $this->Model_saldo_detail->list_top_up()
 		);
 		$this->load->view('admin_blank',$data);
+	}
+
+	public function pembayaran()
+	{
+		$this->load->model('Model_pembayaran_detail');
+		$data = array(
+			'record' => $this->Model_pembayaran_detail->baca_data()
+		);
+		$this->load->view('admin_pembayaran',$data);
+
 	}
 
 	public function konfirmasi($id)
@@ -129,9 +139,6 @@ class Admin extends CI_Controller {
 		foreach ($hasil_id_user as $row) {
 			$id_user = $row->id_user;
 		}
-
-		
-
 		$query = "SELECT user_saldo_pelanggan.saldo FROM user_saldo_pelanggan  WHERE user_saldo_pelanggan.id_user = '$id_user'";
 		$hasil_saldo_sekarang = $this->Db_model->baca_data_dengan_query_custom($query);
 

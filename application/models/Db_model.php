@@ -166,7 +166,7 @@ class Db_model extends CI_Model{
 	{
 		/*SELECT user_login.nama_user, pesanan_pelanggan.jumlah_kursi, pesanan_pelanggan.bukti_bayar, pesanan_pelanggan.status_pemesanan FROM pesanan_pelanggan, user_login WHERE pesanan_pelanggan.kode_resto='OR1';*/
 		
-		$query = $this->db->query("SELECT pesanan_pelanggan.id_pesanan, user_login.nama_user, pesanan_pelanggan.jumlah_kursi, pesanan_pelanggan.tanggal_acara, pesanan_pelanggan.jam_acara, pesanan_pelanggan.bukti_bayar, pesanan_pelanggan.status_pemesanan, pesanan_pelanggan.tanggal_transaksi FROM pesanan_pelanggan, user_login WHERE pesanan_pelanggan.kode_resto='$id_resto' AND pesanan_pelanggan.id_pelanggan=user_login.id_user;");
+		$query = $this->db->query("SELECT pesanan_pelanggan.id_pesanan, user_login.nama_user, pesanan_pelanggan.jumlah_kursi, pesanan_pelanggan.tanggal_acara, pesanan_pelanggan.jam_acara, pesanan_pelanggan.total_bayar,  pesanan_pelanggan.bukti_bayar, pesanan_pelanggan.status_pemesanan, pesanan_pelanggan.tanggal_transaksi FROM pesanan_pelanggan, user_login WHERE pesanan_pelanggan.kode_resto='$id_resto' AND pesanan_pelanggan.id_pelanggan=user_login.id_user;");
 		return $query->result();
 
 
@@ -179,14 +179,11 @@ class Db_model extends CI_Model{
 		WHERE pesanan_pelanggan.id_pelanggan='UL1'*/
 	}
 
-	public function baca_data_pesanan_untuk_pelanggan($id_pelanggan)
-	{
-		$query = $this->db->query("SELECT pesanan_pelanggan.id_pesanan, about_resto.nama_resto, pesanan_pelanggan.jumlah_kursi, pesanan_pelanggan.tanggal_acara, pesanan_pelanggan.jam_acara, pesanan_pelanggan.bukti_bayar, pesanan_pelanggan.status_pemesanan  FROM pesanan_pelanggan, about_resto  WHERE pesanan_pelanggan.id_pelanggan='$id_pelanggan' AND pesanan_pelanggan.kode_resto = about_resto.kode_resto");
-		return $query->result();
-	}
+	
 
 	public function baca_data_dengan_query_custom($query)
 	{
+		
 		$query = $this->db->query($query);
 		return $query->result();
 	}

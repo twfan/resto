@@ -9,6 +9,7 @@
 	<!-- <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/combobox/css/bootstrap-combobox.css"> -->
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/jqueryui/jquery-ui.css">
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/datepicker/css/datepicker.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/popup-image/source/jquery.fancybox.css" media="screen">
 	
 	<script src="http://code.jquery.com/jquery.min.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery/jquery-1.11.3.min.js"></script>
@@ -16,7 +17,7 @@
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/jqueryui/jquery-ui.js"></script>
-	<script src="<?php echo base_url(); ?>assets/plugin/datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/plugin/popup-image/source/jquery.fancybox.js"></script>
 	
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -32,6 +33,7 @@
 	</style>
 <script type="text/javascript">
   $(document).ready(function(){
+  	$(".perbesar").fancybox();
     /*$('.combobox').combobox();*/
     $('#tanggal').datepicker({
         format: "dd-mm-yyyy",
@@ -128,6 +130,7 @@
 			    					<th>Jumlah Kursi</th>
 			    					<th>Tanggal acara</th>
 			    					<th>Jam Acara</th>
+			    					<th>Total Bayar</th>
 			    					<th>Bukti Bayar</th>
 			    					<th>Aksi</th>
 			    				</tr>	
@@ -141,11 +144,24 @@
 				    					<td class="text-center"><?php echo $row->jumlah_kursi; ?></td>
 				    					<td class="text-center"><?php echo $row->tanggal_acara; ?></td>
 				    					<td class="text-center"><?php echo $row->jam_acara; ?></td>
-				    					<td><img src="<?php echo $row->bukti_bayar; ?>" style="width:100px;height:100px;"></td>
+				    					<td class="text-center"><?php echo $row->total_bayar; ?></td>
+				    					<td>
+				    						<?php if($row->bukti_bayar==""){ ?>
+				    						<a href="<?php echo base_url(); ?>uploads/default.png" class="perbesar" >
+												<img src="<?php echo base_url(); ?>uploads/default.png" width="100">
+											</a>
+				    						<?php }else{ ?>
+				    						
+				    						<a href="<?php echo $row->bukti_bayar; ?>" class="perbesar">
+				    							<img  src="<?php echo $row->bukti_bayar; ?>" style="width:100px;height:100px;">
+				    						</a>
+				    						<?php } ?>
+				    					</td>
+
 				    					<?php if($row->status_pemesanan=='belum disetujui'){ ?>
 				    					<td ><a href="#" class="btn btn-info btn-xs" style="width:100px;"><span class="glyphicon glyphicon-remove"></span> Remove</a></td>
 				    					<?php }elseif($row->status_pemesanan=='lanjut pembayaran'){ ?>
-				    					<td ><a href="<?php echo base_url('utama/bayar_pesanan/'.$row->id_pesanan) ?>" class="btn btn-success btn-xs" style="width:100px;"><span class="glyphicon glyphicon-ok"></span> Bayar</a><br><br><a href="#" class="btn btn-info btn-xs" style="width:100px;"><span class="glyphicon glyphicon-remove"></span> Remove</a></td>
+				    					<td ><a href="<?php echo base_url('utama/bayar/'.$row->id_pesanan) ?>" class="btn btn-success btn-xs" style="width:100px;"><span class="glyphicon glyphicon-ok"></span> Bayar</a><br><br><a href="<?php echo base_url('utama/pesan_makan/'.$row->kode_resto.'/'.$row->id_pesanan) ?>" class="btn btn-info btn-xs" style="width:100px;"><span class="glyphicon glyphicon-cutlery"></span> Pesan Makan</a></td>
 				    					<?php } ?>
 				    					<!-- <td ><a href="#" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-remove"></span> Remove</a></td> -->
 				    				</tr>

@@ -6,7 +6,6 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/style.css">
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.css">
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/jqueryui/jquery-ui.css">
-	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/datepicker/css/datepicker.css">
 	
 	<script src="http://code.jquery.com/jquery.min.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery/jquery-1.11.3.min.js"></script>
@@ -14,18 +13,21 @@
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/jqueryui/jquery-ui.js"></script>
-	<script src="<?php echo base_url(); ?>assets/plugin/datepicker/js/bootstrap-datepicker.js"></script>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <script>
   $( function() {
+  	$("#test").click(function(){
+  		alert("asdasd");
+  	})
   	 $('#tanggal').datepicker({
-        format: "yyyy-mm-dd",
-        autoclose:true,
-        maxDate: "now"
-    });  	
+  	 	changeYear: true,
+  	 	changeMonth: true,
+       dateFormat: "yy-mm-dd",
+	  	yearRange: "1945:2007"
+    }); 
   } );
 </script>
 <div class="container ">
@@ -43,22 +45,19 @@
 			<?php
 			}
 			?>
+			
+			
+			
 			<div class="row">
 				<div class="form-group has-feedback register">
-				    <input type="text" class="form-control" placeholder="Nama Lengkap"  name="nama" maxlength="35" value="<?php echo set_value('nama'); ?>"/>
-				    <i class="glyphicon glyphicon-user form-control-feedback"></i>
+				    <input type="text" class="form-control" placeholder="Alamat Email" name="email" maxlength="30" value="<?php echo set_value('email'); ?>"/>
+				    <i class="glyphicon glyphicon-envelope form-control-feedback"></i>
 				</div>
 			</div>
 			<div class="row">
-					<div class="form-group has-feedback register">
-		                <input type="text" class="form-control" name="tanggal" id="tanggal" placeholder="Tanggal Lahir" maxlength="10" name="tanggal" value="<?php echo set_value('tanggal'); ?>"/>
-		                <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
-		            </div>
-			</div>
-			<div class="row">
 				<div class="form-group has-feedback register">
-					<label class="radio-inline"> <input type="radio" name="gender" value="Pria">Pria</input></label>
-					<label class="radio-inline" > <input type="radio" name="gender" value="Wanita">Wanita</input></label>
+				    <input type="text" class="form-control" placeholder="Nama User" name="namauser" maxlength="150" value="<?php echo set_value('namauser'); ?>"/>
+				    <i class="glyphicon glyphicon-user form-control-feedback"></i>
 				</div>
 			</div>
 			<div class="row">
@@ -69,8 +68,14 @@
 			</div>
 			<div class="row">
 				<div class="form-group has-feedback register">
-				    <input type="text" class="form-control" placeholder="Alamat Email" name="email" maxlength="30" value="<?php echo set_value('email'); ?>"/>
-				    <i class="glyphicon glyphicon-envelope form-control-feedback"></i>
+	                <input id="tanggal" readonly type="text" class="form-control " name="tanggal"  placeholder="Tanggal Lahir" maxlength="10" name="tanggal" value="<?php echo set_value('tanggal'); ?>"/>
+	                <i  id="test" class=" glyphicon glyphicon-calendar form-control-feedback"></i>        	
+	            </div>
+			</div>
+			<div class="row">
+				<div class="form-group has-feedback register">
+					<label class="radio-inline"> <input type="radio" name="gender" value="Pria">Pria</input></label>
+					<label class="radio-inline" > <input type="radio" name="gender" value="Wanita">Wanita</input></label>
 				</div>
 			</div>
 			<div class="row">

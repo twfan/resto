@@ -288,16 +288,16 @@
 		                    <p class="list-group-item-text"><?php echo $row->alamat_resto ?></p>
 		                </div>
 		                <div class="col-md-3 text-center">
-		                    <h2> 14240 <small> votes </small></h2>
+		                    <!-- <h2> 14240 <small> votes </small></h2> -->
 		                    <button type="button" class="btn btn-primary btn-lg btn-block"> Vote Now! </button>
-		                    <div class="stars">
+		                    <!-- <div class="stars">
 		                        <span class="glyphicon glyphicon-star"></span>
 		                        <span class="glyphicon glyphicon-star"></span>
 		                        <span class="glyphicon glyphicon-star"></span>
 		                        <span class="glyphicon glyphicon-star"></span>
 		                        <span class="glyphicon glyphicon-star-empty"></span>
 		                    </div>
-		                    <p> Average 4.5 <small> / </small> 5 </p>
+		                    <p> Average 4.5 <small> / </small> 5 </p> -->
 		                </div>
 		        	</a>
 				<?php endforeach; ?>

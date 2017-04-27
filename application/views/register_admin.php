@@ -30,8 +30,38 @@
 <script>
   $(document).ready(function(){
   
-  	$('#daftar').click(function(){
-  		  $(this).attr("disabled","disabled");
+  	$('#register').click(function(){
+  		var username = $("#username").val();
+  		var password = $("#password").val();
+  		var conf_password = $("#conf_password").val();
+  		var nama_user = $("#nama_user").val();
+  		var email = $("#email").val();
+  		if(password==conf_password)
+  		{
+  			$.ajax({
+	  			type:'post',
+	  			dataType:'json',
+	  			url:"<?php echo base_url('admin/proses_register')  ?>",
+				data:{username:username,password:password,nama_user:nama_user,email:email},
+				success:function(html)
+				{
+					swal({
+							  title: "Id berhasil didaftar",
+							  text: "Mohon verifikasi email yang telah didaftarkan.",
+							  type: "success",
+							  confirmButtonText: "Ok"
+							},
+							function(){
+							  window.location.replace("<?php echo base_url('admin') ?>");
+							});
+					
+				}
+	  		});
+  		}else
+  		{
+  			swal("Password tidak sama", "Kombinasi password dan konfirmasi password tidak sama", "error");
+  		}
+  		
   	});
   });
 </script>
@@ -50,34 +80,32 @@
 		<?php
 		}
 		?>
-		<?php echo form_open_multipart(base_url("admin/proses_register"), 'method="POST"') ?>
 		<div class="row">
 			<div class="col-md-6">
-				<input type="text" class="form-control" placeholder="Username"  name="username" value="<?php echo set_value('username'); ?>" maxlength="35"/>
+				<input type="text" class="form-control" placeholder="Username"  id="username" value="<?php echo set_value('username'); ?>" maxlength="35"/>
 			</div>
 			<div class="col-md-6">
-				<input type="password" class="form-control" placeholder="Password"  name="password" value="<?php echo set_value(''); ?>" maxlength="35"/>
+				<input type="password" class="form-control" placeholder="Password"  id="password" value="<?php echo set_value(''); ?>" maxlength="35"/>
 			</div>
 		</div>
 		<div class="row" style="margin-top:10px;">
 			<div class="col-md-6">
-				<input type="password" class="form-control" placeholder="Konfirmasi Password"  name="conf_password" value="<?php echo set_value(''); ?>" maxlength="35"/>
+				<input type="password" class="form-control" placeholder="Konfirmasi Password"  id="conf_password" value="<?php echo set_value(''); ?>" maxlength="35"/>
 			</div>
 			<div class="col-md-6">
-				<input type="text" class="form-control" placeholder="Nama User"  name="nama_user" value="<?php echo set_value('nama_user'); ?>" maxlength="35"/>
+				<input type="text" class="form-control" placeholder="Nama User"  id="nama_user" value="<?php echo set_value('nama_user'); ?>" maxlength="35"/>
 			</div>
 		</div>
 		<div class="row" style="margin-top:10px;">
 			<div class="col-md-12">
-				<input type="email" class="form-control" placeholder="Alamat email"  name="email" value="<?php echo set_value('email'); ?>"   maxlength="25"/>
+				<input type="email" class="form-control" placeholder="Alamat email"  id="email" value="<?php echo set_value('email'); ?>"   maxlength="25"/>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-				<button style='margin-top:15px;' class="btn btn-large btn-block btn-success paling_bawah" name="register" type="submit" id="daftar">Daftar</button>
+				<button style='margin-top:15px;' class="btn btn-large btn-block btn-success paling_bawah" id="register" type="submit" name="daftar">Daftar</button>
 			</div>
 		</div>
-		<?php echo form_close() ?>
 	</div>
 </div>
 </body>

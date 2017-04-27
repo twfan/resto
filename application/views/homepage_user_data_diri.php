@@ -123,7 +123,8 @@
 							<div style="color:red;font-style:italic;margin-top:10px;">	<?php echo $this->session->flashdata('email_kembar'); ?>
 							<?php echo $this->session->flashdata('berhasil'); ?>
 							<?php echo $this->session->flashdata('password_tidak_kembar'); ?></div>
-							<h3>Informasi data diri</h3>
+							
+							<h3>Informasi data diri </h3>
 							<hr/>
 						</div>
 						<div class="col-md-12"><h4>Nama User</h4></div>
@@ -150,13 +151,13 @@
 				 		<div class="col-md-12"><h4>Password</h4></div>
 				        <div class="col-md-12">
 				        	<div class="form-group">
-				        		<input type="password" class="form-control" placeholder="Password"  name="password" maxlength="35" value="<?php echo $row->password; ?>"/>
+				        		<input type="password" class="form-control" placeholder="Password"  name="password" maxlength="35" value=""/>
 				        	</div>
 				        </div>
 				        <div class="col-md-12"><h4>Konfirmasi Password</h4></div>
 				        <div class="col-md-12" style="margin-bottom:25px;">
 				        	<div class="form-group">
-				        		<input type="password" class="form-control" placeholder="Konfirmasi Password"  name="confpassword" maxlength="35" value="<?php echo $row->password; ?>"/>
+				        		<input type="password" class="form-control" placeholder="Konfirmasi Password"  name="confpassword" maxlength="35" value=""/>
 				        	</div>
 				        </div>
 					</div>
@@ -167,6 +168,7 @@
 			</form>
 			<?php } ?>
 		<?php }else{ ?>
+		
 			<form action="<?php echo base_url('owner/update_data_diri'); ?>" method="POST">
 				<div class="col-md-8"  >
 					<div class="row" style="background-color:white;margin-bottom:25px;border-radius:5px;">

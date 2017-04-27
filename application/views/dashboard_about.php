@@ -2,9 +2,15 @@
 <head>
 	<title></title>
  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.min.css">
+ <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/popup-image/source/jquery.fancybox.css">
  <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery/jquery-1.11.3.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
-
+<script src="<?php echo base_url(); ?>assets/plugin/popup-image/source/jquery.fancybox.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	
+});
+</script>
 <style type="text/css">
 
 	.header{
@@ -78,7 +84,6 @@
 			<div class="row">
 				<a href="<?= base_url('owner/dashboard_about') ?>"><div class="col-md-12 menu"><li >About</li></div></a>
 			</div>
-			
 		</div>
 		<div class="col-md-10 content_panel " style="min-height: 100%;">
 				<div class="col-md-12">
@@ -118,7 +123,7 @@
 							        <div class="row">
 							        	<div class="col-md-2"></div>
 							        	<div class="col-md-2">
-								        	<img src="<?php echo $detail->foto_resto;?>" style="height:200px;width:200px;margin-bottom:10px;">
+								        	<img class="perbesar" src="<?php echo $detail->foto_resto;?>" style="height:200px;width:200px;margin-bottom:10px;">
 								        </div>
 							        </div>
 							        <div class="row">
@@ -180,35 +185,44 @@
 								        </div>
 							        </div>
 							        <div class="row">
-							        	<div class="col-md-2"> Biaya tiap kursi</div>
+							        	<div class="col-md-2"> Biaya 1 Kursi</div>
 								        <div class="col-md-4">
 								        	<div class="form-group">
-								        		<input type="number" class="form-control" placeholder="Harga yang dibebankan tiap kursi"  name="hargakursi" maxlength="35" value="<?php echo $detail->biaya_kursi; ?>"/>
+								        		<div class="row">
+								        			<div class="col-md-4"><input type="number" class="form-control"   name="biayakursi" maxlength="35" value="<?php echo $detail->biaya_kursi; ?>"/></div>
+								        		</div>
 								        	</div>
 								        </div>
 							        </div>
 							        <div class="row">
-							        	<div class="col-md-2"> Kuota Harian</div>
-								        <div class="col-md-2">
+							        	<div class="col-md-2"> Kuota pemesanan perjam</div>
+								        <div class="col-md-4">
 								        	<div class="form-group">
-								        		<input type="number" class="form-control" placeholder="Kuota transaksi"  name="kuota" max="5" value="<?php echo $detail->kuota_harian; ?>"/>
+								        		<div class="row">
+								        			<div class="col-md-4"><input type="number" class="form-control"  name="kuotajam" maxlength="35" value="<?php echo $detail->kuota_harian; ?>"/></div>
+								        		</div>
 								        	</div>
 								        </div>
 							        </div>
 							        <div class="row">
-							        	
-							        	<div class="col-md-2"> Pemberitahuan SMS</div>
-								        <div class="col-md-1">
-								        	<?php if($detail->sms=="1"){ ?>
-								        		<div class="form-group">
-									        		<input type="checkbox"  name="sms" value="1" checked=" "/> Ya
-									        	</div>
-								        	<?php }else {?>
-								        		<div class="form-group">
-									        		<input type="checkbox"  name="sms" value="1"/> Ya
-									        	</div>
-								        	<?php } ?>
-								        	
+							        	<div class="col-md-2"> Notifikasi</div>
+								        <div class="col-md-4">
+								        	<div class="form-group">
+								        		<?php if($detail->sms==1){ ?>
+								        			<input type="checkbox" name="sms" value="1" checked=""> SMS</input>
+								        		<?php }else{ ?>
+								        			<input type="checkbox" name="sms" value="1" > SMS</input>
+								        		<?php } ?>
+								     			
+								        	</div>
+								        	<div class="form-group">
+								        		<?php if($detail->email==1){ ?>
+								        			<input type="checkbox" name="email" value="1" checked=""> Email</input>
+								        		<?php }else{ ?>
+								        			<input type="checkbox" name="email" value="1" > Email</input>
+								        		<?php } ?>
+								     			
+								        	</div>
 								        </div>
 							        </div>
 							        <div class="row">

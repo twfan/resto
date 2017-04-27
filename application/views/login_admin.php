@@ -26,7 +26,7 @@
 <body>
 <script>
 $(document).ready(function(){
-	$('#masuk').click(function(){
+	/*$('#masuk').click(function(){
 		var username = $('#username').val();
 		var password = $('#password').val();
 		$.ajax({
@@ -47,12 +47,8 @@ $(document).ready(function(){
 				});
 			}
 		});
-	});
-	$('#tanggal').datepicker({
-        format: "yyyy-mm-dd",
-        autoclose:true,
-        maxDate: "now"
-    });
+	});*/
+	
 });
   $( function() {
 
@@ -66,21 +62,23 @@ $(document).ready(function(){
 	<h1 class="text-center"><a href="home">RESTO.COM</a></h1>
 	<h3 class="text-center"><strong>Hallo Admin !</strong></h3>
 	<!-- <p class="text-center"> Sudah mempunyai akun? Masuk <a href="">disini</a></p> -->
+	<?php echo form_open_multipart(base_url("admin/proses_login"), 'method="POST"') ?>
 		<div class="col-md-4 col-md-offset-4" >
 			<div class="row">
 				<div class="form-group has-feedback register">
-				    <input type="text" class="form-control" placeholder="Username ID"  id="username" />
+				    <input type="text" class="form-control" placeholder="Username ID"  name="username" />
 				    <i class="glyphicon glyphicon-envelope form-control-feedback"></i>
 				</div>
 			</div>
 			<div class="row">
 				<div class="form-group has-feedback register">
-	                <input type="password" class="form-control"  placeholder="Password" id="password"/>
+	                <input type="password" class="form-control"  placeholder="Password" name="password"/>
 	                <i class="glyphicon glyphicon-lock form-control-feedback"></i>
 	            </div>
 			</div>
 			<div class="row"><button class="btn btn-large btn-block btn-success paling bawah" id="masuk">Masuk ke Admin panel</button></div>
 		</div>
+	<?php echo form_close(); ?>
 </div>
 </body>
 </html>

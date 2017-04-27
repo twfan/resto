@@ -1,12 +1,21 @@
 <html>
 <head>
 	<title></title>
- <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.min.css">
- <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/datatables/css/jquery.datatables.css">
+
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/plugin/datatables/js/datatables.bootstrap.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/plugin/datatables/js/jquery.datatables.js"></script>
 <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
-
+<script type="text/javascript">
+	$(document).ready(function(){
+		 $(function () {
+	            $("#lookup").dataTable();
+	        });
+	});
+</script>
 <style type="text/css">
-
 	.header{
 		height: 60px;
 		
@@ -73,7 +82,8 @@
 	<div class="row middle" style="background-color:#DADFE1;">
 		<div class="col-md-2 panel_kiri " style="min-height: 100%;">
 			<div class="row">
-				<a href="<?= base_url('owner/dashboard_owner')?>"><div class="col-md-12 menu"><li >Top Up Saldo</li></div></a>
+				<a href="<?= base_url('admin/home')?>"><div class="col-md-12 menu"><li >Top Up Saldo</li></div></a>
+				<a href="<?= base_url('admin/pembayaran')?>"><div class="col-md-12 menu"><li >Pembayaran Pesanan</li></div></a>
 			</div>
 		</div>
 		<div class="col-md-10 content_panel " style="min-height: 100%;">
@@ -81,9 +91,10 @@
 				<h3 class="row" style="margin-bottom:15px;">Top up saldo User</h3>
 				<div class="row">
 					<div class="table-responsive">
-			    		<table class="table"
+			    		<table id="lookup" class="table table-bordered table-hover table-striped">
 			    			<thead>
 			    				<tr>
+			    					<th>Nomer</th>
 			    					<th>Id</th>
 			    					<th>User</th>
 			    					<th>Nama user</th>
@@ -96,9 +107,11 @@
 			    				</tr>	
 			    			</thead>
 			    			<tbody>
+			    				<?php $no=1; ?>
 			    			<?php if(!empty($record)){ ?>
 								<?php foreach ($record as $row){?>
 				    				<tr>
+				    					<td><?php echo $no;$no++; ?></td>
 				    					<td><?php echo $row->id_top_up; ?></td>
 				    					<td><?php echo $row->id_user; ?></td>
 				    					<td><?php echo $row->nama_user; ?></td>

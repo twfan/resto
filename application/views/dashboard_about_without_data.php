@@ -111,8 +111,9 @@
 								        		<input type="file" class="" name="userfile" size="20"/>
 								        	</div>
 								        </div>
+								        
 								        <div class="col-md-2">
-								        	<img src="<?php echo $detail->foto_resto;?>" style="height:200px;width:200px;">
+								        	<img src="" style="height:200px;width:200px;">
 								        </div>
 							        </div>
 							        <div class="row">

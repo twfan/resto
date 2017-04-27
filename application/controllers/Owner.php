@@ -12,10 +12,6 @@ class Owner extends CI_Controller {
 		$kode_resto = $this->session->userdata('kode_resto');
 	}
 
-	public function dashboard_setting_reservasi()
-	{
-		$this->load->view('dashboard_setting_reservasi');
-	}
 	public function index()
 	{
 		$this->load->view('login_owner');
@@ -23,26 +19,67 @@ class Owner extends CI_Controller {
 
 	public function register_resto()
 	{
+		$this->load->library('email');
+
+		$config['protocol'] = "smtp";
+        $config['smtp_host'] = "ssl://smtp.gmail.com";
+        $config['smtp_port'] = "465";
+        $config['smtp_user'] = "resto.stts@gmail.com";
+        $config['smtp_pass'] = "12041995";
+        $config['charset'] = "utf-8";
+        $config['mailtype'] = "html";
+        $config['newline'] = "\r\n";
+
+		$this->email->initialize($config);
+
 		$this->load->model('Db_model');
+		$this->load->library('encryption');
 		$post = $this->input->post();
 		$password = $this->input->post('password');
+		$password_enc = $this->encryption->encrypt($password);
+
 		$konfpassword = $this->input->post('konf_password');
 		if($password==$konfpassword)
 		{
+
 			if(!empty($post['nama_depan']) && !empty($post['nama_belakang']) && !empty($post['telpon']) && !empty($post['email'])  )
 			{
-				$jumlahdata = $this->Db_model->jumlah_data('owner_resto');
-				$idresto = 'OR' . ($jumlahdata+1);
-				$data=array(
-					'kode_resto' => $idresto,
-					'nama_depan' => $post['nama_depan'],
-					'no_telp' => $post['telpon'],
-					'email' => $post['email'],
-					'password' => $post['password'],
-					'status_akun' => 'TRUE'
-					);
-				$this->Db_model->tambah_data('owner_resto',$data);
-				redirect('owner/dashboard_owner');
+				$cekemail = $this->Db_model->cek_email($post['email']);
+				if(count($cekemail)>=1)
+				{
+					$this->session->set_flashdata('pesan','Email telah terdaftar silahkan gunakan email lain');
+					redirect('owner/register_resto');
+				}else
+				{
+					$jumlahdata = $this->Db_model->jumlah_data('owner_resto');
+					$idresto = 'OR' . ($jumlahdata+1);
+					$data=array(
+						'kode_resto' => $idresto,
+						'nama_depan' => $post['nama_depan'],
+						'no_telp' => $post['telpon'],
+						'email' => $post['email'],
+						'password' => $password_enc,
+						'status_akun' => 'FALSE'
+						);
+					$this->Db_model->tambah_data('owner_resto',$data);
+					$this->email->initialize($config);
+					$link = base_url('owner/verifikasi/').'/'. $idresto;
+					$htmlContent = '<h3>Terima kasih telah mendaftar</h3>';
+					$htmlContent .= "<div>Silahkan klik link berikut untuk melakukan verifikasi email </div> <a href='$link'>$link</a>";
+
+					$this->email->from('resto.stts@gmail.com', 'Resto.com');
+					$this->email->to($post['email']);
+					$this->email->subject('Verifikasi email');
+					$this->email->message($htmlContent);
+
+					if ($this->email->send()) {
+						$this->session->set_flashdata('pesan','Email verifikasi telah dikirim, silahkan cek email anda untuk verifikasi email.');
+					   	redirect('owner');
+					} else {
+					    show_error($this->email->print_debugger());
+					}
+				}
+				
 			}	
 		}else
 		{
@@ -53,18 +90,46 @@ class Owner extends CI_Controller {
 
 		$this->load->view('register_resto');
 	}
+	public function verifikasi($id)
+	{
+		$this->load->model('Model_owner');
+		$data =array(
+			'status_akun' => 'TRUE'
+		);
+		$this->Model_owner->update_data_user($id,'kode_resto',$data);
+		$this->session->set_flashdata('pesan', 'Terima kasih anda telah melakukan verifikasi email.');
+		redirect('owner');
+	}
 	public function login()
 	{
 		if($this->session->userdata('user_owner')==NULL)
 		{
 			$this->load->view('login_owner');
-			$this->load->model('Db_model');
+			$this->load->model('Model_owner');
+			$this->load->library('encryption');
 			$post = $this->input->post();
 			if(!empty($post['email_login']) && !empty($post['password_login']))
 			{
-				/*$this->Db_model->login($post['email'],$post['password']);*/
-				/*redirect('utama/');*/
-				$data=array(
+				echo "masuk 1";
+				$email = $post['email_login'];
+				$data = $this->Model_owner->decrypt_password($email);
+				$password_enc = $data[0]['password'];
+				$password_dec = $this->encryption->decrypt($password_enc);
+				if($password_dec==$post['password_login'])
+				{
+					echo "masuk sini";
+					$this->session->set_userdata('user_owner', $data[0]['nama_depan']);
+					$this->session->set_userdata('kode_resto', $data[0]['kode_resto']);
+					
+					redirect('owner/dashboard_owner');
+				}else
+				{
+					echo "masuk bawah sini";
+					$this->session->set_flashdata('pesan','Kombinasi email / password anda salah');
+					redirect('owner/login');
+				}
+				/*echo $data[0]['password'];*/
+				/*$data=array(
 					'email' => $post['email_login'],
 					'password' => $post['password_login']
 					);
@@ -83,10 +148,11 @@ class Owner extends CI_Controller {
 					
 					$this->session->set_flashdata('pesan','Kombinasi email / password anda salah');
 					redirect('owner/login');
-				}
+				}*/
 			}
 		}else
 		{
+			echo "masuk 2";
 			redirect('owner/dashboard_owner');
 		}
 	}
@@ -165,12 +231,13 @@ class Owner extends CI_Controller {
 	{
 		$this->load->model('Db_model');
 		$post = $this->input->post();
+		
 		$kode_resto = $this->session->userdata('kode_resto');
 		$cek_data = $this->Db_model->read_data('about_resto',$kode_resto);
 
 		$config['upload_path'] = './uploads/resto_profile/';
 		$config['allowed_types'] = 'gif|jpg|png';
-		$config['max_size'] = 250;
+		$config['max_size'] = 500;
 		$config['max_width'] = 1024;
 		$config['max_height'] = 768;
 		$config['overwrite'] = TRUE;
@@ -190,41 +257,45 @@ class Owner extends CI_Controller {
 					$gambar_resto = base_url()."uploads/resto_profile/". $upload_data['file_name'];
 				}
 				$data=array(
-							'nama_resto' => $post['namaresto'],
-							'foto_resto' => $gambar_resto,
-							'alamat_resto' => $post['alamatresto'],
-							'no_telfon' => $post['notelfonresto'],
-							'jadwal_buka' => $post['jadwal'],
-							'tipe_sajian' => $post['sajian'],
-							'harga_terendah' => $post['terendah'],
-							'harga_tertinggi' => $post['tertinggi'],
-							'metode_pembayaran' => $post['pembayaran'],
-							'biaya_kursi' => $post['hargakursi'],
-							'kuota_harian' => $post['kuota'],
-							'sms' => $post['sms'],
-							'status' => 'TRUE'
-							);
-			
+								'nama_resto' => $post['namaresto'],
+								'foto_resto' => $gambar_resto,
+								'alamat_resto' => $post['alamatresto'],
+								'no_telfon' => $post['notelfonresto'],
+								'jadwal_buka' => $post['jadwal'],
+								'tipe_sajian' => $post['sajian'],
+								'harga_terendah' => $post['terendah'],
+								'harga_tertinggi' => $post['tertinggi'],
+								'metode_pembayaran' => $post['pembayaran'],
+								'biaya_kursi' => $post['biayakursi'],
+								'kuota_harian' => $post['kuotajam'],
+								'sms' => $post['sms'],
+								'email' => $post['emal'],
+								'status' => 'TRUE'
+								);
+					$this->Db_model->update_data($kode_resto,$data);
+					redirect('owner/dashboard_owner');
 			}else
 			{
+				
 				$data=array(
-							'nama_resto' => $post['namaresto'],
-							'alamat_resto' => $post['alamatresto'],
-							'no_telfon' => $post['notelfonresto'],
-							'jadwal_buka' => $post['jadwal'],
-							'tipe_sajian' => $post['sajian'],
-							'harga_terendah' => $post['terendah'],
-							'harga_tertinggi' => $post['tertinggi'],
-							'metode_pembayaran' => $post['pembayaran'],
-							'biaya_kursi' => $post['hargakursi'],
-							'kuota_harian' => $post['kuota'],
-							'sms' => $post['sms'],
-							'status' => 'TRUE'
-							);
+								'nama_resto' => $post['namaresto'],
+								'alamat_resto' => $post['alamatresto'],
+								'no_telfon' => $post['notelfonresto'],
+								'jadwal_buka' => $post['jadwal'],
+								'tipe_sajian' => $post['sajian'],
+								'harga_terendah' => $post['terendah'],
+								'harga_tertinggi' => $post['tertinggi'],
+								'metode_pembayaran' => $post['pembayaran'],
+								'biaya_kursi' => $post['biayakursi'],
+								'kuota_harian' => $post['kuotajam'],
+								'sms' => $post['sms'],
+								'email' => $post['email'],
+								'status' => 'TRUE'
+								);
+					$this->Db_model->update_data($kode_resto,$data);
+					redirect('owner/dashboard_owner');
 			}
 			
-				$this->Db_model->update_data($kode_resto,$data);
-				redirect('owner/dashboard_about');
 		}else
 		{
 			$jumlahdata = $this->Db_model->jumlah_data('about_resto');
@@ -248,13 +319,10 @@ class Owner extends CI_Controller {
 							'harga_terendah' => $post['terendah'],
 							'harga_tertinggi' => $post['tertinggi'],
 							'metode_pembayaran' => $post['pembayaran'],
-							'biaya_kursi' => $post['hargakursi'],
-							'kuota_harian' => $post['kuota'],
-							'sms' => $post['sms'],
 							'status' => 'TRUE'
 							);
 				$this->Db_model->tambah_data('about_resto',$data);
-				redirect('owner/dashboard_about');
+				redirect('owner/dashboard_owner');
 			}
 		}
 		

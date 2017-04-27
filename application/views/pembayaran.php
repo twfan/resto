@@ -17,7 +17,6 @@
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/jqueryui/jquery-ui.js"></script>
-	<script src="<?php echo base_url(); ?>assets/plugin/datepicker/js/bootstrap-datepicker.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/sweetalert-master/dist/sweetalert.min.js"></script>
 	
 
@@ -35,10 +34,9 @@
 <script type="text/javascript">
   $(document).ready(function(){
   	 $('#tanggal').datepicker({
-        format: "dd-mm-yyyy",
-        autoclose:true,
-        maxDate: "now",
-        startDate: "+1d"
+        dateFormat: "yy-mm-dd",
+	  minDate: new Date(),
+	  maxDate: "+1w"
     });  	
 
 
@@ -157,6 +155,7 @@
 							  	<div class="tab-content">
 									    <div id="about" class="tab-pane fade in active">
 									    	<?php echo form_open_multipart(base_url("utama/proses_top_up_saldo"), 'method="POST"') ?>
+									    	<h5 style="margin-top:10px;color:red;font-style:italic"><?php echo $this->session->flashdata('terima_kasih') ?></h5>
 							  				<h3 style="margin-bottom:15px;">Konfirmasi Top Up Saldo</h3>
 									        <div class="row">
 									        	<div class="col-md-2"> Nama Email</div>
@@ -185,9 +184,10 @@
 									        <div class="row">
 									        	<div class="col-md-2"> Tanggal Transfer</div>
 										        <div class="col-md-4">
-											        <div class="form-group has-feedback">
-														<input type="text" class="form-control"  id="tanggal" name="tanggal" placeholder="Tanggal" maxlength="20"  />
-													</div>
+											        <div class="form-group">
+										                <input id="tanggal" readonly type="text" class="form-control " name="tanggal"  placeholder="Tanggal" maxlength="10" name="tanggal" value="<?php echo set_value('tanggal'); ?>"/>
+										                     	
+										            </div>
 										        </div>
 									        </div>
 									        <div class="row">
@@ -212,7 +212,9 @@
 							    				</tr>	
 							    			</thead>
 							    			<tbody>
-							    			<?php if(!empty($record)): ?>
+							    			<?php if(!empty($record)){ ?>
+							    			<?php /*echo "masuk sini"; */?>
+							    			<?php /*var_dump($record);*/ ?>
 							    					<?php foreach ($record as $row):?>
 									    				<tr>
 									    					<td><?php echo $row->jumlah_top_up_saldo; ?></td>
@@ -226,7 +228,9 @@
 									    					
 									    				</tr>
 							    					<?php endforeach; ?>
-							    				<?php endif; ?>
+							    				<?php }else{ ?>
+							    				<?php /*echo "masuk bawah sini";*/ ?>
+							    				<?php } ?>
 							    			</tbody>
 
 							    		</table>

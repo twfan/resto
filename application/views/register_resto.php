@@ -43,7 +43,8 @@
 		<?php
 		if($this->session->flashdata('pesan')!=''){
 		?>
-		<div class="row">
+		<div class="row" style="color:red;margin-bottom:10px;font-style:italic;">
+			
 			<?php echo $this->session->flashdata('pesan'); ?>
 		</div>
 		<?php

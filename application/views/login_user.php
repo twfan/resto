@@ -36,7 +36,7 @@
 	<h1 class="text-center"><a href="">LOGO</a></h1>
 	<h3 class="text-center"><strong>Ayo mulai !</strong></h3>
 	<!-- <p class="text-center"> Sudah mempunyai akun? Masuk <a href="">disini</a></p> -->
-	<form action="http://localhost/resto/utama/login" method="POST">
+	<form action="<?php echo base_url('utama/proses_login') ?>" method="POST">
 		<div class="col-md-4 col-md-offset-4" >
 			
 			<?php

@@ -2,9 +2,27 @@
 <head>
 	<title></title>
  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/datatables/css/jquery.datatables.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/popup-image/source/jquery.fancybox.css" media="screen">
+	
+	
+
+
  <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery/jquery-1.11.3.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/plugin/datatables/js/datatables.bootstrap.js"></script>
 
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/plugin/datatables/js/jquery.datatables.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/plugin/popup-image/source/jquery.fancybox.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".perbesar").fancybox();
+		$("#lookup").dataTable();
+		
+		
+	});
+</script>
 <style type="text/css">
 
 	.header{
@@ -78,14 +96,13 @@
 			<div class="row">
 				<a href="<?= base_url('owner/dashboard_about') ?>"><div class="col-md-12 menu"><li >About</li></div></a>
 			</div>
-			
 		</div>
 		<div class="col-md-10 content_panel " style="min-height: 100%;">
 			<div class="col-md-12">
 				<h3 class="row" style="margin-bottom:15px;">Daftar pesanan yang masuk</h3>
 				<div class="row">
 					<div class="table-responsive">
-			    		<table class="table"
+			    		<table class="table" id="lookup">
 			    			<thead>
 			    				<tr>
 			    					<th>Id pesanan</th>
@@ -93,6 +110,7 @@
 			    					<th>Jumlah kursi</th>
 			    					<th>Tanggal acara</th>
 			    					<th>Jam acara</th>
+			    					<th>Total bayar</th>
 			    					<th>Bukti pembayaran</th>
 			    					<th>Status pemesanan</th>
 			    					<th>Tanggal Transaksi</th>
@@ -108,7 +126,19 @@
 				    					<td><?php echo $row->jumlah_kursi; ?></td>
 				    					<td><?php echo $row->tanggal_acara; ?></td>
 				    					<td><?php echo $row->jam_acara; ?></td>
-				    					<td><img src="<?php echo $row->bukti_bayar; ?>" style="width:100px;height:100px;"></td>
+				    					<td><?php echo $row->total_bayar; ?></td>
+				    					<td>
+				    						<?php if($row->bukti_bayar==""){ ?>
+				    						<a href="<?php echo base_url(); ?>uploads/default.png" class="perbesar" >
+												<img src="<?php echo base_url(); ?>uploads/default.png" width="100">
+											</a>
+				    						<?php }else{ ?>
+				    						<a href="<?php echo $row->bukti_bayar; ?>" class="perbesar">
+				    							<img  src="<?php echo $row->bukti_bayar; ?>" style="width:100px;height:100px;">
+				    						</a>
+				    						<?php } ?>
+				    						
+				    					</td>
 				    					<td><?php echo $row->status_pemesanan; ?></td>
 				    					<td><?php echo $row->tanggal_transaksi; ?></td>
 				    					<?php if($row->status_pemesanan=='belum disetujui'){?>
@@ -116,6 +146,9 @@
 				    					<a href="<?php echo base_url('owner/tolak_pemesanan/'.$row->id_pesanan) ?>" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Tolak Pemesanan</a></td>
 				    					<?php }elseif($row->status_pemesanan=='lanjut pembayaran') {?>
 				    					<td><a href="<?php echo base_url('owner/terima_pemesanan/'.$row->id_pesanan) ?>" class="btn btn-warning btn-xs disabled"><span class="glyphicon glyphicon-usd"></span> Menunggu Pembayaran</a></td>
+				    					<?php }elseif($row->status_pemesanan=='pelanggan membayar') {?>
+				    					<td><a href="<?php echo base_url('owner/terima_pembayaran/'.$row->id_pesanan) ?>" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-ok"></span> Terima Pembayaran</a><br/><br/>
+				    					<a href="<?php echo base_url('owner/tolak_pembayaran/'.$row->id_pesanan) ?>" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Tolak Pembayaran</a></td>
 				    					<?php } ?>
 								<?php } ?>
 							<?php } ?>

@@ -12,6 +12,7 @@
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/jqueryui/jquery-ui.css">
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/datepicker/css/datepicker.css">
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/sweetalert-master/dist/sweetalert.css">
+	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/jqueryui-datepicker/jquery-ui.css">
 
 	
 	
@@ -24,6 +25,7 @@
 	<script src="<?php echo base_url(); ?>assets/plugin/datepicker/js/bootstrap-datepicker.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/pgwslideshow/pgwslideshow.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/sweetalert-master/dist/sweetalert.min.js"></script>
+	<script src="<?php echo base_url(); ?>assets/plugin/jqueryui-datepicker/jquery-ui.js"></script>
 
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,9 +45,12 @@
 	    intervalDuration:5000
 	});
     pgwSlideshow.startSlide();
-    $('#tanggal').datepicker({
-        startDate: "+1d"
-    });
+   
+   $( "#tanggal" ).datepicker({
+  		dateFormat: "yy-mm-dd",
+	  minDate: new Date(),
+	  maxDate: "+1w"
+	});
 
   });
 </script>
@@ -113,7 +118,10 @@
 										<div class="form-group has-feedback">
 											<select class="combobox form-control" name="jumlah_kursi" prompt="Jumlah kursi yang dipesan">
 												<option value="" disabled selected>Jumlah kursi</option>
-												<option value="1">1 Orang</option>
+
+												<!-- DIBERI BATAS SESUAI KAPASITAS YANG DISETTING -->
+											
+												
 												<option value="2">2 Orang</option>
 												<option value="3">3 Orang</option>
 												<option value="4">4 Orang</option>
@@ -139,7 +147,7 @@
 									</div>
 									<div class="col-md-3">
 										<div class="form-group has-feedback">
-											<input type="text" class="form-control" name="tanggal" id="tanggal" placeholder="Tanggal" maxlength="20" name="tanggal" />
+											<input id="tanggal" readonly type="text" class="form-control " name="tanggal"  placeholder="Tanggal" maxlength="10" name="tanggal" value="<?php echo set_value('tanggal'); ?>"/>
 										</div>
 										 
 									</div>
