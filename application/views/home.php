@@ -17,7 +17,6 @@
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/jqueryui/jquery-ui.js"></script>
-	<script src="<?php echo base_url(); ?>assets/plugin/datepicker/js/bootstrap-datepicker.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/sweetalert-master/dist/sweetalert.min.js"></script>
 	
 
@@ -39,8 +38,8 @@
     $('#tanggal').datepicker({
         format: "dd-mm-yyyy",
         autoclose:true,
-        maxDate: "now",
-        startDate: "+1d"
+        minDate: new Date(),
+	  maxDate: "+1w"
     });
     $('.tes').click(function(){
     	swal({
@@ -121,6 +120,89 @@
 	<div style="color:red;font-style:italic;margin-top:10px;margin-bottom:25px;">	<?php echo $this->session->flashdata('pesanan_berhasil'); ?></div>
 	<div style="color:red;font-style:italic;margin-top:10px;margin-bottom:25px;">	<?php echo $this->session->flashdata('berhasil_verifikasi'); ?></div>
 	<div style="color:red;font-style:italic;margin-top:10px;margin-bottom:25px;">	<?php echo $this->session->flashdata('email_sent'); ?></div>
+	<div class="row form search">
+		<div class="container" style="background-color:white;margin-bottom:20px;">
+				<div class="row">
+					<div class="col-md-12" style=""><h3>Cari meja dan restauran mu sekarang</h3></div>
+					<div class="col-md-12"><h5 style="font-style:italic;color:red;"><?php echo $this->session->flashdata('pesan'); ?> </h5> </div>
+				</div>
+				<form action="<?php echo base_url('utama/proses_search');?>" method="POST">
+					<div class="row">
+					<div class="col-md-2">
+						<div class="form-group has-feedback register ">
+			                <input id="tanggal" readonly type="text" class="form-control " name="tanggal_acara"  placeholder="Tanggal" maxlength="10" name="tanggal" value="<?php echo set_value('tanggal'); ?>"/>
+			                <i  id="test" class=" glyphicon glyphicon-calendar form-control-feedback"></i>        	
+			            </div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group has-feedback register">
+							<select class="combobox form-control" name="jam_acara" style="" prompt="Jumlah kursi yang dipesan">
+								<!-- INI NANTI DIKASI PENGECEKKAN JAM BUKA  -->
+								<option value="" disabled selected>Jam acara</option>
+								<option value="10.00 AM">10.00 AM</option>
+								<option value="11.00 AM">11.00 AM</option>
+								<option value="12.00 AM">12.00 AM</option>
+								<option value="13.00 PM">13.00 PM</option>
+								<option value="14.00 PM">14.00 PM</option>
+								<option value="15.00 PM">15.00 PM</option>
+								<option value="16.00 PM">16.00 PM</option>
+								<option value="17.00 PM">17.00 PM</option>
+								<option value="18.00 PM">18.00 PM</option>
+								<option value="19.00 PM">19.00 PM</option>
+								<option value="20.00 PM">20.00 PM</option>
+								<option value="21.00 PM">21.00 PM</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group has-feedback register">
+							
+								<select class="combobox form-control" name="jumlah_kursi" prompt="Jumlah kursi yang dipesan">
+												<option value="" disabled selected>Jumlah kursi</option>
+
+												<!-- DIBERI BATAS SESUAI KAPASITAS YANG DISETTING -->
+											
+												
+												<option value="2">2 Orang</option>
+												<option value="3">3 Orang</option>
+												<option value="4">4 Orang</option>
+												<option value="5">5 Orang</option>
+												<option value="6">6 Orang</option>
+												<option value="7">7 Orang</option>
+												<option value="8">8 Orang</option>
+												<option value="9">9 Orang</option>
+												<option value="10">10 Orang</option>
+												<option value="11">11 Orang</option>
+												<option value="12">12 Orang</option>
+												<option value="13">13 Orang</option>
+												<option value="14">14 Orang</option>
+												<option value="15">15 Orang</option>
+												<option value="16">16 Orang</option>
+												<option value="17">17 Orang</option>
+												<option value="18">18 Orang</option>
+												<option value="19">19 Orang</option>
+												<option value="20">20 Orang</option>
+												<option value="pesta">Pesta besar</option>
+											
+							</select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group has-feedback register ">
+			                <input   type="text" class="form-control " name="keyword"  placeholder="Cari dengan katakunci" maxlength="100" name="tanggal" value="<?php echo set_value('tanggal'); ?>"/>
+			                <i  id="test" class=" glyphicon glyphicon-search form-control-feedback"></i>        	
+			            </div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group has-feedback register ">
+			                <button class="btn btn-large btn-block btn-success paling bawah" type="submit" name="daftar">Cari</button>      	
+			            </div>
+					</div>
+				</div>
+				</form>
+				
+		</div>
+	</div>
 	<div class="row">
 		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 		  <!-- Indicators -->

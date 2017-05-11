@@ -36,18 +36,28 @@
 	<h1 class="text-center"><a href="home">LOGO</a></h1>
 	<h3 class="text-center"><strong>Ayo mulai !</strong></h3>
 	<!-- <p class="text-center"> Sudah mempunyai akun? Masuk <a href="">disini</a></p> -->
-	<form action="http://localhost/resto/owner/login" method="POST">
+	<form action="<?php echo base_url('owner/login') ?>" method="POST">
 		<div class="col-md-4 col-md-offset-4" >
 			
 			<?php
+			
 			if($this->session->flashdata('pesan')!=''){
 			?>
 			<div class="row">
-				<?php echo $this->session->flashdata('pesan'); ?>
+				<?php if($this->session->flashdata('pesan')=="daftar berhasil"){ ?>
+					<div class="alert alert-success">
+					  <strong>Berhasil terdaftar!</strong> Silahkan cek email anda untuk melakukan konfirmasi email.
+					</div>
+				<?php }elseif($this->session->flashdata('pesan')=="email pass salah") {?>
+					<div class="alert alert-danger">
+					  <strong>Gagal login!</strong> Kombinasi email dan password salah.
+					</div>
+				<?php } ?>
 			</div>
 			<?php
 			}
 			?>
+
 			
 			<div class="row">
 				<div class="form-group has-feedback register">

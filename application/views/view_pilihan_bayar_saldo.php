@@ -109,21 +109,16 @@
 			<div class="col-md-12">
 				<div class="row">
 					<ul class="nav nav-tabs">
-					    <li class="active"><a data-toggle="tab" href="#transfer">Via Transfer</a></li>
-					    <li><a data-toggle="tab" href="#saldo">Saldo</a></li>
+					    <li ><a data-toggle="tab" href="#transfer">Via Transfer</a></li>
+					    <li class="active"><a data-toggle="tab" href="#saldo">Saldo</a></li>
 					</ul>
 				  	<div class="tab-content">
-					    <div id="transfer" class="tab-pane fade in active">
-					    		<?php
-								if($this->session->flashdata('pesan')=='berhasil_bayar'){
+					    <div id="transfer" class="tab-pane fade">
+					    	<?php
+								if($this->session->flashdata('pesan')=='sudah_bayar'){
 								?>
 								<div class="alert alert-success" style="margin-top:10px;">
-								  <strong>Pesanan berhasil dibayar!</strong> Pesanan anda telah berhasil dibayar. 
-								</div>
-								<?php
-								}elseif($this->session->flashdata('pesan')=='sudah_bayar'){?>
-								<div class="alert alert-warning" style="margin-top:10px;">
-								  <strong>Pesanan sudah dibayar!</strong> Pesanan sudah dibayar. 
+								  <strong>Pesanan sudah dibayar!</strong> Pesanan telah dibayar. 
 								</div>
 								<?php } ?>
 					    	<?php echo form_open_multipart(base_url("utama/proses_bayar_upload/".$idpesanan), 'method="POST"') ?>
@@ -182,7 +177,7 @@
 					    	 <?php echo form_close(); ?>
 					    	
 					    </div>
-					    <div id="saldo" class="tab-pane fade">
+					    <div id="saldo" class="tab-pane fade in active">
 					    	<?php echo form_open_multipart(base_url("utama/bayar_saldo/".$idpesanan), 'method="POST"') ?>
 					    	<?php
 								if($this->session->flashdata('pesan')=='saldo_kurang'){
@@ -236,11 +231,8 @@
 						        	</div>
 						        </div>
 						        <?php echo form_close(); ?>
+
 					    </div>
-					    <div id="menu3" class="tab-pane fade">
-					      <h3>Menu 3</h3>
-					      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-					    </div>    
 					</div>
 				</div>	
 			</div>
@@ -249,9 +241,7 @@
 				</div>
 			</div>
 		</div>
-	   
-	<?php echo form_close(); ?>
-	<div class="row" style="background-color:white;margin-bottom:25px;border-radius:5px;">
+		<div class="row" style="background-color:white;margin-bottom:25px;border-radius:5px;">
 				<div class="col-md-12">
 					<h3>Peraturan dan ketentuan transfer via ATM</h3>
 					<hr/>
@@ -266,6 +256,8 @@
 					<p> - Setelah melakukan konfirmasi, data anda akan kami proses paling lambat 1 x 24 jam.</p>
 				</div>
 			</div>
+	   
+	<?php echo form_close(); ?>
 </div>
 
 <div class="container">

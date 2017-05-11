@@ -121,17 +121,148 @@ class Utama extends CI_Controller {
 	public function bayar($idpesanan)
 	{
 		$this->load->model('Model_pesanan_pelanggan');
+		$this->load->model('Model_saldo');
+		/*$status_bayar = $this->Model_pesanan_pelanggan->baca_status_bayar($id_pesanan);*/
+		$idpelanggan = $this->session->userdata('id_pelanggan');
+		$saldo = $this->Model_saldo->baca_saldo($idpelanggan);
 		$total = $this->Model_pesanan_pelanggan->baca_harga($idpesanan);
-		
+		foreach ($saldo as $row) {
+			$saldo = $row->saldo;
+		}
 		foreach ($total as $row) {
 			$total = $row->total_bayar;
 		}
 		
 		$data = array(
 			'idpesanan' => $idpesanan,
+			'saldo' => $saldo,
 			'total' => $total
 		);
 		$this->load->view('view_pilihan_bayar',$data);
+	}
+
+	public function bayar_saldo($idpesanan)
+	{
+		$post = $this->input->post();
+		$saldo = $post['saldo'];
+		$total_bayar = $post['totalbayar'];
+		$potongan_website = (10/100*$total_bayar);
+		$total_pendapatan_resto = $total_bayar - $potongan_website;
+		$idpelanggan = $this->session->userdata('id_pelanggan');
+		//CEK SUDAH BAYAR APA BELOM
+		$this->load->model('Model_pesanan_pelanggan');
+		$hasil_model_status =$this->Model_pesanan_pelanggan->baca_status_bayar($idpesanan);
+		foreach ($hasil_model_status as $row) {
+			$bukti_bayar = $row->bukti_bayar;
+		}
+
+		if($bukti_bayar==""){
+			if($saldo>=$total_bayar)
+			{
+				$sisa_saldo = $saldo - $total_bayar;
+				$this->load->model('Model_saldo');
+				$data1 =array(
+					'saldo' => $sisa_saldo
+				);
+				$this->Model_saldo->update_saldo($idpelanggan,$data1);
+				$this->load->model('Model_saldo_resto');
+				$this->load->model('Model_saldo_resto_detail');
+				$this->load->model('Model_pembayaran_detail');
+				
+				$jumlahdata = $this->Model_pembayaran_detail->jumlah_data();
+				$id_pembayaran = 'PD' . ($jumlahdata+1);
+				$data2 = array(
+						'id_pembayaran' =>$id_pembayaran,
+						'id_pesanan' =>$idpesanan,
+						'jumlah_transfer' =>$total_bayar,
+						'cara_pembayaran' =>'saldo',
+						'status' =>1
+					);
+				$this->Model_pembayaran_detail->insert_data($data2);
+				$this->load->model('Model_pesanan_pelanggan');
+				$data_foto = array(
+						'bukti_bayar' => 'saldo',
+						'status_pemesanan' => 'selesai'
+					);
+				$hasil = $this->Model_pesanan_pelanggan->baca_kode_resto($idpesanan);
+				foreach ($hasil as $row) {
+					$koderesto = $row->kode_resto;
+				}
+				$this->Model_pesanan_pelanggan->update_bukti($idpesanan,$data_foto);
+				
+				$jumlahdata = $this->Model_saldo_resto_detail->jumlah_data();
+				$idsaldodetail = 'ISRD'.($jumlahdata+1);
+				
+				$data3 = array(
+					'id_saldo_resto_detail' => $idsaldodetail,
+					'id_resto' => $koderesto,
+					'id_pesanan' => $idpesanan,
+					'jumlah_terima_saldo' => $total_pendapatan_resto,
+					'status' => 1
+				);
+				$this->Model_saldo_resto_detail->tambah_data($data3);
+				
+
+				//SALDO WEBSITE
+
+				$this->load->model('Model_saldo_website');
+				$hasil_model = $this->Model_saldo_website->baca_saldo();
+				foreach ($hasil_model as $row) {
+					$saldo_website = $row->saldo;
+				}
+				$total_saldo_website = $saldo_website + $potongan_website;
+				$data_saldo = array(
+						'saldo' => $total_saldo_website
+				);
+				$this->Model_saldo_website->update_saldo($data_saldo);
+
+
+				$this->load->model('Model_saldo_website_detail');
+				$jumlahdata = $this->Model_saldo_website_detail->jumlah_data();
+				$idsaldodetail = 'ISWD'.($jumlahdata+1);
+				$data4 = array(
+					'id_saldo_website_detail' => $idsaldodetail,
+					'id_pesanan' => $idpesanan,
+					'tanggal_terima' => date("Y-m-d"),
+					'jumlah_terima' => $potongan_website
+				);
+				$this->Model_saldo_website_detail->tambah_data_terima_saldo($data4);
+				
+				//AKHIR SALDO WEBSITE
+				$this->session->set_flashdata('pesan','berhasil_bayar');
+				redirect("utama/bayar/".$idpesanan);
+
+			}else{
+				$this->session->set_flashdata('pesan','saldo_kurang');
+				redirect('utama/bayar_saldo_kurang/'.$idpesanan);
+			}
+		}else
+		{
+			$this->session->set_flashdata('pesan','sudah_bayar');
+			redirect('utama/bayar_saldo_kurang/'.$idpesanan);
+		}
+	}
+
+	public function bayar_saldo_kurang($idpesanan)
+	{
+		$this->load->model('Model_pesanan_pelanggan');
+		$this->load->model('Model_saldo');
+		$idpelanggan = $this->session->userdata('id_pelanggan');
+		$saldo = $this->Model_saldo->baca_saldo($idpelanggan);
+		$total = $this->Model_pesanan_pelanggan->baca_harga($idpesanan);
+		foreach ($saldo as $row) {
+			$saldo = $row->saldo;
+		}
+		foreach ($total as $row) {
+			$total = $row->total_bayar;
+		}
+		
+		$data = array(
+			'idpesanan' => $idpesanan,
+			'saldo' => $saldo,
+			'total' => $total
+		);
+		$this->load->view('view_pilihan_bayar_saldo',$data);
 	}
 
 	public function proses_bayar_upload($idpesanan)
@@ -139,52 +270,67 @@ class Utama extends CI_Controller {
 		$this->load->model('Model_pembayaran_detail');
 		$this->load->model('Model_pesanan_pelanggan');
 		$post = $this->input->post();
+		//cek status pesanan
+		$hasil_model_status = $this->Model_pesanan_pelanggan->baca_status_bayar($idpesanan);
+			foreach ($hasil_model_status as $row) {
+			$bukti_bayar = $row->bukti_bayar;
+		}
 
-		$config['upload_path'] = './uploads/pembayaran/';
-		$config['allowed_types'] = 'gif|jpg|png';
-		$config['max_size'] = 1025;
-		$config['max_width'] = 1024;
-		$config['max_height'] = 768;
-		$config['overwrite'] = TRUE;
-		$config['file_name'] = $idpesanan;
-		$this->load->library('upload', $config);
-		
-		$jumlahdata = $this->Model_pembayaran_detail->jumlah_data();
-		$id_pembayaran = 'PD' . ($jumlahdata+1);
-		$upload_data = $this->upload->data();
+		if($bukti_bayar==""){
+			$config['upload_path'] = './uploads/pembayaran/';
+			$config['allowed_types'] = 'gif|jpg|png';
+			$config['max_size'] = 1025;
+			$config['max_width'] = 1024;
+			$config['max_height'] = 768;
+			$config['overwrite'] = TRUE;
+			$config['file_name'] = $idpesanan;
+			$this->load->library('upload', $config);
+			
+			$jumlahdata = $this->Model_pembayaran_detail->jumlah_data();
+			$id_pembayaran = 'PD' . ($jumlahdata+1);
+			$upload_data = $this->upload->data();
 
-		if($upload_data['file_name']!="")
-		{
-			if($this->upload->do_upload('userfile'))
+			if($upload_data['file_name']!="")
 			{
-				$upload_data = $this->upload->data();
-				$gambar_bukti = base_url()."uploads/pembayaran/". $upload_data['file_name'];
-				$data = array(
-					'id_pembayaran' =>$id_pembayaran,
-					'id_pesanan' =>$idpesanan,
-					'nama_rekening' =>$post['namarekening'],
-					'jumlah_transfer' =>$post['jumlahtransfer'],
-					'bank' =>$post['bank'],
-					'bukti_transfer' =>$gambar_bukti,
-					'cara_pembayaran' =>'transfer',
-					'status' =>0
-				);
-				$this->Model_pembayaran_detail->insert_data($data);
-				$data_foto = array(
-					'bukti_bayar' => $gambar_bukti
-				);
-				$this->Model_pesanan_pelanggan->update_bukti($idpesanan,$data_foto);
-				$this->session->set_flashdata('pesan','Konfirmasi pembayaran anda berhasil');
-				redirect("utama/bayar/".$idpesanan);
+				if($this->upload->do_upload('userfile'))
+				{
+					$upload_data = $this->upload->data();
+					$gambar_bukti = base_url()."uploads/pembayaran/". $upload_data['file_name'];
+					$data = array(
+						'id_pembayaran' =>$id_pembayaran,
+						'id_pesanan' =>$idpesanan,
+						'nama_rekening' =>$post['namarekening'],
+						'jumlah_transfer' =>$post['jumlahtransfer'],
+						'bank' =>$post['bank'],
+						'bukti_transfer' =>$gambar_bukti,
+						'cara_pembayaran' =>'transfer',
+						'status' =>0
+					);
+					$this->Model_pembayaran_detail->insert_data($data);
+					$data_foto = array(
+						'bukti_bayar' => $gambar_bukti,
+						'status_pemesanan' => 'pelanggan membayar'
+					);
+					$this->Model_pesanan_pelanggan->update_bukti($idpesanan,$data_foto);
+					$this->session->set_flashdata('pesan','berhasil_bayar');
+					redirect("utama/bayar/".$idpesanan);
+				}else
+				{
+					echo $this->upload->display_errors();
+				}
 			}else
 			{
-				echo $this->upload->display_errors();
+				$this->session->set_flashdata('pesan','Ukuran file gambar terlalu besar');
+				$this->session->set_flashdata('pesan','berhasil_bayar');
+				redirect('utama/bayar/'.$idpesanan);
+				
 			}
-		}else
-		{
-			$this->session->set_flashdata('pesan','Ukuran file gambar terlalu besar');
-			redirect("utama/bayar/".$idpesanan);
+		}else{
+			$this->session->set_flashdata('pesan','sudah_bayar');
+			redirect('utama/bayar/'.$idpesanan);
 		}
+
+		
 	}
 
 	public function baca_menu()
@@ -342,7 +488,8 @@ class Utama extends CI_Controller {
 			$this->load->model('Model_pesanan_pelanggan');
 			$idpelanggan = $this->session->userdata('id_pelanggan');
 			$data = array(
-				'record_pesanan' =>  $this->Model_pesanan_pelanggan->baca_data_pesanan_untuk_pelanggan($idpelanggan)
+				'record_pesanan' =>  $this->Model_pesanan_pelanggan->list_pesanan($idpelanggan),
+				'record_pesanan_berhasil' => $this->Model_pesanan_pelanggan->list_pesanan_berhasil($idpelanggan)
 			);
 			
 			$this->load->view('homepage_user_pesanan',$data);
@@ -423,7 +570,7 @@ class Utama extends CI_Controller {
         $config['smtp_host'] = "ssl://smtp.gmail.com";
         $config['smtp_port'] = "465";
         $config['smtp_user'] = "resto.stts@gmail.com";
-        $config['smtp_pass'] = "12041995";
+        $config['smtp_pass'] = "twfan1204";
         $config['charset'] = "utf-8";
         $config['mailtype'] = "html";
         $config['newline'] = "\r\n";
@@ -466,8 +613,9 @@ class Utama extends CI_Controller {
 					//echo count($cekemail);
 					if(count($cekemail)>=1)
 					{
+						var_dump($cekemail);
 						$this->session->set_flashdata('email_kembar','Email telah terdaftar silahkan gunakan email lain');
-						redirect('utama/registerpelanggan');
+						/*redirect('utama/registerpelanggan');*/
 					}else
 					{
 						//echo "masuk siniiiiiiiiiii";
@@ -722,19 +870,83 @@ class Utama extends CI_Controller {
 	public function top_up_saldo()
 	{
 		$this->load->model('Model_saldo_detail');
+		$this->load->model('Model_saldo');
 		$table = 'user_saldo_pelanggan_detail';
 		$id_pelanggan = $this->session->userdata['id_pelanggan'];
 		$data = array(
-			'record' => $this->Model_saldo_detail->baca_data_table($table,'id_user',$id_pelanggan)
+			'record' => $this->Model_saldo_detail->baca_data_table($table,'id_user',$id_pelanggan),
+			'record_combo' => $this->Model_saldo_detail->data_transaksi_belum_bayar($id_pelanggan),
+			'saldo' => $this->Model_saldo->baca_saldo($id_pelanggan)
 		);
-
 		$this->load->view('pembayaran',$data);
 	}
 
-	public function proses_top_up_saldo()
+	public function request_top_up_saldo()
 	{
-		
 		$post = $this->input->post();
+		$this->load->model('Model_saldo_detail');
+		if(!empty($post['topup'])){
+			$topup = $post['topup'];
+			$kodeunik = rand(191,499);
+			$jumlahdata = $this->Model_saldo_detail->jumlahdata();
+			$id_top_up = 'IT' . ($jumlahdata+1);
+			$id_user = $this->session->userdata('id_pelanggan');
+			$data=array(
+				'id_top_up' => $id_top_up,
+				'id_user' => $id_user,
+				'jumlah_top_up_saldo' => $topup,
+				'kode_unik' => $kodeunik,
+				'status_transaksi' => 'belum dibayar'
+			);
+			$this->Model_saldo_detail->request_top_up($data);
+			$this->session->set_flashdata('pesan','berhasil');
+			redirect('utama/invoice_page/'.$id_top_up);
+		}else{
+			$this->session->set_flashdata('pesan','combo kosong');
+			redirect('utama/top_up_saldo');
+		}
+	}
+
+	public function invoice_page($idtopup)
+	{
+		$this->load->model('Model_saldo_detail');
+		$iduser = $this->session->userdata('id_pelanggan');
+		$data_baca = $this->Model_saldo_detail->data_invoice($idtopup,$iduser);
+		foreach ($data_baca as $row) {
+			$sub_total = $row->jumlah_top_up_saldo;
+			$kodeunik = $row->kode_unik;
+		}
+		$total = $sub_total+$kodeunik;
+		$data =array(
+			'sub_total' => $sub_total,
+			'kode_unik' => $kodeunik,
+			'total' => $total,
+			'record'=> $this->Model_saldo_detail->data_invoice($idtopup,$iduser)
+		);
+		$this->load->view('invoice_page',$data);
+	}
+
+
+
+	public function konfirmasi_top_up($idtopup)
+	{
+		$this->load->model('Model_saldo_detail');
+		$iduser = $this->session->userdata('id_pelanggan');
+		$data_baca = $this->Model_saldo_detail->data_invoice($idtopup,$iduser);
+		foreach ($data_baca as $row) {
+			$sub_total = $row->jumlah_top_up_saldo;
+			$kodeunik = $row->kode_unik;
+		}
+		$total = $sub_total+$kodeunik;
+		$data =array(
+			'idtopup' => $idtopup,
+			'sub_total' => $sub_total,
+			'kode_unik' => $kodeunik,
+			'total' => $total,
+			'record'=> $this->Model_saldo_detail->data_invoice($idtopup,$iduser)
+		);
+		$this->load->view('view_konfirmasi_topup',$data);
+		/*$post = $this->input->post();
 		if(!empty($post['nama']) && !empty($post['nama']) && !empty($post['nama']) )
 		$jumlahtransfer = $post['jumlahtransfer'];
 		$namarekening = $post['namarekening'];
@@ -745,16 +957,58 @@ class Utama extends CI_Controller {
 		$data = array(
 			'id_top_up' => $id_topup,
 			'id_user' => $iduser,
-			'jumlah_top_up_saldo' => $post['jumlahtransfer'],
-			'nama_rekening' => $post['namarekening'],
-			'tanggal_transfer' => $post['tanggal'],
-			'status_transaksi' => 'belum konfirmasi admin'
+			'jumlah_top_up_saldo' => $post['topup'],
+			'status_transaksi' => 'belum konfirmasi transfer'
 		);
 		$this->Db_model->tambah_data('user_saldo_pelanggan_detail',$data);
 		$this->session->set_flashdata("terima_kasih","Terima kasih telah melakukan konfirmasi, top up anda akan di proses secepatnya.");
-		redirect('utama/top_up_saldo');
+		redirect('utama/top_up_saldo');*/
+
+
 		/*header('Content-Type:application/json');
 		echo json_encode($data);*/
+	}
+
+	public function proses_top_up_saldo($idtopup){
+		$post = $this->input->post();
+		$config['upload_path'] = './uploads/pembayaran/top_up';
+		$config['allowed_types'] = 'gif|jpg|png';
+		$config['max_size'] = 1025;
+		$config['max_width'] = 1024;
+		$config['max_height'] = 768;
+		$config['overwrite'] = TRUE;
+		$config['file_name'] = $idtopup;
+	
+		$this->load->library('upload', $config);
+		echo $this->upload->data('orig_name');     
+		$namarekening = $post['namarekening'];
+		$tanggal_transer = $post['tanggal'];
+		
+		if(!empty($post['namarekening'])&&!empty($post['tanggal'])){
+			if($this->upload->do_upload('userfile'))
+			{
+				$upload_data = $this->upload->data();
+				$gambar_bukti = base_url()."uploads/pembayaran/top_up/". $upload_data['file_name'];
+				$this->load->model('Model_saldo_detail');
+				$data = array(
+					'nama_rekening' =>$namarekening,
+					'tanggal_transfer' =>$post['tanggal'],
+					'bukti_transfer' =>$gambar_bukti,
+					'tanggal_konfirmasi' => date("Y-m-d"),
+					'status_transaksi' => 'sudah dibayar'
+				);
+				$this->Model_saldo_detail->update_konfirmasi($idtopup,$data);
+				$this->session->set_flashdata('pesan','konfirmasi berhasil');
+				redirect('utama/top_up_saldo');
+			}else
+			{
+				echo $this->upload->display_errors();
+			}
+		}else
+		{
+			echo $post['namarekening']. " ". $post['tanggal']. " " ;
+		}
+
 	}
 
 	public function bayar_pesanan($id)

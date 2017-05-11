@@ -53,6 +53,8 @@
 <script type="text/javascript">
   $(document).ready(function(){
     /*$('.combobox').combobox();*/
+    $('html, body').scrollTop($('.rating').offset().top);
+
     var pgwSlideshow = $('.pgwSlideshow').pgwSlideshow();
     pgwSlideshow.reload({
 	    maxHeight:400,
@@ -124,28 +126,6 @@
 	<?php endif; ?>
 	<div class="row" style="margin-top:25px;">
 		<div class="col-md-8" >
-			
-			<div class="row" style="background-color:white;margin-top:10px;margin-bottom:10px;border-radius:10px;">
-				
-					<?php if(!empty($record_foto)){?>
-					<ul class="pgwSlideshow">
-						<?php foreach ($record_foto as $row2):?>
-						
-							<li><img src="<?php echo $row2->path_foto ?>"></li>
-						
-						<?php endforeach; ?>
-						</ul>
-					<?php }else{?>
-					<ul class="pgwSlideshow">
-							<li><img src="http://lorempixel.com/400/200/Dummy-Text/"></li>
-							<li><img src="http://lorempixel.com/400/200/Dummy-Text/"></li>
-							<li><img src="http://lorempixel.com/400/200/Dummy-Text/"></li>
-							<li><img src="http://lorempixel.com/400/200/Dummy-Text/"></li>
-							<li><img src="http://lorempixel.com/400/200/Dummy-Text/"></li>
-						</ul>
-					<?php } ?>
-				
-			</div>
 			<div class="row" style="background-color:white;border-radius:10px;margin-bottom:25px;">
 				<div class="col-md-12"><h1>Review Pelanggan</h1></div>
 				<hr/>
@@ -161,21 +141,6 @@
 							</div>
 							<div class="col-sm-9">
 								<div class="review-block-rate">
-									<!-- <button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
-									  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-									</button>
-									<button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
-									  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-									</button>
-									<button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
-									  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-									</button>
-									<button type="button" class="btn btn-default btn-grey btn-xs" aria-label="Left Align">
-									  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-									</button>
-									<button type="button" class="btn btn-default btn-grey btn-xs" aria-label="Left Align">
-									  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-									</button> -->
 									<div class="rating">
 										<span style="font-size : 20px" data-rating="5">☆</span>
 										<span style="font-size : 20px" data-rating="4">☆</span>
@@ -183,20 +148,19 @@
 										<span style="font-size : 20px" data-rating="2">☆</span>
 										<span style="font-size : 20px" data-rating="1">☆</span>
 									</div>
-									
 								</div>
-								<form action="<?php echo base_url('utama/simpan_review'); ?>" method="POST">
-								<input type="hidden" name="rating" id="star">
-								<?php if(!empty($record_resto)){ ?>
-									<?php foreach ($record_resto as $row) { ?>
-										<input type="hidden" name="koderesto" value="<?php echo $row->kode_resto; ?>"></input>
-										<?php } ?>
-								<?php } ?>
-								<?php if(!empty($record_pelanggan)){ ?>
-									<?php foreach ($record_pelanggan as $row) { ?>
-										<input type="hidden" name="kodepelanggan" value="<?php echo $row->id_user; ?>"></input>
-										<?php } ?>
-								<?php } ?>
+								<form class="review" action="<?php echo base_url('utama/simpan_review'); ?>" method="POST">
+									<input type="hidden" name="rating" id="star">
+									<?php if(!empty($record_resto)){ ?>
+										<?php foreach ($record_resto as $row) { ?>
+											<input type="hidden" name="koderesto" value="<?php echo $row->kode_resto; ?>"></input>
+											<?php } ?>
+									<?php } ?>
+									<?php if(!empty($record_pelanggan)){ ?>
+										<?php foreach ($record_pelanggan as $row) { ?>
+											<input type="hidden" name="kodepelanggan" value="<?php echo $row->id_user; ?>"></input>
+											<?php } ?>
+									<?php } ?>
 									<div class="review-block-title"><input type="text" class="form-control" placeholder="Judul Review"  name="judulreview" maxlength="100" value=""></div>
 									<div class="review-block-description"><textarea class="form-control" rows="4" cols="74" name="isireview"  placeholder="Tuliskan komentar anda" maxlength="250"></textarea></div><br />
 									<div class="review-block-description"><button class="btn btn-small btn-success paling bawah" type="submit" name="kirim">Kirim</button></div>
@@ -207,6 +171,27 @@
 					</div>
 				</div>
 			</div>
+			<div class="row" style="background-color:white;margin-top:10px;margin-bottom:10px;border-radius:10px;">
+				
+					<?php if(!empty($record_foto)){?>
+					<ul class="pgwSlideshow">
+						<?php foreach ($record_foto as $row2):?>
+						
+							<li><img src="<?php echo $row2->path_foto ?>"></li>
+						
+						<?php endforeach; ?>
+						</ul>
+					<?php }else{?>
+					<ul class="pgwSlideshow">
+						<li><img src="http://lorempixel.com/400/200/Dummy-Text/"></li>
+						<li><img src="http://lorempixel.com/400/200/Dummy-Text/"></li>
+						<li><img src="http://lorempixel.com/400/200/Dummy-Text/"></li>
+						<li><img src="http://lorempixel.com/400/200/Dummy-Text/"></li>
+						<li><img src="http://lorempixel.com/400/200/Dummy-Text/"></li>
+					</ul>
+					<?php } ?>
+			</div>
+			
 		</div>
 		<div class="col-md-1"></div>
 		<div class="col-md-3" style="margin-bottom:25px;background-color:white;border-radius:10px;">

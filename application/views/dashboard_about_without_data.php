@@ -76,6 +76,9 @@
 	<div class="row middle" style="background-color:#DADFE1;">
 		<div class="col-md-2 panel_kiri " style="min-height: 100%;">
 			<div class="row">
+				<a href="<?= base_url('owner/cek_reservasi')?>"><div class="col-md-12 menu"><li >Lihat Reservasi</li></div></a>
+			</div>
+			<div class="row">
 				<a href="<?= base_url('owner/dashboard_owner')?>"><div class="col-md-12 menu"><li >Reservation</li></div></a>
 			</div>
 			<div class="row">

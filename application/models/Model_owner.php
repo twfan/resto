@@ -18,6 +18,13 @@ class Model_owner extends CI_Model{
 		$this->db->where($parameter_pembanding,$parameter);
 		$this->db->update('owner_resto',$data);
 	}
+	function cek_email($email)
+	{
+		$email_user = $email;
+		$q = $this->db-> get_where ('owner_resto',array('email'=>$email));
+		$hasil_data = $q->result_array();
+		return $hasil_data;
+	}
 }
 
 

@@ -101,7 +101,6 @@
 			    </div>
 			</div> 
 	<div class="row testing" style="margin-top:25px;">
-		
 		<div class="col-md-8" style="margin-left:20px;" >
 			<div class="row" style="background-color:white;border-radius:10px;">
 				<div class="col-md-12">
@@ -154,18 +153,18 @@
 									<div class="col-md-3">
 										<select class="combobox form-control"  name="jam_acara" prompt="Jam acara berlangsung">
 											<option value="" disabled selected>Jam acara</option>
-											<option value="10.00 AM">10.00 AM</option>
-											<option value="11.00 AM">11.00 AM</option>
-											<option value="12.00 AM">12.00 AM</option>
-											<option value="13.00 PM">13.00 PM</option>
-											<option value="14.00 PM">14.00 PM</option>
-											<option value="15.00 PM">15.00 PM</option>
-											<option value="16.00 PM">16.00 PM</option>
-											<option value="17.00 PM">17.00 PM</option>
-											<option value="18.00 PM">18.00 PM</option>
-											<option value="19.00 PM">19.00 PM</option>
-											<option value="20.00 PM">20.00 PM</option>
-											<option value="21.00 PM">21.00 PM</option>
+											<option value="10.00 ">10.00 AM</option>
+											<option value="11.00 ">11.00 AM</option>
+											<option value="12.00 ">12.00 AM</option>
+											<option value="13.00 ">13.00 PM</option>
+											<option value="14.00 ">14.00 PM</option>
+											<option value="15.00 ">15.00 PM</option>
+											<option value="16.00 ">16.00 PM</option>
+											<option value="17.00 ">17.00 PM</option>
+											<option value="18.00 ">18.00 PM</option>
+											<option value="19.00 ">19.00 PM</option>
+											<option value="20.00 ">20.00 PM</option>
+											<option value="21.00 ">21.00 PM</option>
 										</select>
 									</div>
 

@@ -76,6 +76,9 @@
 	<div class="row middle" style="background-color:#DADFE1;">
 		<div class="col-md-2 panel_kiri " style="min-height: 100%;">
 			<div class="row">
+				<a href="<?= base_url('owner/cek_reservasi')?>"><div class="col-md-12 menu"><li >Lihat Reservasi</li></div></a>
+			</div>
+			<div class="row">
 				<a href="<?= base_url('owner/dashboard_owner')?>"><div class="col-md-12 menu"><li >Reservation</li></div></a>
 			</div>
 			<div class="row">
@@ -93,6 +96,17 @@
 						</ul>
 					  	<div class="tab-content">
 						    <div id="about" class="tab-pane fade ">
+						    	<?php if($this->session->flashdata('pesan')==''){ ?>
+						    	<?php echo $this->session->flashdata('pesan'); ?>
+						    	<?php }elseif($this->session->flashdata('pesan')=='1'){ ?>
+						    	<div class="alert alert-success" style="margin-top:10px;">
+								  <strong>Simpan data berhasil!</strong> Data berhasil disimpan.
+								</div>
+						    	<?php }else{ ?>
+						    	<div class="alert alert-danger" style="margin-top:10px;">
+								  <strong>Simpan data gagal!</strong> Data gagal disimpan.
+								</div>
+						    	<?php } ?>
 						        <h3 style="margin-bottom:15px;">Data Resto</h3>
 									<?php
 

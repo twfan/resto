@@ -34,7 +34,7 @@
 	<h1 class="text-center"><a href="home">LOGO</a></h1>
 	<h3 class="text-center"><strong>Daftarkan akunmu</strong></h3>
 	<p class="text-center"> Sudah mempunyai akun? Masuk <a href="login">disini</a></p>
-	<form action="http://localhost/resto/utama/registerpelanggan" method="POST">
+	<form action="<?php echo base_url('utama/registerpelanggan') ?>" method="POST">
 		<div class="col-md-4 col-md-offset-4">
 			<?php
 			if($this->session->flashdata('email_kembar')!=''){

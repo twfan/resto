@@ -91,6 +91,9 @@
 	<div class="row middle" style="background-color:#DADFE1;">
 		<div class="col-md-2 panel_kiri " style="min-height: 100%;">
 			<div class="row">
+				<a href="<?= base_url('owner/cek_reservasi')?>"><div class="col-md-12 menu"><li >Lihat Reservasi</li></div></a>
+			</div>
+			<div class="row">
 				<a href="<?= base_url('owner/dashboard_owner')?>"><div class="col-md-12 menu"><li >Reservation</li></div></a>
 			</div>
 			<div class="row">
@@ -132,7 +135,9 @@
 				    						<a href="<?php echo base_url(); ?>uploads/default.png" class="perbesar" >
 												<img src="<?php echo base_url(); ?>uploads/default.png" width="100">
 											</a>
-				    						<?php }else{ ?>
+				    						<?php }elseif($row->bukti_bayar=="saldo"){ ?>
+				    						<?php echo "Menggunakan Saldo" ?>
+				    						<?php }else{?>
 				    						<a href="<?php echo $row->bukti_bayar; ?>" class="perbesar">
 				    							<img  src="<?php echo $row->bukti_bayar; ?>" style="width:100px;height:100px;">
 				    						</a>
@@ -147,8 +152,9 @@
 				    					<?php }elseif($row->status_pemesanan=='lanjut pembayaran') {?>
 				    					<td><a href="<?php echo base_url('owner/terima_pemesanan/'.$row->id_pesanan) ?>" class="btn btn-warning btn-xs disabled"><span class="glyphicon glyphicon-usd"></span> Menunggu Pembayaran</a></td>
 				    					<?php }elseif($row->status_pemesanan=='pelanggan membayar') {?>
-				    					<td><a href="<?php echo base_url('owner/terima_pembayaran/'.$row->id_pesanan) ?>" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-ok"></span> Terima Pembayaran</a><br/><br/>
-				    					<a href="<?php echo base_url('owner/tolak_pembayaran/'.$row->id_pesanan) ?>" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Tolak Pembayaran</a></td>
+				    					<td><?php echo "Menunggu konfirmasi admin"; ?></td>
+				    					<?php }elseif($row->status_pemesanan=='selesai') { ?>
+				    					<td><a href="<?php echo base_url('owner/terima_pemesanan/'.$row->id_pesanan) ?>" class="btn btn-success btn-xs disabled"><span class="glyphicon glyphicon-ok"></span> Pemesanan berhasil</a></td>
 				    					<?php } ?>
 								<?php } ?>
 							<?php } ?>

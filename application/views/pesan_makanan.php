@@ -168,8 +168,7 @@
 						<div class="col-md-12 pesan"><h1>Pesan makanan</h1></div>
 					</div>
 					<div class="">
-						<?php echo $id_pesanan; ?>
-						<?php echo $kode_resto; ?>
+						
 						<form method="post" action="<?php echo base_url('utama/proses_pesan_makan/'.$kode_resto.'/'.$id_pesanan); ?>">
 							<table class="table table-responsive">
 								<thead>

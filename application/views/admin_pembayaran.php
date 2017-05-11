@@ -3,14 +3,17 @@
 	<title></title>
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/datatables/css/jquery.datatables.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/popup-image/source/jquery.fancybox.css" media="screen">
 
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/plugin/datatables/js/datatables.bootstrap.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/plugin/datatables/js/jquery.datatables.js"></script>
 <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/plugin/popup-image/source/jquery.fancybox.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 		 $(function () {
+		 		$(".perbesar").fancybox();
 	            $("#lookup").dataTable();
 	        });
 	});
@@ -113,11 +116,23 @@
 				    					<td><?php echo $row->nama_rekening; ?></td>
 				    					<td><?php echo $row->jumlah_transfer; ?></td>
 				    					<td><?php echo $row->bank; ?></td>
-				    					<td><?php echo $row->bukti_transfer;?></td>
-				    					<?php if($row->status=='belum konfirmasi admin'){?>
-				    					<td><a href="<?php echo base_url('admin/konfirmasi/'. $row->id_top_up) ?>" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-ok"></span> Konfirmasi Top UP</a></td>
-				    					<?php }elseif($row->status=='sudah konfirmasi admin') {?>
-				    					<td><a href="<?php echo base_url('admin/konfirmasi/'. $row->id_top_up) ?>" class="btn btn-success btn-xs disabled"><span class="glyphicon glyphicon-ok"></span> Selesai Top Up</a></td>
+				    					<td>
+				    						<?php if($row->bukti_transfer==""){ ?>
+				    						<a href="<?php echo base_url(); ?>uploads/default.png" class="perbesar" >
+												<img src="<?php echo base_url(); ?>uploads/default.png" width="100">
+											</a>
+				    						<?php }else{ ?>
+				    						<a href="<?php echo $row->bukti_transfer; ?>" class="perbesar">
+				    							<img  src="<?php echo $row->bukti_transfer; ?>" style="width:100px;height:100px;">
+				    						</a>
+				    						<?php } ?>
+
+				    					</td>
+				    					<?php if($row->status=='0'){?>
+				    					<td><a href="<?php echo base_url('admin/pembayaran_terima/'. $row->id_pesanan) ?>" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-ok"></span> Terima Pembayaran</a><br><br><a href="<?php echo base_url('admin/pembayaran_tolak/'. $row->id_pesanan) ?>" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Tolak Pembayaran</a></td>
+				    					
+				    					<?php }elseif($row->status=='1') {?>
+				    					<td><a href="<?php echo base_url('admin/konfirmasi/'. $row->id_pesanan) ?>" class="btn btn-success btn-xs disabled"><span class="glyphicon glyphicon-ok"></span> Transaksi Selesai</a></td>
 				    					<?php } ?>
 				    				</tr>
 								<?php } ?>

@@ -38,18 +38,22 @@
 		<h1 class="text-center"><a href="home">RESTO</a></h1>
 		<h3 class="text-center" ><strong>Awali sukses restauranmu dengan Resto</strong></h3>
 		<p class="text-center"> Kita senang berbincang-bincang dengan para kustomer tentang bisnis unik mereka, telpon kami di <a href="">031-8381400</a>, kirim email ke <a href="">marketing@resto.com</a> atau deskripsikan restauranmu di bawah ini.</p>
-		<form action="http://localhost/resto/owner/register_resto" method="POST">
+		<form action="<?php echo base_url('owner/register_resto') ?>" method="POST">
 		<hr>
 		<?php
-		if($this->session->flashdata('pesan')!=''){
-		?>
-		<div class="row" style="color:red;margin-bottom:10px;font-style:italic;">
 			
-			<?php echo $this->session->flashdata('pesan'); ?>
-		</div>
-		<?php
-		}
-		?>
+			if($this->session->flashdata('pesan')!=''){
+			?>
+			<div class="row">
+				<?php if($this->session->flashdata('pesan')=="Email sama"){ ?>
+					<div class="alert alert-danger">
+					  <strong>Gagal terdaftar!</strong> Email telah terdaftar, silahkan menggunakan email yang lain.
+					</div>
+				<?php }?>
+			</div>
+			<?php
+			}
+			?>
 		
 		<div class="row">
 			<div class="col-md-6">

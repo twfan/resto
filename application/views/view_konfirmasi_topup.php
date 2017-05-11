@@ -35,8 +35,8 @@
   $(document).ready(function(){
   	 $('#tanggal').datepicker({
         dateFormat: "yy-mm-dd",
-	  minDate: new Date(),
-	  maxDate: "+1w"
+	  minDate:"-1w",
+	  maxDate: new Date()
     });  	
 
 
@@ -143,143 +143,87 @@
 		<div class="col-md-9"  >
 			<div class="row" style="background-color:white;margin-bottom:25px;border-radius:5px;">
 				<div class="col-md-12">
-					<?php foreach ($saldo as $row ) {?>
-						<h3>Saldo DompetResto = Rp <label class="saldo"><?php echo number_format($row->saldo);?> </label></h3>
-					<?php } ?>
-					
+					<h3>Konfirmasi Top up</h3>
 					<hr/>
 					<div class="col-md-12 content_panel " style="min-height: 100%;">
 						<div class="col-md-12">
 							<div class="row">
-								<ul class="nav nav-tabs">
-									 <li class="active"><a data-toggle="tab" href="#request">Request saldo</a></li>
-								    <li class=""><a data-toggle="tab" href="#history">History Top Up</a></li>
-								</ul>
-							  	<div class="tab-content">
-									    <div id="about" class="tab-pane fade ">
-									    	<?php echo form_open_multipart(base_url("utama/proses_top_up_saldo"), 'method="POST"') ?>
-									    	<h5 style="margin-top:10px;color:red;font-style:italic"><?php echo $this->session->flashdata('terima_kasih') ?></h5>
-							  				<h3 style="margin-bottom:15px;">Konfirmasi Top Up Saldo</h3>
-									        <div class="row">
-									        	<div class="col-md-2"> Nama Email</div>
-										        <div class="col-md-4">
-										        	<div class="form-group">
-										        		<?php echo $this->session->userdata('email'); ?>
-										        	</div>
-										        </div>
-									        </div>
-									        <div class="row">
-									        	<div class="col-md-2"> Jumlah Transfer</div>
-										        <div class="col-md-3">
-										        	<div class="form-group">
-										        		<input type="text" class="form-control" placeholder="Jumlah yang ditransfer"  name="jumlahtransfer" maxlength="35" value=""/>
-										        	</div>
-										        </div>
-									        </div>
-									        <div class="row">
-									        	<div class="col-md-2"> Nama Rekening</div>
-										        <div class="col-md-6">
-										        	<div class="form-group">
-										        		<input type="text" class="form-control" placeholder="Nama pemilik rekening"  name="namarekening" maxlength="35" />
-										        	</div>
-										        </div>
-									        </div>
-									        <div class="row">
-									        	<div class="col-md-2"> Tanggal Transfer</div>
-										        <div class="col-md-4">
-											        <div class="form-group">
-										                <input id="tanggal" readonly type="text" class="form-control " name="tanggal"  placeholder="Tanggal" maxlength="10" name="tanggal" value="<?php echo set_value('tanggal'); ?>"/>
-										                     	
-										            </div>
-										        </div>
-									        </div>
-									        <div class="row">
-									        	<div class="col-md-2"></div>
-									        	<div class="col-md-2 ">
-									        		<button class="btn btn-large btn btn-success center  " type="submit" id="topup"  style='margin-bottom:20px;'>Verifikasi</button>
-									        	</div>
-									        </div>
-									        <?php echo form_close(); ?>
-										</div>
-							  		
-							  		<div id="history" class="tab-pane fade">
-								      <h3>History Top up</h3>
-								      <div class="table-responsive">
-							    		<table class="table">
-							    			<thead>
-							    				<tr>
-							    					<th>Jumlah Top Up</th>
-							    					<th>Nama Rekening</th>
-							    					<th>Tanggal Transfer</th>
-							    					<th>Keterangan</th>
-							    				</tr>	
-							    			</thead>
-							    			<tbody>
-							    			<?php if(!empty($record)){ ?>
-							    			<?php /*echo "masuk sini"; */?>
-							    			<?php /*var_dump($record);*/ ?>
-							    					<?php foreach ($record as $row):?>
-									    				<tr>
-									    					<td><?php echo Number_format($row->jumlah_top_up_saldo); ?></td>
-									    					<td><?php echo $row->nama_rekening; ?></td>
-									    					<td><?php echo $row->tanggal_transfer; ?></td>
-									    					<?php if($row->status_transaksi=="belum dibayar"){ ?>
-									    					<td ><a href="<?php echo base_url('utama/konfirmasi_top_up/'.$row->id_top_up) ?>" class="btn btn-success btn-xs " style="width:100px;"><span class="glyphicon glyphicon-ok"></span> Konfirmasi</a></td>
-									    					<?php }elseif($row->status_transaksi=="sudah dibayar") {?>
-									    					<td ><a href="#" class="btn btn-warning btn-xs disabled" style="width:100px;"><span class="glyphicon glyphicon-info-sign"></span> Admin Check</a></td>
-									    					<?php }elseif($row->status_transaksi=="sudah konfirmasi admin"){ ?>
-									    					<td ><a href="#" class="btn btn-success btn-xs disabled" style="width:100px;"><span class="glyphicon glyphicon-ok"></span> Sukses</a></td>
-									    					<?php } ?>
-									    				</tr>
-							    					<?php endforeach; ?>
-							    				<?php }else{ ?>
-							    				<?php /*echo "masuk bawah sini";*/ ?>
-							    				<?php } ?>
-							    			</tbody>
-
-							    		</table>
-							    	</div>
-								    </div> 
-								    <div id="request" class="tab-pane fade in active">
-								    	<?php
-											if($this->session->flashdata('pesan')!=''){
-												if($this->session->flashdata('pesan')=='berhasil'){
-													echo "<div class='alert alert-success' style='margin-top:10px;'><strong>Request berhasil!</strong> Harap melakukan pembayaran dan melakukan konfirmasi pembayaran.</div>";
-												}elseif ($this->session->flashdata('pesan')=='combo kosong') {
-													echo "<div class='alert alert-warning' style='margin-top:10px;'><strong>Pilih top up!</strong> Harap menentukan pilihan top up terlebih dahulu.</div>";
-												}elseif ($this->session->flashdata('pesan')=='konfirmasi berhasil') {
-													echo "<div class='alert alert-success' style='margin-top:10px;'><strong>Konfirmasi berhasil!</strong> Status dapat dilihat pada history top up.</div>";
-												}
-											}
-										?>
-								    	<h3>Request Saldo</h3>
-								    	<?php echo form_open_multipart(base_url("utama/request_top_up_saldo"), 'method="POST"') ?>
-								    		<div class="row">
-									        	<div class="col-md-2"> Pilihan Top Up</div>
-										        <div class="col-md-4">
-										        	<div class="form-group">
-										        		<select class="combobox form-control" name="topup" prompt="">
-															<option value="" disabled selected>Pilihan Top up</option>
-															<option value="50000"><?php echo number_format(50000) ?></option>
-															<option value="100000"><?php echo number_format(100000) ?></option>
-															<option value="150000"><?php echo number_format(150000) ?></option>
-															<option value="200000"><?php echo number_format(200000) ?></option>
-														</select>
-										        	</div>
-										        </div>
-									        </div>
-									        <div class="row">
-									        	<div class="col-md-2"></div>
-									        	<div class="col-md-2 ">
-									        		<button class="btn btn-large btn btn-success center  " type="submit" id="topup"  style='margin-bottom:20px;'>Top Up</button>
-									        	</div>
-									        </div>
-								    	<?php echo form_close(); ?>
-								    </div>
-								</div>
+								<div class="table-responsive">
+									<table class="table table-bordered">
+										<thead>
+											<th>Email user</th>
+											<th>Jumlah Top up</th>
+										</thead>
+										<tbody>
+											<?php foreach ($record as $row) {?>
+											<tr>
+												<td><?php echo $row->email; ?></td>
+												<td style="text-align:center;">Rp <?php echo number_format($row->jumlah_top_up_saldo); ?>,00</td>
+											</tr>
+											<?php } ?>
+											
+											<tr style="background-color:#F5F5F5;">
+												<td style="text-align:right;">Sub Total</td>
+												<td style="text-align:center;">Rp <?php echo number_format($sub_total); ?>,00</td>
+											</tr>
+											<tr style="background-color:#F5F5F5;">
+												<td style="text-align:right;">*Kode unik</td>
+												<td style="text-align:center;">Rp <?php echo number_format($kode_unik); ?>,00</td>
+											</tr>
+											<tr style="background-color:#F5F5F5;">
+												<td style="text-align:right;">**Total</td>
+												<td style="text-align:center;">Rp <?php echo number_format($total); ?>,00</td>
+											</tr>
+											<?php foreach ($record as $row) {?>
+												<tr style="background-color:#F5F5F5;">
+													<td style="text-align:right;">Status</td>
+													<td style="text-align:center;"><?php echo $row->status_transaksi; ?></td>
+												</tr>
+											<?php } ?>
+											
+										</tbody>
+									</table>
+									<label style="color:red;font-style:italic;">*Kode unik akan ditambahkan pada saldo id anda.</label><br>
+									<label style="color:red;font-style:italic;">**Diharapkan melakukan pembayaran sesuai dengan total yang tertulis tidak kurang dan tidak lebih..</label><br>
+								</div>	
 							</div>	
 						</div>
 					</div>
+				</div>
+				<div class="col-md-12" style="margin-top:12px;">
+					<?php echo form_open_multipart(base_url("utama/proses_top_up_saldo/".$idtopup), 'method="POST"') ?>
+					 <div class="row">
+			        	<div class="col-md-2"> Nama Rekening</div>
+				        <div class="col-md-6">
+				        	<div class="form-group">
+				        		<input type="text" class="form-control" placeholder="Nama rekening yang digunakan"  name="namarekening" maxlength="35" />
+				        	</div>
+				        </div>
+			        </div>
+			        <div class="row">
+			        	<div class="col-md-2"> Tanggal Transfer</div>
+				        <div class="col-md-4">
+					        <div class="form-group">
+				                <input id="tanggal" readonly type="text" class="form-control " name="tanggal"  placeholder="Tanggal" maxlength="10" name="tanggal" value="<?php echo set_value('tanggal'); ?>"/>
+				                     	
+				            </div>
+				        </div>
+			        </div>
+			        <div class="row">
+			        	<div class="col-md-2"> Bukti Transfer</div>
+				        <div class="col-md-2">
+				        	<div class="form-group">
+				        		<input type="file" class="" name="userfile" size="20"/>
+				        	</div>
+				        </div>
+			        </div>
+			        <div class="row">
+			        	<div class="col-md-2"></div>
+			        	<div class="col-md-2 ">
+			        		<button class="btn btn-large btn btn-success center  " type="submit" id="topup"  style='margin-bottom:20px;'>Verifikasi</button>
+			        	</div>
+			        </div>
+			        <?php echo form_close(); ?>
 				</div>
 			</div>
 			<div class="row" style="background-color:white;margin-bottom:25px;border-radius:5px;">

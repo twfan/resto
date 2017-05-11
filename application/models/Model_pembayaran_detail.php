@@ -19,6 +19,15 @@ class Model_pembayaran_detail extends CI_Model{
 		return $hasil_data->result();
 	}
 
+	public function update_status_terima($idpesanan,$data_detail,$data_pesanan)
+	{
+		$this->db->where('id_pesanan',$idpesanan);
+		$this->db->update('pembayaran_detail',$data_detail);
+
+		$this->db->where('id_pesanan',$idpesanan);
+		$this->db->update('pesanan_pelanggan',$data_pesanan);
+	}
+
 }
 
 

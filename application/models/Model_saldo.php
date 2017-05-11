@@ -22,6 +22,17 @@ class Model_saldo extends CI_Model{
 			return "data tidak ada";
 		}
 	}
+	public function baca_saldo($idpelanggan)
+	{
+		$hasil_data =  $this->db->get_where('user_saldo_pelanggan', array('id_user' => $idpelanggan));
+		return $hasil_data->result();
+	}
+
+	public function update_saldo($idpelanggan,$data)
+	{
+		$this->db->where('id_user',$idpelanggan);
+		$this->db->update('user_saldo_pelanggan',$data);
+	}
 
 }
 
