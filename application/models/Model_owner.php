@@ -25,6 +25,13 @@ class Model_owner extends CI_Model{
 		$hasil_data = $q->result_array();
 		return $hasil_data;
 	}
+
+	public function baca_telfon_resto($koderesto)
+	{
+		$query = "SELECT no_telp FROM `owner_resto` WHERE kode_resto='$koderesto'";
+		$sql = $this->db->query($query);
+		return $sql->result();
+	}
 }
 
 

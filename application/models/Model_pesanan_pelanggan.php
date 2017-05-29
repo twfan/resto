@@ -5,13 +5,18 @@ class Model_pesanan_pelanggan extends CI_Model{
 	function __construct(){
 		parent::__construct();
 	}
+	function tambah_data($data){
+		$this->db->insert('pesanan_pelanggan',$data);
+	}
 
 	public function baca_kode_resto($id_pesanan)
 	{
-		$query = "SELECT kode_resto FROM `pesanan_pelanggan` WHERE id_pesanan='PP1'";
+		$query = "SELECT kode_resto FROM `pesanan_pelanggan` WHERE id_pesanan='$id_pesanan'";
 		$sql = $this->db->query($query);
 		return $sql->result();
 	}
+
+	
 
 	function baca_total_pesanan_perjam($date,$jam_acara)
 	{

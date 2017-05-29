@@ -98,7 +98,7 @@
 						    <div id="about" class="tab-pane fade in active">
 						        <h3></h3>
 								
-						        <form action="http://localhost/resto/owner/about_system" method="POST">
+						        <?php echo form_open_multipart(base_url("owner/about_system"), 'method="POST"') ?>
 						        	<div class="row">
 							        	<div class="col-md-2"> Nama Resto</div>
 								        <div class="col-md-4">
@@ -115,8 +115,11 @@
 								        	</div>
 								        </div>
 								        
-								        <div class="col-md-2">
-								        	<img src="" style="height:200px;width:200px;">
+							        </div>
+							        <div class="row">
+							        	<div class="col-md-2"></div>
+							        	<div class="col-md-2">
+								        	<img class="perbesar" src="" style="height:200px;width:200px;margin-bottom:10px;">
 								        </div>
 							        </div>
 							        <div class="row">
@@ -177,14 +180,50 @@
 								        	</div>
 								        </div>
 							        </div>
-							        
+							        <div class="row">
+							        	<div class="col-md-2"> Biaya 1 Kursi</div>
+								        <div class="col-md-4">
+								        	<div class="form-group">
+								        		<div class="row">
+								        			<div class="col-md-4"><input type="number" class="form-control"   name="biayakursi" maxlength="35" value=""/></div>
+								        		</div>
+								        	</div>
+								        </div>
+							        </div>
+							        <div class="row">
+							        	<div class="col-md-2"> Kuota pemesanan perjam</div>
+								        <div class="col-md-4">
+								        	<div class="form-group">
+								        		<div class="row">
+								        			<div class="col-md-4"><input type="number" class="form-control"  name="kuotajam" maxlength="35" value=""/></div>
+								        		</div>
+								        	</div>
+								        </div>
+							        </div>
+							        <div class="row">
+							        	<div class="col-md-2"> Notifikasi</div>
+								        <div class="col-md-4">
+								        	<div class="form-group">
+								        		
+								        			<input type="checkbox" name="sms" value="1" > SMS</input>
+								        		
+								     			
+								        	</div>
+								        	<div class="form-group">
+								        		
+								        			<input type="checkbox" name="email" value="1" > Email</input>
+								        		
+								     			
+								        	</div>
+								        </div>
+							        </div>
 							        <div class="row">
 							        	<div class="col-md-2"></div>
 							        	<div class="col-md-2 ">
 							        		<button class="btn btn-large btn btn-success center  " type="submit" name="input" >Simpan Data</button>
 							        	</div>
 							        </div>
-							    </form>
+							   <?php echo form_close(); ?>
 							</div>
 						    <div id="makanan" class="tab-pane fade">
 						    	<h3 style="margin-bottom:15px;">Daftar makanan dan minuman</h3>

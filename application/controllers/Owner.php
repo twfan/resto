@@ -181,19 +181,30 @@ class Owner extends CI_Controller {
 				$data = $this->Model_owner->decrypt_password($email);
 				$password_enc = $data[0]['password'];
 				$password_dec = $this->encryption->decrypt($password_enc);
-				if($password_dec==$post['password_login'])
+
+				if( $data[0]['status_akun']=="TRUE")
 				{
-					
-					$this->session->set_userdata('user_owner', $data[0]['nama_depan']);
-					$this->session->set_userdata('kode_resto', $data[0]['kode_resto']);
-					
-					redirect('owner/dashboard_owner');
+					if($password_dec==$post['password_login'])
+					{
+						
+						$this->session->set_userdata('user_owner', $data[0]['nama_depan']);
+						$this->session->set_userdata('kode_resto', $data[0]['kode_resto']);
+						
+						redirect('owner/dashboard_owner');
+					}else
+					{
+						
+						$this->session->set_flashdata('pesan','email pass salah');
+						redirect('owner/login');
+					}
 				}else
 				{
-					
-					$this->session->set_flashdata('pesan','email pass salah');
+					$this->session->set_flashdata('pesan','User belum verifikasi email');
 					redirect('owner/login');
 				}
+
+
+				
 				/*echo $data[0]['password'];*/
 				/*$data=array(
 					'email' => $post['email_login'],

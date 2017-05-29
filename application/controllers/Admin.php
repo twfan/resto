@@ -14,7 +14,13 @@ class Admin extends CI_Controller {
 	
 	public function index()
 	{
-		$this->load->view('login_admin');
+		if($this->session->userdata('username')==""){
+			$this->load->view('login_admin');
+		}else
+		{
+			redirect('admin/home');
+		}
+		
 	}
 
 	public function proses_login()
@@ -32,7 +38,11 @@ class Admin extends CI_Controller {
 		$hasil = $this->Model_admin->cari_data_bener($table,$data);
 		if(count($hasil)>0)
 		{
+			$this->session->set_userdata('username',$username);
 			redirect('admin/home');
+		}else
+		{
+			redirect('admin');
 		}
 	}
 
@@ -96,17 +106,27 @@ class Admin extends CI_Controller {
 	{
 		$data = array('status'=>'sudah verifikasi');
 		$this->Db_model->update_data_bener($id,'user_admin','username',$data);
-		redirect('admin');
+		redirect('admin/home');
 	}
 
 	public function home()
 	{
-		$this->load->model('Model_saldo_detail');
-		
-		$data = array(
-			'record' => $this->Model_saldo_detail->list_top_up()
-		);
-		$this->load->view('admin_blank',$data);
+		if($this->session->userdata('username')==""){
+			$this->load->view('login_admin');
+		}else
+		{
+			$this->load->model('Model_saldo_detail');
+			$data = array(
+				'record' => $this->Model_saldo_detail->list_top_up()
+			);
+			$this->load->view('admin_blank',$data);
+		}
+	}
+
+	public function log_out()
+	{
+		$this->session->unset_userdata('username');
+		redirect('admin');
 	}
 
 	public function pembayaran()
@@ -140,16 +160,18 @@ class Admin extends CI_Controller {
 	public function konfirmasi($id)
 	{
 		$this->load->Model('Model_saldo');
+		$this->load->Model('Model_user');
 		$data1 = array(
 			'status_transaksi' => 'sudah konfirmasi admin' 
 		);
 		$this->Db_model->update_data_bener($id,'user_saldo_pelanggan_detail','id_top_up',$data1);
 		
-		$query = "SELECT user_saldo_pelanggan_detail.jumlah_top_up_saldo, user_saldo_pelanggan_detail.kode_unik FROM `user_saldo_pelanggan_detail` WHERE user_saldo_pelanggan_detail.id_top_up = '$id' ";
+		$query = "SELECT user_saldo_pelanggan_detail.id_user,user_saldo_pelanggan_detail.jumlah_top_up_saldo, user_saldo_pelanggan_detail.kode_unik FROM `user_saldo_pelanggan_detail` WHERE user_saldo_pelanggan_detail.id_top_up = '$id' ";
 		$hasil_jumlah_top_up_saldo = $this->Db_model->baca_data_dengan_query_custom($query);
 
 		foreach ($hasil_jumlah_top_up_saldo as $row) {
 			$jumlah_top_up_saldo = $row->jumlah_top_up_saldo +$row->kode_unik;
+			$id_user = $row->id_user;
 		}
 		
 		$query = "SELECT user_saldo_pelanggan_detail.id_user FROM `user_saldo_pelanggan_detail` WHERE user_saldo_pelanggan_detail.id_top_up = '$id'";
@@ -166,11 +188,27 @@ class Admin extends CI_Controller {
 		}
 
 		$saldo = $saldo_sekarang + $jumlah_top_up_saldo;
-		echo $saldo;
+		
 
 		$data2 = array('saldo'=>$saldo);
 
 		$this->Model_saldo->update_saldo($id_user,$data2);
+
+		//SMS PELANGGAN
+		$hasil_telp_pelanggan = $this->Model_user-> baca_telfon_pelanggan($id_user);
+		foreach ($hasil_telp_pelanggan as $row) {
+			$hp_pelanggan = $row->no_handphone;
+		}
+		$message=urlencode("Hai, top up anda telah berhasil. Saldo anda sekarang dapat digunakan untuk melakukan transaksi. Terimakasih. *pesan-meja-stts.com");
+		$curlHandle = curl_init();
+		$url="http://128.199.232.241/sms/smsreguler.php?username=taufanerlangga95&key=69e376c0d072538ba7c068a48426785e&number=$hp_pelanggan&message=$message";
+		curl_setopt($curlHandle, CURLOPT_URL,$url);
+		curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+		curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curlHandle, CURLOPT_TIMEOUT,120);
+		$hasil = curl_exec($curlHandle);
+		curl_close($curlHandle);
+
 		redirect('admin/home');
 	}
 

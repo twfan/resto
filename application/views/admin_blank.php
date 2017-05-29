@@ -82,7 +82,7 @@
 <body>
 <div class="container-fluid wrapper" >
 	<div class="row header">
-		<div class="col-md-10  " > <h3 > <a href="<?= base_url('owner/dashboard_owner') ?>">Dashboard User Resto </a></h3></div>
+		<div class="col-md-10  " > <h3 > <a href="<?= base_url('admin/home') ?>">Dashboard Admin </a></h3></div>
 		<a href="log_out"> <div class="col-md-2 sign-out"><h5>Sign Out  <span class="glyphicon glyphicon-log-out" ></span></h5></div></a>
 	</div>
 	<div class="row middle" style="background-color:#DADFE1;">
@@ -145,6 +145,8 @@
 				    					<td><a href="<?php echo base_url('admin/konfirmasi/'. $row->id_top_up) ?>" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-ok"></span> Konfirmasi Top UP</a></td>
 				    					<?php }elseif($row->status_transaksi=='sudah konfirmasi admin') {?>
 				    					<td><a href="<?php echo base_url('admin/konfirmasi/'. $row->id_top_up) ?>" class="btn btn-success btn-xs disabled"><span class="glyphicon glyphicon-ok"></span> Selesai Top Up</a></td>
+				    					<?php }elseif($row->status_transaksi=='belum dibayar') {?>
+				    					<td><a href="<?php echo base_url('admin/konfirmasi/'. $row->id_top_up) ?>" class="btn btn-warning btn-xs disabled"><span class="glyphicon glyphicon-ok"></span> Menunggu pembayaran</a></td>
 				    					<?php } ?>
 				    				</tr>
 								<?php } ?>

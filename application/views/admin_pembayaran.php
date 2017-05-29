@@ -79,7 +79,7 @@
 <body>
 <div class="container-fluid wrapper" >
 	<div class="row header">
-		<div class="col-md-10  " > <h3 > <a href="<?= base_url('owner/dashboard_owner') ?>">Dashboard User Resto </a></h3></div>
+		<div class="col-md-10  " > <h3 > <a href="<?= base_url('admin/home') ?>">Dashboard Admin </a></h3></div>
 		<a href="log_out"> <div class="col-md-2 sign-out"><h5>Sign Out  <span class="glyphicon glyphicon-log-out" ></span></h5></div></a>
 	</div>
 	<div class="row middle" style="background-color:#DADFE1;">

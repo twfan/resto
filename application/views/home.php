@@ -350,6 +350,9 @@
         <div class="list-group">
 
         	<?php if(!empty($record_resto)): ?>
+        	<!-- <pre>
+        	<?php var_dump($record_resto); ?>
+        	</pre> -->
 				<?php foreach ($record_resto as $row):?>
     				<!-- <tr>
     					<td><?php echo $row->nama_makanan; ?></td>

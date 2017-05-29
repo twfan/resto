@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Register</title>
+	<title>Login Pelanggan</title>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/style.css">
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.css">
@@ -33,21 +33,29 @@
   } );
 </script>
 <div class="container" id="login">
-	<h1 class="text-center"><a href="">LOGO</a></h1>
+	<h1 class="text-center"><a href="">Halo pelanggan</a></h1>
 	<h3 class="text-center"><strong>Ayo mulai !</strong></h3>
 	<!-- <p class="text-center"> Sudah mempunyai akun? Masuk <a href="">disini</a></p> -->
 	<form action="<?php echo base_url('utama/proses_login') ?>" method="POST">
 		<div class="col-md-4 col-md-offset-4" >
-			
-			<?php
-			if($this->session->flashdata('pesan')!=''){
-			?>
 			<div class="row">
-				<?php echo $this->session->flashdata('pesan'); ?>
+				<?php
+				if($this->session->flashdata('pesan')=='kombinasi_salah'){
+				?>
+				<div class="alert alert-danger">
+				  <strong>Email & Password. </strong> Kombinasi email dan password salah.
+				</div>
+				
+				<?php
+				}elseif($this->session->flashdata('pesan')=='verifikasi_0'){
+				?>
+				<div class="alert alert-info">
+				  <strong>Verifikasi email. </strong> Silahkan melakukan verifikasi email anda, dengan membuka alamat email anda.
+				</div>
+				<?php } ?>
 			</div>
-			<?php
-			}
-			?>
+			
+			
 			
 			<div class="row">
 				<div class="form-group has-feedback register">
@@ -61,7 +69,10 @@
 		                <i class="glyphicon glyphicon-lock form-control-feedback"></i>
 		            </div>
 			</div>
-			<div class="col-md-7 col-md-offset-7"><h6><a href="registerpelanggan">Belum mempunyai akun?</a></h6></div>
+			<div class="row">
+				<div class="col-md-7 col-md-offset-7" ><h5><a href="registerpelanggan">Belum mempunyai akun?</a></h5></div>	
+			</div>
+			
 			
 			<div class="row"><button class="btn btn-large btn-block btn-success paling bawah" type="submit" name="daftar">Masuk ke Resto</button></div>
 		</div>

@@ -6,6 +6,13 @@ class Model_user extends CI_Model{
 		parent::__construct();
 	}
 
+	public function baca_telfon_pelanggan($idpelanggan)
+	{
+		$query = "SELECT no_handphone FROM `user_login` WHERE id_user='$idpelanggan'";
+		$sql = $this->db->query($query);
+		return $sql->result();
+	}
+
 	public function baca_data_table($table,$kolom,$data_pembanding)
 	{
 		$hasil_data =  $this->db->get_where($table, array($kolom => $data_pembanding));

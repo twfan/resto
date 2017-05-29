@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Register</title>
+	<title>Register pelanggan</title>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/style.css">
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.css">
@@ -31,16 +31,18 @@
   } );
 </script>
 <div class="container ">
-	<h1 class="text-center"><a href="home">LOGO</a></h1>
+	<h1 class="text-center"><a href="home">Pesan Meja STTS</a></h1>
 	<h3 class="text-center"><strong>Daftarkan akunmu</strong></h3>
 	<p class="text-center"> Sudah mempunyai akun? Masuk <a href="login">disini</a></p>
 	<form action="<?php echo base_url('utama/registerpelanggan') ?>" method="POST">
 		<div class="col-md-4 col-md-offset-4">
 			<?php
-			if($this->session->flashdata('email_kembar')!=''){
+			if($this->session->flashdata('pesan')=='email_kembar'){
 			?>
 			<div class="row">
-				<?php echo $this->session->flashdata('email_kembar'); ?>
+				<div class="alert alert-danger">
+				  <strong>Email sama!</strong> Email telah digunakan, silahkan gunakan email lain.
+				</div>
 			</div>
 			<?php
 			}
@@ -62,7 +64,7 @@
 			</div>
 			<div class="row">
 					<div class="form-group has-feedback register">
-					    <input type="text" class="form-control" placeholder="Nomor Handphone" name="nohp" maxlength="25" value="<?php echo set_value('nohp'); ?>"/>
+					    <input type="number" class="form-control" placeholder="Nomor Handphone" name="nohp" maxlength="25" value="<?php echo set_value('nohp'); ?>"/>
 					    <i class="glyphicon glyphicon-phone form-control-feedback"></i>
 					</div>
 			</div>

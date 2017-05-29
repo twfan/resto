@@ -33,17 +33,16 @@ class Utama extends CI_Controller {
 
 	public function pesan_makan($kode_resto,$idpesanan)
 	{
-		$query ="SELECT user_login.nama_user, review_pelanggan.judul_review, review_pelanggan.review_pelanggan, review_pelanggan.rating, review_pelanggan.tanggal_review FROM review_pelanggan, user_login WHERE review_pelanggan.id_resto='$kode_resto' AND user_login.id_user = review_pelanggan.id_pelanggan";
-
 		if($this->session->userdata('id_pelanggan')!=NULL)
 		{
 			$this->load->model('Db_model');
+			$this->load->model('Model_review');
 			$data = array(
 				'kode_resto' => $kode_resto,
 				'id_pesanan' => $idpesanan,
 				'record_resto' =>  $this->Db_model->cari_data('about_resto',$kode_resto),
 				'record_foto' => $this->Db_model->cari_data('foto_resto',$kode_resto),
-				'record_review' => $this->Db_model->baca_data_dengan_query_custom($query)
+				'record_review' => $this->Model_review->baca_data_review()
 			);
 			$this->load->view('pesan_makanan',$data);
 		}else
@@ -269,7 +268,32 @@ class Utama extends CI_Controller {
 	{
 		$this->load->model('Model_pembayaran_detail');
 		$this->load->model('Model_pesanan_pelanggan');
+		$this->load->model('Model_owner');
+		$this->load->model('Model_user');
+		$this->session->userdata('id');
 		$post = $this->input->post();
+		$idpelanggan = $this->session->userdata('id_pelanggan');
+		$koderesto=0;
+		$no_telp_resto=0;
+
+		//baca notelfon
+		$hasil_koderesto = $this->Model_pesanan_pelanggan->baca_kode_resto($idpesanan);
+
+		foreach ($hasil_koderesto as $row) {
+			$koderesto= $row->kode_resto;
+		}
+			
+		$hasil_telfon = $this->Model_owner->baca_telfon_resto($koderesto);
+		foreach ($hasil_telfon as $row) {
+			$no_telp_resto = $row->no_telp;
+		}
+
+
+		$hasil_telfon_pelanggan = $this->Model_user->baca_telfon_pelanggan($idpelanggan);
+		foreach ($hasil_telfon_pelanggan as $row) {
+			$no_telp_pelanggan = $row->no_handphone;
+		}
+
 		//cek status pesanan
 		$hasil_model_status = $this->Model_pesanan_pelanggan->baca_status_bayar($idpesanan);
 			foreach ($hasil_model_status as $row) {
@@ -313,6 +337,33 @@ class Utama extends CI_Controller {
 					);
 					$this->Model_pesanan_pelanggan->update_bukti($idpesanan,$data_foto);
 					$this->session->set_flashdata('pesan','berhasil_bayar');
+
+					//SMS PELANGGAN
+					$message=urlencode("Hai, pesanan anda dan pembayaran anda berhasil masuk mohon di tunggu konfirmasi oleh pihak admin. Terimakasih. *pesan-meja-stts.com");
+					$curlHandle = curl_init();
+					$url="http://128.199.232.241/sms/smsreguler.php?username=taufanerlangga95&key=69e376c0d072538ba7c068a48426785e&number=$no_telp_pelanggan&message=$message";
+					curl_setopt($curlHandle, CURLOPT_URL,$url);
+					curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+					curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($curlHandle, CURLOPT_TIMEOUT,120);
+					$hasil = curl_exec($curlHandle);
+					curl_close($curlHandle);
+					//SMS PELANGGAN
+
+					//SMS ADMIN
+					$no_telp_admin = '085732777009';
+					$message=urlencode("Admin, harap membuka user anda dikarenakan ada pembayaran yang sedang berlangsung. Terimakasih. *pesan-meja-stts.com");
+					$curlHandle = curl_init();
+					$url="http://128.199.232.241/sms/smsreguler.php?username=taufanerlangga95&key=69e376c0d072538ba7c068a48426785e&number=$no_telp_admin&message=$message";
+					curl_setopt($curlHandle, CURLOPT_URL,$url);
+					curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+					curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($curlHandle, CURLOPT_TIMEOUT,120);
+					$hasil = curl_exec($curlHandle);
+					curl_close($curlHandle);
+					//SMS PELANGGAN
+
+
 					redirect("utama/bayar/".$idpesanan);
 				}else
 				{
@@ -372,14 +423,21 @@ class Utama extends CI_Controller {
 
 	public function logged_in()
 	{
-		$this->load->model('Db_model');
-		$this->load->model('Model_review');
-		$hasil = $this->Model_review->baca_vote();
-		$data = array(
-			'record_resto' => $this->Db_model->baca_seluruh_table('about_resto'),
-			'record_vote' => $this->Model_review->baca_vote()
-		);
-		$this->load->view('home_loggedin',$data);
+		if($this->session->userdata('id_pelanggan')!="")
+		{
+			$this->load->model('Db_model');
+			$this->load->model('Model_review');
+			$hasil = $this->Model_review->baca_vote();
+			$data = array(
+				'record_resto' => $this->Db_model->baca_seluruh_table('about_resto'),
+				'record_vote' => $this->Model_review->baca_vote()
+			);
+			$this->load->view('home_loggedin',$data);
+		}else
+		{
+			redirect('utama/login');
+		}
+		
 	}
 	public function login()
 	{
@@ -418,42 +476,15 @@ class Utama extends CI_Controller {
 					redirect('utama/logged_in');
 				}else
 				{
-					$this->session->set_flashdata('pesan','User belum verifikasi email');
+					$this->session->set_flashdata('pesan','verifikasi_0');
 					redirect('utama/login');
 				}
 					
 			}else
 			{
-				echo "beda";
+				$this->session->set_flashdata('pesan','kombinasi_salah');
+				redirect('utama/login');
 			}
-
-
-			/*$this->load->view('login_user');
-			$this->load->model('Db_model');
-			$post = $this->input->post();
-			if(!empty($post['email_login']) && !empty($post['password_login']))
-			{
-				$data=array(
-					'email' => $post['email_login'],
-					'password' => $post['password_login']
-					);
-				$hasil = $this->Db_model->login('user_login',$data);
-				echo count($hasil);
-				
-				if(count($hasil)==1)
-				{
-					
-					$this->session->set_userdata('user_pelanggan', $hasil[0]['nama_user']);
-					$this->session->set_userdata('id_pelanggan', $hasil[0]['id_user']);
-					$this->session->set_userdata('email', $hasil[0]['email']);
-					redirect('utama/logged_in');
-				}else
-				{
-					
-					$this->session->set_flashdata('pesan','Kombinasi email / password anda salah');
-					redirect('utama/login');
-				}
-			}*/
 		}else
 		{
 			redirect('utama/logged_in');
@@ -577,18 +608,6 @@ class Utama extends CI_Controller {
 
 		$this->email->initialize($config);
 
-		/*$this->email->from('taufan.stts@gmail.com', 'Taufan Erlangga');
-		$this->email->to('taufan.erlangga@gmail.com');
-
-		$this->email->subject('Email Test');
-		$this->email->message('Testing the email class.');
-
-		if ($this->email->send()) {
-            echo 'Email sent.';
-        } else {
-            show_error($this->email->print_debugger());
-        }*/
-
 
 		$this->load->model('Db_model');
 		$post = $this->input->post();
@@ -596,11 +615,6 @@ class Utama extends CI_Controller {
 		$password= $this->input->post('password');
 		$password_enc = $this->encryption->encrypt($password);
 
-
-
-		/*echo "password enc = ". $password_enc;
-		$password_dec = $this->encryption->decrypt($password_enc);
-		echo "password_dec = ".$password_dec;*/
 
 		$konfpassword= $this->input->post('konfpassword');
 		if($konfpassword==$password)
@@ -610,15 +624,15 @@ class Utama extends CI_Controller {
 				{
 					
 					$cekemail = $this->Db_model->cek_email($post['email']);
-					//echo count($cekemail);
+					
 					if(count($cekemail)>=1)
 					{
-						var_dump($cekemail);
-						$this->session->set_flashdata('email_kembar','Email telah terdaftar silahkan gunakan email lain');
-						/*redirect('utama/registerpelanggan');*/
+						
+						$this->session->set_flashdata('pesan','email_kembar');
+						
 					}else
 					{
-						//echo "masuk siniiiiiiiiiii";
+					
 						$jumlahdata = $this->Db_model->jumlah_data('user_login');
 						$iduser = 'UL' . ($jumlahdata+1);
 						$jumlahdata = $this->Db_model->jumlah_data('user_login');
@@ -669,7 +683,7 @@ class Utama extends CI_Controller {
 				}
 				else
 				{
-					echo "masuk bawah sini";
+					
 				}
 
 		}else
@@ -694,6 +708,7 @@ class Utama extends CI_Controller {
 
 	public function pesan_meja($id){
 		$this->load->model('Db_model');
+		$this->load->model('Model_pesanan_pelanggan');
 		$this->load->model('Model_resto');
 		$post = $this->input->post();
 		$namapelanggan = $this->session->userdata['user_pelanggan'];
@@ -704,6 +719,7 @@ class Utama extends CI_Controller {
 			$data = $this->Model_resto->baca_harga($id);
 			foreach ($data as $row) {
 				$harga_kursi = $row->biaya_kursi;
+				
 			}
 			$total_bayar = $harga_kursi * $post['jumlah_kursi'];
 			$jumlahdata = $this->Db_model->jumlah_data('pesanan_pelanggan');
@@ -718,78 +734,9 @@ class Utama extends CI_Controller {
 				'total_bayar' => $total_bayar,
 				'status_pemesanan' => 'belum disetujui'
 				);
-			$this->Db_model->tambah_data('pesanan_pelanggan',$data);
-
-			 $record_resto = $this->Db_model->cari_data_resto($id);
-			 foreach ($record_resto as $row){
-			 	$no_handphone_resto = $row->no_telp;
-			 	$nama_owner = $row->nama_depan;
-			 }
-
-			/*$userkey="gq6ivk"; // userkey lihat di zenziva
-			$passkey="taufan1204"; // set passkey di zenziva
-			$telepon=$no_handphone_resto;
-			$message="Hai ". $nama_owner ." resto anda memiliki pesanan baru, mohon untuk login dan melakukan konfirmasi secepatnya";
-			$url ="https://reguler.zenziva.net/apps/smsapi.php";
-			$curlHandle = curl_init();
-			curl_setopt($curlHandle, CURLOPT_URL, $url);
-			curl_setopt($curlHandle, CURLOPT_POSTFIELDS, 'userkey='.$userkey.'&passkey='.$passkey.'&nohp='.$telepon.'&pesan='.urlencode($message));
-			curl_setopt($curlHandle, CURLOPT_HEADER, 0);
-			curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
-			curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
-			curl_setopt($curlHandle, CURLOPT_TIMEOUT,30);
-			curl_setopt($curlHandle, CURLOPT_POST, 1);
-			$results = curl_exec($curlHandle);
-			curl_close($curlHandle);*/
-
-			
-
-			$record_pelanggan = $this->Db_model->cari_data_pelanggan($idpelanggan);
-			 foreach ($record_pelanggan as $row){
-			 	$no_handphone_pelanggan = $row->no_handphone;
-			 }
-			 
-			 $nohptujuan = $no_handphone_pelanggan;
-			// Script http API SMS Reguler Zenziva
-
-			/*$userkey="gq6ivk"; // userkey lihat di zenziva
-			$passkey="taufan1204"; // set passkey di zenziva
-			$telepon=$no_handphone_pelanggan;
-			$message="Hai ". $namapelanggan ." pesanan anda berhasil masuk, mohon di tunggu konfirmasinya. Zenziva";
-			$url ="https://reguler.zenziva.net/apps/smsapi.php";
-			$curlHandle = curl_init();
-			curl_setopt($curlHandle, CURLOPT_URL, $url);
-			curl_setopt($curlHandle, CURLOPT_POSTFIELDS, 'userkey='.$userkey.'&passkey='.$passkey.'&nohp='.$telepon.'&pesan='.urlencode($message));
-			curl_setopt($curlHandle, CURLOPT_HEADER, 0);
-			curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
-			curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
-			curl_setopt($curlHandle, CURLOPT_TIMEOUT,30);
-			curl_setopt($curlHandle, CURLOPT_POST, 1);
-			$results = curl_exec($curlHandle);
-			curl_close($curlHandle);*/
-
-			/*RAJA SMS*/
-			/*$telepon=$no_handphone_pelanggan;
-			$message="pesanan anda berhasil masuk, mohon di tunggu konfirmasinya. Raja SMS";
-			$curlHandle = curl_init();
-			$url="http://128.199.232.241/sms/smsreguler.php?username=taufanerlangga95&key=69e376c0d072538ba7c068a48426785e&number=$no_handphone_pelanggan&message=$message";
-			curl_setopt($curlHandle, CURLOPT_URL,$url);
-			curl_setopt($curlHandle, CURLOPT_HEADER, 0);
-			curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($curlHandle, CURLOPT_TIMEOUT,120);
-			$hasil = curl_exec($curlHandle);
-			curl_close($curlHandle);*/
-
-
-			/*$this->session->set_flashdata('pesanan_berhasil','Pesanan berhasil, mohon di tunggu konfirmasinya.');*/
+			$this->Model_pesanan_pelanggan->tambah_data($data);
 			redirect('utama/pesan_makan/'.$id.'/'.$idpesanan);
 		}
-		else{
-			echo $post['jumlah_kursi']. " ".$post['tanggal']. " " .$post['jam_acara'] ;
-		}
-
 	}
 
 
@@ -885,6 +832,7 @@ class Utama extends CI_Controller {
 	{
 		$post = $this->input->post();
 		$this->load->model('Model_saldo_detail');
+		$this->load->model('Model_user');
 		if(!empty($post['topup'])){
 			$topup = $post['topup'];
 			$kodeunik = rand(191,499);
@@ -900,6 +848,23 @@ class Utama extends CI_Controller {
 			);
 			$this->Model_saldo_detail->request_top_up($data);
 			$this->session->set_flashdata('pesan','berhasil');
+			
+
+			//SMS PELANGGAN
+			$hasil_telp_pelanggan = $this->Model_user-> baca_telfon_pelanggan($id_user);
+			foreach ($hasil_telp_pelanggan as $row) {
+				$hp_pelanggan = $row->no_handphone;
+			}
+			$message=urlencode("Hai, diharapkan melakukan pembayaran sesuai dengan yang tertulis di halaman pembayaran dan langsung melakukan konfirmasi kepada admin. Terimakasih. *pesan-meja-stts.com");
+			$curlHandle = curl_init();
+			$url="http://128.199.232.241/sms/smsreguler.php?username=taufanerlangga95&key=69e376c0d072538ba7c068a48426785e&number=$hp_pelanggan&message=$message";
+			curl_setopt($curlHandle, CURLOPT_URL,$url);
+			curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+			curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($curlHandle, CURLOPT_TIMEOUT,120);
+			$hasil = curl_exec($curlHandle);
+			curl_close($curlHandle);
+
 			redirect('utama/invoice_page/'.$id_top_up);
 		}else{
 			$this->session->set_flashdata('pesan','combo kosong');
@@ -947,6 +912,8 @@ class Utama extends CI_Controller {
 		);
 		$this->load->view('view_konfirmasi_topup',$data);
 		/*$post = $this->input->post();
+		
+
 		if(!empty($post['nama']) && !empty($post['nama']) && !empty($post['nama']) )
 		$jumlahtransfer = $post['jumlahtransfer'];
 		$namarekening = $post['namarekening'];
@@ -962,10 +929,10 @@ class Utama extends CI_Controller {
 		);
 		$this->Db_model->tambah_data('user_saldo_pelanggan_detail',$data);
 		$this->session->set_flashdata("terima_kasih","Terima kasih telah melakukan konfirmasi, top up anda akan di proses secepatnya.");
-		redirect('utama/top_up_saldo');*/
+		redirect('utama/top_up_saldo');
 
 
-		/*header('Content-Type:application/json');
+		header('Content-Type:application/json');
 		echo json_encode($data);*/
 	}
 
@@ -1138,3 +1105,37 @@ curl_setopt($curlHandle, CURLOPT_TIMEOUT,30);
 curl_setopt($curlHandle, CURLOPT_POST, 1);
 $results = curl_exec($curlHandle);
 curl_close($curlHandle);*/
+
+
+/*RAJA SMS*/
+			/*
+			 $record_resto = $this->Db_model->cari_data_resto($id);
+			 foreach ($record_resto as $row){
+			 	$no_handphone_resto = $row->no_telp;
+			 	$nama_owner = $row->nama_depan;
+			 }
+
+			
+
+			
+
+			$record_pelanggan = $this->Db_model->cari_data_pelanggan($idpelanggan);
+			 foreach ($record_pelanggan as $row){
+			 	$no_handphone_pelanggan = $row->no_handphone;
+			 }
+			 
+			 $nohptujuan = $no_handphone_pelanggan;
+
+
+
+
+			$telepon=$no_handphone_pelanggan;
+			$message="pesanan anda berhasil masuk, mohon di tunggu konfirmasinya. Raja SMS";
+			$curlHandle = curl_init();
+			$url="http://128.199.232.241/sms/smsreguler.php?username=taufanerlangga95&key=69e376c0d072538ba7c068a48426785e&number=$no_handphone_pelanggan&message=$message";
+			curl_setopt($curlHandle, CURLOPT_URL,$url);
+			curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+			curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($curlHandle, CURLOPT_TIMEOUT,120);
+			$hasil = curl_exec($curlHandle);
+			curl_close($curlHandle);*/
