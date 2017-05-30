@@ -79,6 +79,9 @@
 				<a href="<?= base_url('owner/cek_reservasi')?>"><div class="col-md-12 menu"><li >Lihat Reservasi</li></div></a>
 			</div>
 			<div class="row">
+				<a href="<?= base_url('owner/laporan') ?>"><div class="col-md-12 menu"><li >Laporan</li></div></a>
+			</div>
+			<div class="row">
 				<a href="<?= base_url('owner/dashboard_owner')?>"><div class="col-md-12 menu"><li >Reservation</li></div></a>
 			</div>
 			<div class="row">
@@ -202,6 +205,28 @@
 							        <?php } ?>
 							</div>
 						    <div id="makanan" class="tab-pane fade in active">
+						    	<?php if($this->session->flashdata('menu')==''){ ?>
+						    	
+						    	<?php }elseif($this->session->flashdata('menu')=='1'){ ?>
+						    	<div class="alert alert-success" style="margin-top:10px;">
+								  <strong>Simpan data berhasil!</strong> Data berhasil disimpan.
+								</div>
+						    	<?php }elseif($this->session->flashdata('menu')=='2'){ ?>
+						    	<div class="alert alert-danger" style="margin-top:10px;">
+								  <strong>Simpan foto gagal!</strong> Foto harus dibawah 1024kb dan berdimensi kurang dari 1000x1000.
+								</div>
+						    	<?php } ?>
+						    	<?php if($this->session->flashdata('update')==''){ ?>
+						    	
+						    	<?php }elseif($this->session->flashdata('update')=='1'){ ?>
+						    	<div class="alert alert-success" style="margin-top:10px;">
+								  <strong>Update data berhasil!</strong> Data berhasil disimpan.
+								</div>
+						    	<?php }elseif($this->session->flashdata('update')=='2'){ ?>
+						    	<div class="alert alert-danger" style="margin-top:10px;">
+								  <strong>Simpan foto gagal!</strong> Foto harus dibawah 1024kb dan berdimensi kurang dari 1000x1000.
+								</div>
+						    	<?php } ?>
 						    	<h3 style="margin-bottom:15px;">Daftar makanan dan minuman</h3>
 						    	<?php echo form_open_multipart(base_url("owner/about_system_makanan"), 'method="POST"') ?>
 						    		<div class="row">
@@ -256,16 +281,17 @@
 						    				</tr>	
 						    			</thead>
 						    			<tbody>
-						    			<?php if(!empty($record_menu)): ?>
-						    					<?php foreach ($record_menu as $row):?>
+						    			<?php if($record_menu!="data tidak ada"){ ?>
+						    			
+						    					<?php foreach ($record_menu as $row){?>
 								    				<tr>
 								    					<td><?php echo $row->nama_makanan; ?></td>
 								    					<td><?php echo $row->harga; ?></td>
 								    					<td><img src="<?php echo $row->foto_makanan; ?>" style="width:100px;height:100px;"></td>
 								    					<td><a href="<?php echo base_url('owner/edit_menu/'.$row->kode_menu) ?>">Edit</a> | <a href="<?php echo base_url('owner/hapus_makanan/'.$row->kode_menu) ?>">Hapus</a></td>
 								    				</tr>
-						    					<?php endforeach; ?>
-						    				<?php endif; ?>
+						    					<?php }?>
+						    				<?php } ?>
 						    			</tbody>
 
 						    		</table>

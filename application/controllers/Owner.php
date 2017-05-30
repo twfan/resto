@@ -15,13 +15,34 @@ class Owner extends CI_Controller {
 	public function laporan()
 	{
 		$this->load->model('Model_pesanan_pelanggan');
+		$this->load->model('Model_resto');
 		$koderesto = $this->session->userdata('kode_resto');
+		$hasil = $this->Model_resto->nama_resto($koderesto);
+		$nama_resto= "nama restaurant";
+		foreach ($hasil as $row) {
+			$nama_resto = $row->nama_resto;
+		}
+		if($nama_resto==NULL)
+		{
+			$nama_resto="nama restaurant";
+		}
+		echo $nama_resto;
+		
 		$data_laporan = $this->Model_pesanan_pelanggan->laporan_jumlah_pesanan($koderesto);
-
+		
+		$senin=0;
+		$selasa=0;
+		$rabu=0;
+		$kamis=0;
+		$jumat=0;
+		$sabtu=0;
+		$minggu=0;
+		
 		foreach ($data_laporan as $row) {	
 			if($row->hari=="Monday")
 			{
 				$senin = $row->jumlah_pesanan;
+				
 			}else if($row->hari=="Tuesday"){
 				$selasa = $row->jumlah_pesanan;
 			}else if($row->hari=="Wednesday"){
@@ -36,13 +57,20 @@ class Owner extends CI_Controller {
 				$minggu = $row->jumlah_pesanan;
 			}
 		}
-		echo "Senin = ". $senin ."<br>";
-		echo "Selasa = ". $selasa ."<br>";
-		echo "rabu = ". $rabu ."<br>";
-		echo "kamis = ". $kamis ."<br>";
-		echo "jumat = ". $jumat ."<br>";
-		echo "sabtu = ". $sabtu ."<br>";
-		echo "minggu = ". $minggu ."<br>";
+
+		$data = array(
+			'senin' => $senin,
+			'selasa' => $selasa,
+			'rabu' => $rabu,
+			'kamis' => $kamis,
+			'jumat' => $jumat,
+			'sabtu' => $sabtu,
+			'minggu' => $minggu,
+			'nama_resto' => $nama_resto
+		);
+
+
+		$this->load->view('dashboard_laporan',$data);
 		
 	}
 
@@ -181,55 +209,29 @@ class Owner extends CI_Controller {
 				$data = $this->Model_owner->decrypt_password($email);
 				$password_enc = $data[0]['password'];
 				$password_dec = $this->encryption->decrypt($password_enc);
-
-				if( $data[0]['status_akun']=="TRUE")
+				
+				if($password_dec==$post['password_login'] && $email==$data[0]['email'])
 				{
-					if($password_dec==$post['password_login'])
+					if( $data[0]['status_akun']=="TRUE")
 					{
-						
 						$this->session->set_userdata('user_owner', $data[0]['nama_depan']);
 						$this->session->set_userdata('kode_resto', $data[0]['kode_resto']);
 						
 						redirect('owner/dashboard_owner');
 					}else
 					{
-						
-						$this->session->set_flashdata('pesan','email pass salah');
+						$this->session->set_flashdata('pesan','verifikasi_0');
 						redirect('owner/login');
 					}
 				}else
 				{
-					$this->session->set_flashdata('pesan','User belum verifikasi email');
+					$this->session->set_flashdata('pesan','tidak_terdaftar');
 					redirect('owner/login');
 				}
-
-
-				
-				/*echo $data[0]['password'];*/
-				/*$data=array(
-					'email' => $post['email_login'],
-					'password' => $post['password_login']
-					);
-				$hasil = $this->Db_model->login('owner_resto',$data);
-				echo count($hasil);
-				
-				if(count($hasil)==1)
-				{
-					
-					$this->session->set_userdata('user_owner', $hasil[0]['nama_depan']);
-					$this->session->set_userdata('kode_resto', $hasil[0]['kode_resto']);
-					
-					redirect('owner/dashboard_owner');
-				}else
-				{
-					
-					$this->session->set_flashdata('pesan','Kombinasi email / password anda salah');
-					redirect('owner/login');
-				}*/
 			}
 		}else
 		{
-			echo "masuk 2";
+			
 			redirect('owner/dashboard_owner');
 		}
 	}
@@ -340,7 +342,7 @@ class Owner extends CI_Controller {
 								'harga_tertinggi' => $post['tertinggi'],
 								'metode_pembayaran' => $post['pembayaran'],
 								'biaya_kursi' => $post['biayakursi'],
-								'kuota_harian' => $post['kuotajam'],
+								
 								'sms' => $post['sms'],
 								'email' => $post['emal'],
 								'status' => 'TRUE'
@@ -351,6 +353,7 @@ class Owner extends CI_Controller {
 			}else
 			{
 				echo $this->upload->display_errors();
+				
 				$data=array(
 								'nama_resto' => $post['namaresto'],
 								'alamat_resto' => $post['alamatresto'],
@@ -361,13 +364,13 @@ class Owner extends CI_Controller {
 								'harga_tertinggi' => $post['tertinggi'],
 								'metode_pembayaran' => $post['pembayaran'],
 								'biaya_kursi' => $post['biayakursi'],
-								'kuota_harian' => $post['kuotajam'],
+								
 								'sms' => $post['sms'],
 								'email' => $post['email'],
 								'status' => 'TRUE'
 								);
 					$this->Db_model->update_data($kode_resto,$data);
-					$this->session->set_flashdata('pesan','1');
+					$this->session->set_flashdata('pesan','2');
 					redirect('owner/dashboard_about');
 			}
 			
@@ -394,9 +397,13 @@ class Owner extends CI_Controller {
 							'harga_terendah' => $post['terendah'],
 							'harga_tertinggi' => $post['tertinggi'],
 							'metode_pembayaran' => $post['pembayaran'],
+							'biaya_kursi' => $post['biayakursi'],
+							'sms' => $post['sms'],
+							'email' => $post['email'],
 							'status' => 'TRUE'
 							);
 				$this->Db_model->tambah_data('about_resto',$data);
+				$this->session->set_flashdata('pesan','1');
 				redirect('owner/dashboard_about');
 			}
 		}
@@ -445,11 +452,12 @@ class Owner extends CI_Controller {
 				);
 			
 			$this->Db_model->tambah_data('menu_resto',$data);
-			$this->session->set_flashdata('pesan','1');
+			$this->session->set_flashdata('menu','1');
 			redirect('owner/dashboard_owner_menu');
 			}else
 			{
-				echo $this->upload->display_errors();
+				$this->session->set_flashdata('menu','2');
+				redirect('owner/dashboard_owner_menu');
 			}
 			
 
@@ -489,14 +497,18 @@ class Owner extends CI_Controller {
 							'status' => 'TRUE'
 					);
 				//echo print_r($data);
+				$this->session->set_flashdata('foto','1');
 				$this->Db_model->tambah_data('foto_resto',$data);
-				redirect('owner/dashboard_owner_foto');
+				
 			}else
 			{
-				echo $this->upload->display_errors();
+				
+				$this->session->set_flashdata('foto','2');
+				redirect('owner/dashboard_owner_foto');
 			}
 		}else
 		{
+			$this->session->set_flashdata('foto','3');
 			redirect('owner/dashboard_owner_foto');
 		}
 		
@@ -615,12 +627,19 @@ class Owner extends CI_Controller {
 					'foto_makanan' => $gambar_makanan,
 					'harga' => $post['hargamakanan']
 				);		
-				
+			$this->session->set_flashdata('update','1');
 			$this->Db_model->update($post['id'],$data,'menu_resto');
 			redirect(base_url('owner/dashboard_owner_menu'));
 			}else
 			{
-				echo $this->upload->display_errors();
+				$data = array(
+					'nama_makanan' => $post['namamakanan'],
+					'deskripsi' => $post['deskripsimakanan'],
+					'harga' => $post['hargamakanan']
+				);		
+			$this->session->set_flashdata('update','1');
+			$this->Db_model->update($post['id'],$data,'menu_resto');
+			redirect(base_url('owner/dashboard_owner_menu'));
 			}
 
 

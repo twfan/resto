@@ -911,29 +911,7 @@ class Utama extends CI_Controller {
 			'record'=> $this->Model_saldo_detail->data_invoice($idtopup,$iduser)
 		);
 		$this->load->view('view_konfirmasi_topup',$data);
-		/*$post = $this->input->post();
 		
-
-		if(!empty($post['nama']) && !empty($post['nama']) && !empty($post['nama']) )
-		$jumlahtransfer = $post['jumlahtransfer'];
-		$namarekening = $post['namarekening'];
-		$tanggal = $post['tanggal'];
-		$iduser = $this->session->userdata('id_pelanggan');
-		$jumlahdata = $this->Db_model->jumlah_data('user_saldo_pelanggan_detail');
-		$id_topup = 'IT' . ($jumlahdata+1);
-		$data = array(
-			'id_top_up' => $id_topup,
-			'id_user' => $iduser,
-			'jumlah_top_up_saldo' => $post['topup'],
-			'status_transaksi' => 'belum konfirmasi transfer'
-		);
-		$this->Db_model->tambah_data('user_saldo_pelanggan_detail',$data);
-		$this->session->set_flashdata("terima_kasih","Terima kasih telah melakukan konfirmasi, top up anda akan di proses secepatnya.");
-		redirect('utama/top_up_saldo');
-
-
-		header('Content-Type:application/json');
-		echo json_encode($data);*/
 	}
 
 	public function proses_top_up_saldo($idtopup){
@@ -965,11 +943,12 @@ class Utama extends CI_Controller {
 					'status_transaksi' => 'sudah dibayar'
 				);
 				$this->Model_saldo_detail->update_konfirmasi($idtopup,$data);
-				$this->session->set_flashdata('pesan','konfirmasi berhasil');
+				$this->session->set_flashdata('pesan','1');
 				redirect('utama/top_up_saldo');
 			}else
 			{
-				echo $this->upload->display_errors();
+				$this->session->set_flashdata('pesan','2');
+				redirect('utama/top_up_saldo');
 			}
 		}else
 		{

@@ -247,8 +247,10 @@
 													echo "<div class='alert alert-success' style='margin-top:10px;'><strong>Request berhasil!</strong> Harap melakukan pembayaran dan melakukan konfirmasi pembayaran.</div>";
 												}elseif ($this->session->flashdata('pesan')=='combo kosong') {
 													echo "<div class='alert alert-warning' style='margin-top:10px;'><strong>Pilih top up!</strong> Harap menentukan pilihan top up terlebih dahulu.</div>";
-												}elseif ($this->session->flashdata('pesan')=='konfirmasi berhasil') {
+												}elseif ($this->session->flashdata('pesan')=='1') {
 													echo "<div class='alert alert-success' style='margin-top:10px;'><strong>Konfirmasi berhasil!</strong> Status dapat dilihat pada history top up.</div>";
+												}elseif ($this->session->flashdata('pesan')=='2') {
+													echo "<div class='alert alert-danger' style='margin-top:10px;'><strong>Bukti transfer gagal upload!</strong> Bukti transfer harus dibawah 1024kb dan mempunyai dimensi dibawah 1000x1000.</div>";
 												}
 											}
 										?>

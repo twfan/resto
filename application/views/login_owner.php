@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Register</title>
+	<title>Login Owner</title>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/style.css">
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/vegas/vegas.min.css">
@@ -33,7 +33,7 @@
   } );
 </script>
 <div class="container" id="login">
-	<h1 class="text-center"><a href="home">LOGO</a></h1>
+	<h1 class="text-center"><a href="home">Pesan Meja STTS</a></h1>
 	<h3 class="text-center"><strong>Ayo mulai !</strong></h3>
 	<!-- <p class="text-center"> Sudah mempunyai akun? Masuk <a href="">disini</a></p> -->
 	<form action="<?php echo base_url('owner/login') ?>" method="POST">
@@ -44,13 +44,17 @@
 			if($this->session->flashdata('pesan')!=''){
 			?>
 			<div class="row">
-				<?php if($this->session->flashdata('pesan')=="daftar berhasil"){ ?>
-					<div class="alert alert-success">
-					  <strong>Berhasil terdaftar!</strong> Silahkan cek email anda untuk melakukan konfirmasi email.
+				<?php if($this->session->flashdata('pesan')=="verifikasi_0"){ ?>
+					<div class="alert alert-info">
+					  <strong>Verifikasi email. </strong> Silahkan melakukan verifikasi email anda, dengan membuka alamat email anda.
 					</div>
-				<?php }elseif($this->session->flashdata('pesan')=="email pass salah") {?>
+				<?php }elseif($this->session->flashdata('pesan')=="kombinasi_salah") {?>
 					<div class="alert alert-danger">
 					  <strong>Gagal login!</strong> Kombinasi email dan password salah.
+					</div>
+				<?php }elseif($this->session->flashdata('pesan')=="tidak_terdaftar") {?>
+					<div class="alert alert-danger">
+					  <strong>Gagal login!</strong> Kombinasi email dan password belum terdaftar.
 					</div>
 				<?php } ?>
 			</div>

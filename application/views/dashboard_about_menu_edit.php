@@ -79,6 +79,9 @@
 				<a href="<?= base_url('owner/cek_reservasi')?>"><div class="col-md-12 menu"><li >Lihat Reservasi</li></div></a>
 			</div>
 			<div class="row">
+				<a href="<?= base_url('owner/laporan') ?>"><div class="col-md-12 menu"><li >Laporan</li></div></a>
+			</div>
+			<div class="row">
 				<a href="<?= base_url('owner/dashboard_owner')?>"><div class="col-md-12 menu"><li >Reservation</li></div></a>
 			</div>
 			<div class="row">
@@ -91,7 +94,7 @@
 						<ul class="nav nav-tabs">
 						    <li ><a data-toggle="tab" href="#about">Resto Profile</a></li>
 						    <li class="active"><a data-toggle="tab" href="#makanan">Menu Makanan</a></li>
-						    <li><a data-toggle="tab" href="#menu2">Fasilitas</a></li>
+						    <li><a data-toggle="tab" href="#foto">Foto Restauran</a></li>
 						</ul>
 					  	<div class="tab-content">
 						    <div id="about" class="tab-pane fade ">
@@ -190,6 +193,28 @@
 							        <?php } ?>
 							</div>
 						    <div id="makanan" class="tab-pane fade in active">
+						    	<?php if($this->session->flashdata('menu')==''){ ?>
+						    	
+						    	<?php }elseif($this->session->flashdata('menu')=='1'){ ?>
+						    	<div class="alert alert-success" style="margin-top:10px;">
+								  <strong>Simpan data berhasil!</strong> Data berhasil disimpan.
+								</div>
+						    	<?php }elseif($this->session->flashdata('menu')=='2'){ ?>
+						    	<div class="alert alert-danger" style="margin-top:10px;">
+								  <strong>Simpan foto gagal!</strong> Foto harus dibawah 1024kb dan berdimensi kurang dari 1000x1000.
+								</div>
+						    	<?php } ?>
+						    	<?php if($this->session->flashdata('update')==''){ ?>
+						    	
+						    	<?php }elseif($this->session->flashdata('update')=='1'){ ?>
+						    	<div class="alert alert-success" style="margin-top:10px;">
+								  <strong>Update data berhasil!</strong> Data berhasil disimpan.
+								</div>
+						    	<?php }elseif($this->session->flashdata('update')=='2'){ ?>
+						    	<div class="alert alert-danger" style="margin-top:10px;">
+								  <strong>Simpan foto gagal!</strong> Foto harus dibawah 1024kb dan berdimensi kurang dari 1000x1000.
+								</div>
+						    	<?php } ?>
 						    	<h3 style="margin-bottom:15px;">Daftar makanan dan minuman</h3>
 						    	<?php echo form_open_multipart(base_url("owner/update_makanan"), 'method="POST"') ?>
 						    		<div class="row">
@@ -258,6 +283,48 @@
 						    		</table>
 						    	</div>
 
+						    </div>
+						    <div id="foto" class="tab-pane fade">
+						    	<h3 style="margin-bottom:15px;">Kumpulan foto Resto (Max 10 foto)</h3>
+						    	<?php echo form_open_multipart(base_url("owner/about_system_foto"), 'method="POST"') ?>
+						    	
+							        <div class="row">
+							        	<div class="col-md-2"> Foto Restauran</div>
+								        <div class="col-md-2">
+								        	<div class="form-group">
+								        		<input type="file" class="" name="userfile" size="20"/>
+								        	</div>
+								        </div>
+							        </div>
+							        <div class="row">
+							        	<div class="col-md-2"></div>
+							        	<div class="col-md-2 ">
+							        		<button class="btn btn-large btn btn-success center  " type="submit" name="tambahdata" >Tambahkan</button>
+							        	</div>
+							        </div>
+						    	<?php echo form_close(); ?>
+						    	<div class="table-responsive">
+						    		<table class="table">
+						    			<thead>
+						    				<tr>
+						    					
+						    					<th>Foto</th>
+						    					<th>Aksi</th>
+						    				</tr>	
+						    			</thead>
+						    			<tbody>
+						    			<?php if(!empty($record_foto)): ?>
+						    					<?php foreach ($record_foto as $row):?>
+								    				<tr>
+								    					<td><img src="<?php echo $row->path_foto; ?>" style="width:100px;height:100px;"></td>
+								    					<td> <a href="<?php echo base_url('owner/hapus_foto/'.$row->id_foto) ?>">Hapus</a></td>
+								    				</tr>
+						    					<?php endforeach; ?>
+						    				<?php endif; ?>
+						    			</tbody>
+
+						    		</table>
+						    	</div>
 						    </div>
 						    <div id="menu2" class="tab-pane fade">
 						      <h3>Menu 2</h3>

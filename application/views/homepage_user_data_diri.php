@@ -137,7 +137,7 @@
 				        <div class="col-md-6"><h4>Email</h4></div>
 				        <div class="col-md-6">
 				        	<div class="form-group">
-				        		<input type="text" class="form-control" placeholder="Nomor handphone"  name="nohp" maxlength="35" value="<?php echo $row->no_handphone; ?>"/>
+				        		<input type="number" class="form-control" placeholder="Nomor handphone"  name="nohp" maxlength="35" value="<?php echo $row->no_handphone; ?>"/>
 				        	</div>
 				        </div>
 				        <div class="col-md-6">

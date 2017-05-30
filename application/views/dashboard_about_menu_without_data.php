@@ -79,6 +79,9 @@
 				<a href="<?= base_url('owner/cek_reservasi')?>"><div class="col-md-12 menu"><li >Lihat Reservasi</li></div></a>
 			</div>
 			<div class="row">
+				<a href="<?= base_url('owner/laporan') ?>"><div class="col-md-12 menu"><li >Laporan</li></div></a>
+			</div>
+			<div class="row">
 				<a href="<?= base_url('owner/dashboard_owner')?>"><div class="col-md-12 menu"><li >Reservation</li></div></a>
 			</div>
 			<div class="row">
@@ -129,7 +132,7 @@
 							        	<div class="col-md-2"> No telfon Resto</div>
 								        <div class="col-md-4">
 								        	<div class="form-group">
-								        		<input type="text" class="form-control" placeholder="Nomor telfon resto"  name="notelfonresto" maxlength="35" value=""/>
+								        		<input type="number" class="form-control" placeholder="Nomor telfon resto"  name="notelfonresto" maxlength="35" value=""/>
 								        	</div>
 								        </div>
 							        </div>
@@ -155,13 +158,13 @@
 								        	<div class="row">
 								        		<div class="col-md-5">
 									        		<div class="form-group">
-										        		<input type="text" class="form-control" placeholder="Terendah"  name="terendah" maxlength="35" value=""/>
+										        		<input type="number" class="form-control" placeholder="Terendah"  name="terendah" maxlength="35" value=""/>
 										        	</div>
 									        	</div>
 									        	<div class="col-md-1"> <h5>~</h5> </div>
 									        	<div class="col-md-6">
 									        		<div class="form-group">
-										        		<input type="text" class="form-control" placeholder="Tertinggi"  name="tertinggi" maxlength="35" value=""/>
+										        		<input type="number" class="form-control" placeholder="Tertinggi"  name="tertinggi" maxlength="35" value=""/>
 										        	</div>
 									        	</div>
 								        	</div>
@@ -175,6 +178,38 @@
 								        	</div>
 								        </div>
 							        </div>
+							        <div class="row">
+							        	<div class="col-md-2"> Biaya 1 Kursi</div>
+								        <div class="col-md-4">
+								        	<div class="form-group">
+								        		<div class="row">
+								        			<div class="col-md-4"><input type="number" class="form-control"   name="biayakursi" maxlength="35" value="<?php echo $detail->biaya_kursi; ?>"/></div>
+								        		</div>
+								        	</div>
+								        </div>
+							        </div>
+							        
+							        <div class="row">
+							        	<div class="col-md-2"> Notifikasi</div>
+								        <div class="col-md-4">
+								        	<div class="form-group">
+								        		<?php if($detail->sms==1){ ?>
+								        			<input type="checkbox" name="sms" value="1" checked=""> SMS</input>
+								        		<?php }else{ ?>
+								        			<input type="checkbox" name="sms" value="1" > SMS</input>
+								        		<?php } ?>
+								     			
+								        	</div>
+								        	<div class="form-group">
+								        		<?php if($detail->email==1){ ?>
+								        			<input type="checkbox" name="email" value="1" checked=""> Email</input>
+								        		<?php }else{ ?>
+								        			<input type="checkbox" name="email" value="1" > Email</input>
+								        		<?php } ?>
+								     			
+								        	</div>
+								        </div>
+							        </div>
 							        
 							        <div class="row">
 							        	<div class="col-md-2"></div>
@@ -185,6 +220,17 @@
 							    </form>
 							</div>
 						    <div id="makanan" class="tab-pane fade">
+						    	<?php if($this->session->flashdata('menu')==''){ ?>
+						    	
+						    	<?php }elseif($this->session->flashdata('menu')=='1'){ ?>
+						    	<div class="alert alert-success" style="margin-top:10px;">
+								  <strong>Simpan data berhasil!</strong> Data berhasil disimpan.
+								</div>
+						    	<?php }elseif($this->session->flashdata('menu')=='2'){ ?>
+						    	<div class="alert alert-danger" style="margin-top:10px;">
+								  <strong>Simpan foto gagal!</strong> Foto harus dibawah 1024kb dan berdimensi kurang dari 1000x1000.
+								</div>
+						    	<?php } ?>
 						    	<h3 style="margin-bottom:15px;">Daftar makanan dan minuman</h3>
 						    	<form action="http://localhost/resto/owner/about_system_makanan" method="POST">
 						    		<div class="row">
@@ -207,7 +253,7 @@
 							        	<div class="col-md-2"> Harga Makanan</div>
 								        <div class="col-md-2">
 								        	<div class="form-group">
-								        		<input type="text" class="form-control" placeholder="Harga"  name="hargamakanan" maxlength="35" value=""/>
+								        		<input type="number" class="form-control" placeholder="Harga"  name="hargamakanan" maxlength="35" value=""/>
 								        	</div>
 								        </div>
 							        </div>

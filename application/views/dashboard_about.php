@@ -82,6 +82,9 @@ $(document).ready(function(){
 				<a href="<?= base_url('owner/cek_reservasi')?>"><div class="col-md-12 menu"><li >Lihat Reservasi</li></div></a>
 			</div>
 			<div class="row">
+				<a href="<?= base_url('owner/laporan') ?>"><div class="col-md-12 menu"><li >Laporan</li></div></a>
+			</div>
+			<div class="row">
 				<a href="<?= base_url('owner/dashboard_owner')?>"><div class="col-md-12 menu"><li >Reservation</li></div></a>
 			</div>
 			<div class="row">
@@ -105,9 +108,9 @@ $(document).ready(function(){
 						    	<div class="alert alert-success" style="margin-top:10px;">
 								  <strong>Simpan data berhasil!</strong> Data berhasil disimpan.
 								</div>
-						    	<?php }else{ ?>
+						    	<?php }elseif($this->session->flashdata('pesan')=='2'){ ?>
 						    	<div class="alert alert-danger" style="margin-top:10px;">
-								  <strong>Simpan data gagal!</strong> Data gagal disimpan.
+								  <strong>Simpan foto gagal!</strong> Foto harus dibawah 1024kb dan berdimensi kurang dari 1000x1000.
 								</div>
 						    	<?php } ?>
 						    	
@@ -211,16 +214,7 @@ $(document).ready(function(){
 								        	</div>
 								        </div>
 							        </div>
-							        <div class="row">
-							        	<div class="col-md-2"> Kuota pemesanan perjam</div>
-								        <div class="col-md-4">
-								        	<div class="form-group">
-								        		<div class="row">
-								        			<div class="col-md-4"><input type="number" class="form-control"  name="kuotajam" maxlength="35" value="<?php echo $detail->kuota_harian; ?>"/></div>
-								        		</div>
-								        	</div>
-								        </div>
-							        </div>
+							        
 							        <div class="row">
 							        	<div class="col-md-2"> Notifikasi</div>
 								        <div class="col-md-4">
@@ -238,7 +232,6 @@ $(document).ready(function(){
 								        		<?php }else{ ?>
 								        			<input type="checkbox" name="email" value="1" > Email</input>
 								        		<?php } ?>
-								     			
 								        	</div>
 								        </div>
 							        </div>
@@ -275,7 +268,7 @@ $(document).ready(function(){
 							        	<div class="col-md-2"> Harga Makanan</div>
 								        <div class="col-md-2">
 								        	<div class="form-group">
-								        		<input type="text" class="form-control" placeholder="Harga"  name="hargamakanan" maxlength="35" value=""/>
+								        		<input type="number" class="form-control" placeholder="Harga"  name="hargamakanan" maxlength="35" value=""/>
 								        	</div>
 								        </div>
 							        </div>

@@ -79,6 +79,10 @@
 				<a href="<?= base_url('owner/cek_reservasi')?>"><div class="col-md-12 menu"><li >Lihat Reservasi</li></div></a>
 			</div>
 			<div class="row">
+				<a href="<?= base_url('owner/laporan') ?>"><div class="col-md-12 menu"><li >Laporan</li></div></a>
+			</div>
+			<div class="row">
+
 				<a href="<?= base_url('owner/dashboard_owner')?>"><div class="col-md-12 menu"><li >Reservation</li></div></a>
 			</div>
 			<div class="row">
@@ -261,6 +265,21 @@
 
 						    </div>
 						    <div id="foto" class="tab-pane fade  in active">
+						    	<?php if($this->session->flashdata('foto')==''){ ?>
+						    	
+						    	<?php }elseif($this->session->flashdata('foto')=='1'){ ?>
+						    	<div class="alert alert-success" style="margin-top:10px;">
+								  <strong>Simpan data berhasil!</strong> Data berhasil disimpan.
+								</div>
+						    	<?php }elseif($this->session->flashdata('foto')=='2'){ ?>
+						    	<div class="alert alert-danger" style="margin-top:10px;">
+								  <strong>Simpan foto gagal!</strong> Foto harus dibawah 1024kb dan berdimensi kurang dari 1000x1000.
+								</div>
+						    	<?php }elseif($this->session->flashdata('foto')=='3'){ ?>
+						    	<div class="alert alert-danger" style="margin-top:10px;">
+								  <strong>Maksimal 10 foto!</strong> Galeri foto penuh.
+								</div>
+						    	<?php } ?>
 						      <h3 style="margin-bottom:15px;">Kumpulan foto Resto (Max 10 foto)</h3>
 						      <?php echo form_open_multipart(base_url("owner/about_system_foto"), 'method="POST"') ?>
 							        <div class="row">
@@ -288,7 +307,7 @@
 						    				</tr>	
 						    			</thead>
 						    			<tbody>
-						    			<?php if(!empty($record_foto)): ?>
+						    			<?php if($record_foto!="data tidak ada"): ?>
 						    					<?php foreach ($record_foto as $row):?>
 								    				<tr>
 								    					
