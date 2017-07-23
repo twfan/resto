@@ -87,6 +87,7 @@
 			<div class="row">
 				<a href="<?= base_url('admin/home')?>"><div class="col-md-12 menu"><li >Top Up Saldo</li></div></a>
 				<a href="<?= base_url('admin/pembayaran')?>"><div class="col-md-12 menu"><li >Pembayaran Pesanan</li></div></a>
+				<a href="<?= base_url('admin/penarikan')?>"><div class="col-md-12 menu"><li >Penarikan Saldo</li></div></a>
 			</div>
 		</div>
 		<div class="col-md-10 content_panel " style="min-height: 100%;">
@@ -129,7 +130,7 @@
 
 				    					</td>
 				    					<?php if($row->status=='0'){?>
-				    					<td><a href="<?php echo base_url('admin/pembayaran_terima/'. $row->id_pesanan) ?>" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-ok"></span> Terima Pembayaran</a><br><br><a href="<?php echo base_url('admin/pembayaran_tolak/'. $row->id_pesanan) ?>" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span> Tolak Pembayaran</a></td>
+				    					<td><a href="<?php echo base_url('admin/pembayaran_terima/'. $row->id_pesanan) ?>" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-ok"></span> Terima Pembayaran</a><br><br></td>
 				    					
 				    					<?php }elseif($row->status=='1') {?>
 				    					<td><a href="<?php echo base_url('admin/konfirmasi/'. $row->id_pesanan) ?>" class="btn btn-success btn-xs disabled"><span class="glyphicon glyphicon-ok"></span> Transaksi Selesai</a></td>

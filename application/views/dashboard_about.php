@@ -3,12 +3,14 @@
 	<title></title>
  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.min.css">
  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/popup-image/source/jquery.fancybox.css">
+ <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/form/chosen.css">
  <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery/jquery-1.11.3.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/plugin/popup-image/source/jquery.fancybox.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugin/form/chosen.jquery.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-	
+	$("#fmasakan").chosen();
 });
 </script>
 <style type="text/css">
@@ -90,6 +92,12 @@ $(document).ready(function(){
 			<div class="row">
 				<a href="<?= base_url('owner/dashboard_about') ?>"><div class="col-md-12 menu"><li >About</li></div></a>
 			</div>
+			<div class="row">
+				<a href="<?= base_url('owner/upgrade_akun') ?>"><div class="col-md-12 menu"><li >Upgrade Akun</li></div></a>
+			</div>
+			<div class="row">
+				<a href="<?= base_url('owner/pemasukan') ?>"><div class="col-md-12 menu"><li >Pemasukan Resto </li></div></a>
+			</div>
 		</div>
 		<div class="col-md-10 content_panel " style="min-height: 100%;">
 				<div class="col-md-12">
@@ -98,7 +106,9 @@ $(document).ready(function(){
 						    <li class="active"><a data-toggle="tab" href="#about">Resto Profile</a></li>
 						    <li><a data-toggle="tab" href="#makanan">Menu Makanan</a></li>
 						    <li><a data-toggle="tab" href="#foto">Foto Restauran</a></li>
-						   
+						    <?php if($status_upgrade==1){?>
+						    	 <li><a data-toggle="tab" href="#iklan">Iklan Restauran</a></li>
+						    <?php } ?>
 						</ul>
 					  	<div class="tab-content">
 						    <div id="about" class="tab-pane fade in active">
@@ -112,7 +122,11 @@ $(document).ready(function(){
 						    	<div class="alert alert-danger" style="margin-top:10px;">
 								  <strong>Simpan foto gagal!</strong> Foto harus dibawah 1024kb dan berdimensi kurang dari 1000x1000.
 								</div>
-						    	<?php } ?>
+						    	<?php }elseif($this->session->flashdata('pesan')=='3'){ ?>
+						    	<div class="alert alert-danger" style="margin-top:10px;">
+								  <strong>Simpan foto iklan gagal!</strong> Foto harus dibawah 2500kb dan berdimensi kurang dari 1500x600.
+								</div>
+						    	<?php }?>
 						    	
 
 						    	
@@ -155,6 +169,22 @@ $(document).ready(function(){
 								        </div>
 							        </div>
 							        <div class="row">
+							        	<div class="col-md-2"> Kota Resto</div>
+								        <div class="col-md-4">
+								        	<div class="form-group">
+								        		<select class="combobox form-control" name="kota" style="" prompt="">
+												<option value="" disabled selected>Kota</option>
+												<option value="JKT" <?= $detail->kota=='JKT' ?'selected="selected"':''; ?> >JAKARTA</option>
+												<option value="SBY" <?= $detail->kota=='SBY' ?'selected="selected"':''; ?>>SURABAYA</option>
+												<option value="MDN" <?= $detail->kota=='MDN' ?'selected="selected"':''; ?>>MEDAN</option>
+												<option value="BDG" <?= $detail->kota=='BDG' ?'selected="selected"':''; ?>>BANDUNG</option>
+												<option value="SMG" <?= $detail->kota=='SMG' ?'selected="selected"':''; ?>>SEMARANG</option>
+											</select>
+								        	</div>
+								        	
+								        </div>
+							        </div>
+							        <div class="row">
 							        	<div class="col-md-2"> No telfon Resto</div>
 								        <div class="col-md-4">
 								        	<div class="form-group">
@@ -174,7 +204,22 @@ $(document).ready(function(){
 							        	<div class="col-md-2"> Tipe sajian</div>
 								        <div class="col-md-4">
 								        	<div class="form-group">
-								        		<textarea class="form-control" rows="4" cols="74" name="sajian"  placeholder="Sajian makanan yang disediakans"><?php echo $detail->tipe_sajian; ?></textarea>
+								        		<?= form_multiselect('masakan[]',$opt,$selected_opt,array('class'=>'form-control chosen-select col-md-12','data-placeholder'=>'Tipe masakan', 'id'=>'fmasakan')); ?>
+								        	<!-- 	<select id='fmasakan' multiple class="form-control chosen-select col-md-12"  name="masakan[]" data-placeholder="Tipe masakan">
+								        		
+								        		</select> -->
+								        	</div>
+								        </div>
+							        </div>
+							         <div class="row">
+							        	<div class="col-md-2"> Halal</div>
+								        <div class="col-md-4">
+								        	<div class="form-group">
+								      
+								        			<input type="radio" name="halal" value="1" checked=""> Ya</input>
+								        	
+								        			<input type="radio" name="halal" value="0" > Tidak</input>
+								        	
 								        	</div>
 								        </div>
 							        </div>
@@ -356,9 +401,20 @@ $(document).ready(function(){
 						    		</table>
 						    	</div>
 						    </div>
-						    <div id="menu3" class="tab-pane fade">
-						      <h3>Menu 3</h3>
-						      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+						    <div id="iklan" class="tab-pane fade">
+						      <div class="col-md-12">
+								<h3 style="margin-bottom:15px;">Request Iklan</h3>
+									<?php echo form_open_multipart(base_url("owner/request_iklan"), 'method="POST"') ?>
+							    		<div class="row">
+								        	<div class="col-md-5"> Kirim email untuk pemasangan iklan <br></div>
+								        </div>
+								        <div class="row">
+								        	<div class="col-md-2 ">
+								        		<button class="btn btn-large btn btn-success center  " type="submit" name="tambahdata" >Kirim email</button>
+								        	</div>
+								        </div>
+								    <?php echo form_close(); ?>
+								</div>
 						    </div>    
 						</div>
 					</div>	

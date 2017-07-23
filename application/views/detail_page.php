@@ -126,7 +126,7 @@
 						<hr />
 						<div class="row">
 							<div class="col-md-3">Harga</div>
-							<div class="col-md-3 col-md-offset-6" style="padding-bottom:10px;"><strong><?php echo $row->total_bayar; $total1= $row->total_bayar;?></strong></div>
+							<div class="col-md-3 col-md-offset-6" style="padding-bottom:10px;"><strong><?php echo number_format($row->total_bayar); $total1= $row->total_bayar;?></strong></div>
 						</div>
 						<?php } ?>
 					</div>
@@ -151,7 +151,7 @@
 									<tr>
 				    					<td class="text-center"><?php echo $row->nama_makanan; ?></td>
 				    					<td class="text-center"><?php echo $row->jumlah_makanan; ?></td>
-				    					<td class="text-center"><?php echo $row->sub_harga_makanan; ?></td>
+				    					<td class="text-center"><?php echo number_format($row->sub_harga_makanan); ?></td>
 				    				</tr>
 								<?php } ?>
 							<?php }else{ ?>
@@ -165,7 +165,7 @@
 					</div>
 					<div class="row">
 						<div class="col-md-3">Harga</div>
-						<div class="col-md-3 col-md-offset-6" style="padding-bottom:10px;"><strong><?php echo $total; ?></strong></div>
+						<div class="col-md-3 col-md-offset-6" style="padding-bottom:10px;"><strong><?php echo number_format($total); ?></strong></div>
 					</div>
 				</div>
 			</div>
@@ -177,7 +177,7 @@
 						<h3>Total yang harus di bayar</h3>
 					</div>
 					<div class="col-md-2 col-md-offset-6">
-						<h3><?php echo $total1 ?></h3>
+						<h3><?php echo number_format($total1) ?></h3>
 					</div>
 					<hr />
 				</div>

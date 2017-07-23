@@ -52,7 +52,7 @@
 			
 			<div class="row">
 				<div class="form-group has-feedback register">
-				    <input type="text" class="form-control" placeholder="Alamat Email" name="email" maxlength="30" value="<?php echo set_value('email'); ?>"/>
+				    <input type="mail" class="form-control" placeholder="Alamat Email" name="email" maxlength="30" value="<?php echo set_value('email'); ?>"/>
 				    <i class="glyphicon glyphicon-envelope form-control-feedback"></i>
 				</div>
 			</div>

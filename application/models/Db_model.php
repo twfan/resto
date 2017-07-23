@@ -6,6 +6,34 @@ class Db_model extends CI_Model{
 		parent::__construct();
 	}
 
+
+	public function getall($table,$bulan)
+	{
+		/*$hasil_data = $this->db->get($table);
+		return $hasil_data->result();*/
+		/*"SELECT date_format(tanggal, '%W') as hari, COUNT(date_format(tanggal, '%W')) as jumlah_pesanan FROM $table GROUP BY hari"*/
+		/*$query = "SELECT  STR_TO_DATE(tanggal, '%d/%m/%Y') FROM $table ";*/
+
+
+/*		$query = "SELECT date_format(STR_TO_DATE(tanggal, '%d/%m/%Y'), '%W') as hari,  COUNT(date_format(STR_TO_DATE(tanggal, '%d/%m/%Y'), '%W')) as jumlah_pesanan FROM $table WHERE date_format(STR_TO_DATE(tanggal, '%d/%m/%Y'), '%M')='january' GROUP BY hari ";
+		$hasil = $this->db->query($query);
+		return $hasil->result();*/
+
+		/*$query = "SELECT date_format(STR_TO_DATE(tanggal, '%d/%m/%Y'), '%M') as BULAN FROM $table GROUP BY BULAN ";
+		$hasil = $this->db->query($query);
+		return $hasil->result();*/
+
+			$query = "SELECT date_format(STR_TO_DATE(tanggal, '%d/%m/%Y'), '%M') as BULAN FROM $table GROUP BY BULAN ";
+		$hasil = $this->db->query($query);
+		return $hasil->result();
+	}
+
+	public function getall_byMonth($table)
+	{
+		$query = "SELECT date_format(STR_TO_DATE(tanggal, '%d/%m/%Y'), '%W') as hari,  COUNT(date_format(STR_TO_DATE(tanggal, '%d/%m/%Y'), '%W')) as jumlah_pesanan FROM $table WHERE date_format(STR_TO_DATE(tanggal, '%d/%m/%Y'), '%M')=$month GROUP BY hari ";
+		$hasil = $this->db->query($query);
+		return $hasil->result();
+	}
 	function cek_email($email)
 	{
 		$email_user = $email;
@@ -57,6 +85,17 @@ class Db_model extends CI_Model{
 	{
 		$hasil_data = $this->db->get_where($table, array('kode_resto' => $parameter));
 		if($hasil_data->num_rows() >= 10)
+		{
+			return "tidak bisa";
+		}else
+		{
+			return "bisa";
+		}
+	}
+	function read_jumlah_iklan_batasan($table)
+	{
+		$hasil_data = $this->db->get_where($table);
+		if($hasil_data->num_rows() >= 3)
 		{
 			return "tidak bisa";
 		}else

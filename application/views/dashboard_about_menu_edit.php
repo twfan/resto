@@ -87,6 +87,12 @@
 			<div class="row">
 				<a href="<?= base_url('owner/dashboard_about') ?>"><div class="col-md-12 menu"><li >About</li></div></a>
 			</div>
+			<div class="row">
+				<a href="<?= base_url('owner/upgrade_akun') ?>"><div class="col-md-12 menu"><li >Upgrade Akun</li></div></a>
+			</div>
+			<div class="row">
+				<a href="<?= base_url('owner/pemasukan') ?>"><div class="col-md-12 menu"><li >Pemasukan Resto </li></div></a>
+			</div>
 		</div>
 		<div class="col-md-10 content_panel " style="min-height: 100%;">
 				<div class="col-md-12">
@@ -272,7 +278,7 @@
 						    					<?php foreach ($record_menu as $row):?>
 								    				<tr>
 								    					<td><?php echo $row->nama_makanan; ?></td>
-								    					<td><?php echo $row->harga; ?></td>
+								    					<td><?php echo number_format($row->harga);?></td>
 								    					<td><img src="<?php echo $row->foto_makanan; ?>" style="width:100px;height:100px;"></td>
 								    					<td><a href="<?php echo base_url('owner/edit_menu/'.$row->kode_menu) ?>">Edit</a> | <a href="<?php echo base_url('owner/hapus_makanan/'.$row->kode_menu) ?>">Hapus</a></td>
 								    				</tr>

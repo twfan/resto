@@ -5,6 +5,19 @@ class Model_pesanan_pelanggan extends CI_Model{
 	function __construct(){
 		parent::__construct();
 	}
+
+	function cari_data_notif(){
+		$query = "SELECT id_pesanan, id_pelanggan ,timestampdiff(MINUTE,curtime(),jam_acara) as selisih, notif FROM `pesanan_pelanggan` WHERE `tanggal_acara`= curdate() AND `notif`=0";
+		$sql = $this->db->query($query);
+		return $sql->result();
+	}
+
+	function update_notif($idpesanan,$data)
+	{
+		$this->db->where('id_pesanan',$idpesanan);
+		$this->db->update('pesanan_pelanggan',$data);
+	}
+
 	function tambah_data($data){
 		$this->db->insert('pesanan_pelanggan',$data);
 	}
@@ -14,6 +27,13 @@ class Model_pesanan_pelanggan extends CI_Model{
 		$query = "SELECT kode_resto FROM `pesanan_pelanggan` WHERE id_pesanan='$id_pesanan'";
 		$sql = $this->db->query($query);
 		return $sql->result();
+	}
+	public function baca_id_resto($id_pesanan)
+	{
+		$query = "SELECT kode_resto FROM `pesanan_pelanggan` WHERE id_pesanan='$id_pesanan'";
+		$sql = $this->db->query($query);
+		$data = $sql->result();
+		return $data[0]->kode_resto;
 	}
 
 	
@@ -52,6 +72,13 @@ class Model_pesanan_pelanggan extends CI_Model{
 	{
 		$query = $this->db->query("SELECT `total_bayar` FROM `pesanan_pelanggan` WHERE `id_pesanan`='$id_pesanan'");
 		return $query->result();
+	}
+
+	public function baca_bayar($id_pesanan)
+	{
+		$query = $this->db->query("SELECT `total_bayar` FROM `pesanan_pelanggan` WHERE `id_pesanan`='$id_pesanan'");
+		$data = $query->result();
+		return $data[0]->total_bayar;
 	}
 
 	public function update_bukti($id_pesanan,$data)

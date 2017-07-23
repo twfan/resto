@@ -141,9 +141,50 @@
 			<div class="row">
 				<a href="<?= base_url('owner/dashboard_about') ?>"><div class="col-md-12 menu"><li >About</li></div></a>
 			</div>
+			<div class="row">
+				<a href="<?= base_url('owner/upgrade_akun') ?>"><div class="col-md-12 menu"><li >Upgrade Akun</li></div></a>
+			</div>
+			
+			<div class="row">
+				<a href="<?= base_url('owner/pemasukan') ?>"><div class="col-md-12 menu"><li >Pemasukan Resto </li></div></a>
+			</div>
 		</div>
 		<div class="col-md-10 content_panel " style="min-height: 100%;">
 			<div class="col-md-12">
+
+				<?php echo form_open_multipart(base_url("owner/index"), 'method="POST"') ?>
+		    		<div class="row">
+			        	<div class="form-group has-feedback">
+						<select class="combobox form-control" name="bulan" prompt="Bulan">
+							<option value="" disabled selected>Bulan</option>
+
+							<!-- DIBERI BATAS SESUAI KAPASITAS YANG DISETTING -->
+						
+							
+							<option value="January">JAN</option>
+							<option value="February">FEB</option>
+							<option value="March">MAR</option>
+							<option value="April">APR</option>
+							<option value="May">MEI</option>
+							<option value="June">JUN</option>
+							<option value="July">JUL</option>
+							<option value="August">AGU</option>
+							<option value="September">SEPT</option>
+							<option value="October">OKT</option>
+							<option value="November">NOV</option>
+							<option value="December">DES</option>
+							
+						</select>
+					</div>
+			        </div>
+			        <div class="row">
+			        	<div class="col-md-2"></div>
+			        	<div class="col-md-2 ">
+			        		<button class="btn btn-large btn btn-success center  " type="submit" name="tambahdata" >Cari</button>
+			        	</div>
+			        </div>
+			    <?php echo form_close(); ?>
+				
 			    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 			</div>
 			

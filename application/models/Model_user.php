@@ -13,6 +13,22 @@ class Model_user extends CI_Model{
 		return $sql->result();
 	}
 
+	public function baca_telfon_pelanggan_1($idpelanggan)
+	{
+		$query = "SELECT no_handphone FROM `user_login` WHERE id_user='$idpelanggan'";
+		$sql = $this->db->query($query);
+		$data = $sql->result();
+		return $data[0]->no_handphone;
+	}
+
+	public function baca_nama($idpelanggan)
+	{
+		$query = "SELECT nama_user FROM `user_login` WHERE id_user='$idpelanggan'";
+		$sql = $this->db->query($query);
+		$data = $sql->result();
+		return $data[0]->nama_user;
+	}
+
 	public function baca_data_table($table,$kolom,$data_pembanding)
 	{
 		$hasil_data =  $this->db->get_where($table, array($kolom => $data_pembanding));

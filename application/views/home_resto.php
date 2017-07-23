@@ -102,7 +102,7 @@
 			</div> 
 	<div class="row testing" style="margin-top:25px;">
 		<div class="col-md-8" style="margin-left:20px;" >
-			<div class="row" style="background-color:white;border-radius:10px;">
+			<div class="row" style="background-color:white;border-radius:10px;margin-bottom:10px;">
 				<div class="col-md-12">
 					<div class="row">
 						<div class="col-md-4 pesan"><h1>Pesan meja</h1></div>
@@ -140,7 +140,7 @@
 												<option value="18">18 Orang</option>
 												<option value="19">19 Orang</option>
 												<option value="20">20 Orang</option>
-												<option value="pesta">Pesta besar</option>
+												
 											</select>
 										</div>
 									</div>
@@ -153,18 +153,18 @@
 									<div class="col-md-3">
 										<select class="combobox form-control"  name="jam_acara" prompt="Jam acara berlangsung">
 											<option value="" disabled selected>Jam acara</option>
-											<option value="10.00 ">10.00 AM</option>
-											<option value="11.00 ">11.00 AM</option>
-											<option value="12.00 ">12.00 AM</option>
-											<option value="13.00 ">13.00 PM</option>
-											<option value="14.00 ">14.00 PM</option>
-											<option value="15.00 ">15.00 PM</option>
-											<option value="16.00 ">16.00 PM</option>
-											<option value="17.00 ">17.00 PM</option>
-											<option value="18.00 ">18.00 PM</option>
-											<option value="19.00 ">19.00 PM</option>
-											<option value="20.00 ">20.00 PM</option>
-											<option value="21.00 ">21.00 PM</option>
+											<option value="10:00:00 ">10:00 AM</option>
+											<option value="11:00:00 ">11:00 AM</option>
+											<option value="12:00:00 ">12:00 AM</option>
+											<option value="13:00:00 ">13:00 PM</option>
+											<option value="14:00:00 ">14:00 PM</option>
+											<option value="15:00:00 ">15:00 PM</option>
+											<option value="16:00:00 ">16:00 PM</option>
+											<option value="17:00:00 ">17:00 PM</option>
+											<option value="18:00:00 ">18:00 PM</option>
+											<option value="19:00:00 ">19:00 PM</option>
+											<option value="20:00:00 ">20:00 PM</option>
+											<option value="21:00:00 ">21:00 PM</option>
 										</select>
 									</div>
 
@@ -177,6 +177,7 @@
 					</div>	
 				</div>
 			</div>
+			
 			<div class="row" style="background-color:white;margin-top:10px;margin-bottom:10px;border-radius:10px;">
 				
 					<?php if(!empty($record_foto)){?>
@@ -347,9 +348,7 @@
 					<div class="row" style="padding-bottom:20px;">
 						<div class="col-md-6">Jadwal buka</div><div class="col-md-6"><?php echo $row->jadwal_buka; ?></div>
 					</div>
-					<div class="row" style="padding-bottom:20px;">
-						<div class="col-md-6">Tipe Sajian</div><div class="col-md-6"><?php echo $row->tipe_sajian; ?></div>
-					</div>
+					
 					<div class="row" style="padding-bottom:20px;">
 						<div class="col-md-6">Kisaran harga</div><div class="col-md-6"><?php echo $row->harga_terendah; echo " - "; echo $row->harga_tertinggi?></div>
 					</div>

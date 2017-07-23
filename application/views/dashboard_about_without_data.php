@@ -2,9 +2,15 @@
 <head>
 	<title></title>
  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.min.css">
+ <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugin/form/chosen.css">
  <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery/jquery-1.11.3.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
-
+<script src="<?php echo base_url(); ?>assets/plugin/form/chosen.jquery.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#fmasakan").chosen();
+});
+</script>
 <style type="text/css">
 
 	.header{
@@ -87,6 +93,12 @@
 			<div class="row">
 				<a href="<?= base_url('owner/dashboard_about') ?>"><div class="col-md-12 menu"><li >About</li></div></a>
 			</div>
+			<div class="row">
+				<a href="<?= base_url('owner/upgrade_akun') ?>"><div class="col-md-12 menu"><li >Upgrade Akun</li></div></a>
+			</div>
+			<div class="row">
+				<a href="<?= base_url('owner/pemasukan') ?>"><div class="col-md-12 menu"><li >Pemasukan Resto </li></div></a>
+			</div>
 		</div>
 		<div class="col-md-10 content_panel " style="min-height: 100%;">
 				<div class="col-md-12">
@@ -133,7 +145,23 @@
 								        	</div>
 								        </div>
 							        </div>
-							        <div class="row">
+							       
+							        <div class="row ">
+							        	<div class="col-md-2">Kota Resto</div>
+								        <div class="col-md-4">
+								        	<div class="form-group">
+								        		<select class=" form-control" name="kota" style="" prompt="">
+												<option value="" disabled selected>Kota</option>
+												<option value="JKT"> JAKARTA</option>
+												<option value="SBY"> SURABAYA</option>
+												<option value="MDN"> MEDAN</option>
+												<option value="BDG"> BANDUNG</option>
+												<option value="SMG"> SEMARANG</option>
+											</select>
+								        	</div>
+								        </div>
+							        </div>
+							        <div class="row ">
 							        	<div class="col-md-2"> No telfon Resto</div>
 								        <div class="col-md-4">
 								        	<div class="form-group">
@@ -153,7 +181,24 @@
 							        	<div class="col-md-2"> Tipe sajian</div>
 								        <div class="col-md-4">
 								        	<div class="form-group">
-								        		<textarea class="form-control" rows="4" cols="74" name="sajian"  placeholder="Sajian makanan yang disediakans"></textarea>
+								        		<select id='fmasakan' multiple class="chosen-select col-md-12" name="masakan">
+								        			<option value="seafood">Seafood</option>
+								        			<option value="chinese">Chinese food</option>
+								        			<option value="japanes">Japanese food</option>
+								        			<option value="local">Local food</option>
+								        		</select>
+								        	</div>
+								        </div>
+							        </div>
+							         <div class="row">
+							        	<div class="col-md-2"> Halal</div>
+								        <div class="col-md-4">
+								        	<div class="form-group">
+								      
+								        			<input type="radio" name="halal" value="1" checked=""> Ya</input>
+								        	
+								        			<input type="radio" name="halal" value="0" > Tidak</input>
+								        	
 								        	</div>
 								        </div>
 							        </div>

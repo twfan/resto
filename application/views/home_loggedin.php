@@ -174,44 +174,40 @@
 
 	<div class="row">
 		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-		  <!-- Indicators -->
-		  <ol class="carousel-indicators">
-		    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-		    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-		    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-		  </ol>
-
-		  <!-- Wrapper for slides -->
-		  <div class="carousel-inner" role="listbox">
-		    <div class="item active">
-		      <img src="<?php echo base_url(); ?>assets/img/banner/1.jpg" alt="Testing 1">
-		      <div class="carousel-caption">
-		        Gambar 1
-		      </div>
-		    </div>
-		    <div class="item">
-		      <img src="<?php echo base_url(); ?>assets/img/banner/2.jpg" alt="Testing 2">
-		      <div class="carousel-caption">
-		       Gambar 2
-		      </div>
-		    </div>
-		    <div class="item">
-		      <img src="<?php echo base_url(); ?>assets/img/banner/3.jpg" alt="Testing 3">
-		      <div class="carousel-caption">
-		      Gambar 3
-		      </div>
-		    </div>
-		  </div>
-
-		  <!-- Controls -->
-		  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-		    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-		    <span class="sr-only">Previous</span>
-		  </a>
-		  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-		    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-		    <span class="sr-only">Next</span>
-		  </a>
+		  	<ol class="carousel-indicators">
+		  	<?php for ($i=0; $i <$jumlah_iklan ; $i++) { 
+		  		if($i==0)
+		  		{
+		  			echo '<li data-target="#carousel-example-generic" data-slide-to="$i" class="active"></li>';
+		  		}else
+		  		{
+		  			echo '<li data-target="#carousel-example-generic" data-slide-to="$i" ></li>';
+		  		}
+		  	} ?>
+		  	</ol>
+			<div class="carousel-inner" role="listbox">
+			  	<?php $ctr=1; ?>
+			  	<?php foreach ($iklan as $slide) {?>
+			  	<?php if ($ctr==1){ ?>
+			  	<div class="item active">
+			  	<?php }else{ ?>
+		  		 <div class="item">
+		  		 	<?php } ?>
+			      <img src="<?php echo $slide ?>" alt="Testing 1"><!-- 1500x600 -->
+			      <div class="carousel-caption">
+			      </div>
+			    </div>
+			  	<?php $ctr++;} ?>
+			  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+			    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+			    <span class="sr-only">Previous</span>
+			  </a>
+			  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+			    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+			    <span class="sr-only">Next</span>
+			  </a>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -340,9 +336,18 @@
 		                </div>
 		                <div class="col-md-3 text-center">
 		                	
-		                	<?php foreach ($record_vote as $row2) {?>
+		                	
+		                	<?php foreach ($record_rating as $row2) {?>
 			                	<?php if($row->kode_resto==$row2->id_resto) {?>
-			                		<h2> <?php echo $row2->total_vote	 ?> <small> votes </small></h2>
+			                		<h2> <?php echo floor($row2->rating);	 ?> <small> Rate </small></h2>
+			                		
+			                	<?php }?>
+		                	<?php } ?>
+
+		                	<?php foreach ($record_vote as $row1) {?>
+		                		<?php if($row->kode_resto==$row1->id_resto) {?>
+			                		<h5> Dari <?php echo $row1->total_vote; ?> ransaksi</h5>
+			                		
 			                	<?php }?>
 		                	<?php } ?>
 		                    

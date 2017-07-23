@@ -24,6 +24,7 @@
 	<script src="<?php echo base_url(); ?>assets/plugin/datepicker/js/bootstrap-datepicker.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/pgwslideshow/pgwslideshow.js"></script>
 	<script src="<?php echo base_url(); ?>assets/plugin/sweetalert-master/dist/sweetalert.min.js"></script>
+	<script src="<?php echo base_url(); ?>assets/plugin/numeraljs/min/numeral.min.js"></script>
 
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -97,12 +98,14 @@
 
     function generate_total_harga() {
     	var total_harga = 0
+    	var string = ""
     	$('.data-makanan').find('tr').each(function() {
     		var qty = parseInt($(this).find('.qty').val())
     		var harga = parseInt($(this).find('.harga').html())
     		total_harga += qty * harga
+    		string = numeral(total_harga).format('0,0');
     	})
-    	$('.total_bayar').html(total_harga)
+    	$('.total_bayar').html(string)
     }
 
     
@@ -211,9 +214,7 @@
 					<div class="row" style="padding-bottom:20px;">
 						<div class="col-md-6">Jadwal buka</div><div class="col-md-6"><?php echo $row->jadwal_buka; ?></div>
 					</div>
-					<div class="row" style="padding-bottom:20px;">
-						<div class="col-md-6">Tipe Sajian</div><div class="col-md-6"><?php echo $row->tipe_sajian; ?></div>
-					</div>
+					
 					<div class="row" style="padding-bottom:20px;">
 						<div class="col-md-6">Kisaran harga</div><div class="col-md-6"><?php echo $row->harga_terendah; echo " - "; echo $row->harga_tertinggi?></div>
 					</div>

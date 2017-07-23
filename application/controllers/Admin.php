@@ -148,6 +148,63 @@ class Admin extends CI_Controller {
 		$data_pesanan=array(
 			'status_pemesanan' => 'selesai'
 		);
+
+		$this->load->model('Model_pesanan_pelanggan');
+		$this->load->model('Model_saldo_resto');
+		$this->load->model('Model_saldo_resto_detail');
+		$this->load->model('Model_saldo_website');
+		$this->load->model('Model_saldo_website_detail');
+		$this->load->model('Model_pesanan_pelanggan');
+		
+
+		$bayar = $this->Model_pesanan_pelanggan->baca_bayar($idpesanan);
+		$koderesto = $this->Model_pesanan_pelanggan->baca_id_resto($idpesanan);
+		
+		$potongan_website = ((10/100)*$bayar);
+		
+		$jumlahdata = $this->Model_saldo_website_detail->jumlah_data();
+		$idsaldodetail = 'ISWD'.($jumlahdata+1);
+		$data4 = array(
+			'id_saldo_website_detail' => $idsaldodetail,
+			'id_pesanan' => $idpesanan,
+			'tanggal_terima' => date("Y-m-d"),
+			'jumlah_terima' => $potongan_website
+		);
+		$this->Model_saldo_website_detail->tambah_data_terima_saldo($data4);
+
+
+		$hasil_model = $this->Model_saldo_website->baca_saldo();
+		$saldo_website = $hasil_model[0]->saldo;
+		$total_saldo_website = $saldo_website + $potongan_website;
+		$data_saldo = array(
+				'saldo' => $total_saldo_website
+		);
+		$this->Model_saldo_website->update_saldo($data_saldo);
+
+
+		
+		$total_pendapatan_resto = $bayar - $potongan_website;
+		$jumlahdata = $this->Model_saldo_resto_detail->jumlah_data();
+		$idsaldodetail = 'ISRD'.($jumlahdata+1);
+		$data3 = array(
+			'id_saldo_resto_detail' => $idsaldodetail,
+			'id_resto' => $koderesto,
+			'id_pesanan' => $idpesanan,
+			'jumlah_terima_saldo' => $total_pendapatan_resto,
+			'status' => 1
+		);
+		$this->Model_saldo_resto_detail->tambah_data($data3);
+
+
+		$saldo_resto = $this->Model_saldo_resto->baca_saldo($koderesto);
+		$total_saldo_resto = $saldo_resto + $total_pendapatan_resto;
+		$data_saldo = array(
+				'saldo' => $total_saldo_resto
+		);
+		$this->Model_saldo_resto->update_saldo($koderesto,$data_saldo);
+
+
+
 		$this->Model_pembayaran_detail->update_status_terima($idpesanan,$data_detail,$data_pesanan);
 		redirect('admin');
 	}
@@ -199,6 +256,7 @@ class Admin extends CI_Controller {
 		foreach ($hasil_telp_pelanggan as $row) {
 			$hp_pelanggan = $row->no_handphone;
 		}
+
 		$message=urlencode("Hai, top up anda telah berhasil. Saldo anda sekarang dapat digunakan untuk melakukan transaksi. Terimakasih. *pesan-meja-stts.com");
 		$curlHandle = curl_init();
 		$url="http://128.199.232.241/sms/smsreguler.php?username=taufanerlangga95&key=69e376c0d072538ba7c068a48426785e&number=$hp_pelanggan&message=$message";
@@ -211,6 +269,69 @@ class Admin extends CI_Controller {
 
 		redirect('admin/home');
 	}
+
+	public function penarikan()
+	{
+		$this->load->model('Model_penarikan_saldo');
+		$data = array(
+			'record' =>$this->Model_penarikan_saldo->get_data()
+			);
+		$this->load->view('admin_konfirmasi_penarikan',$data);
+	}
+	public function konfirmasi_penarikan($id)
+	{
+
+
+		$this->load->model('Model_penarikan_saldo');
+		$this->load->model('Model_owner');
+		$this->load->model('Model_saldo_resto');
+		$this->load->model('Model_saldo_resto_detail');
+		
+
+		$data  = $this->Model_penarikan_saldo->get_databycode($id);
+		$idresto = $data[0]->id_resto;
+		$jumlah_penarikan = $data[0]->jumlah_penarikan;
+		$bank = $data[0]->bank;
+		$rekening = $data[0]->rekening;
+		$noresto = $this->Model_owner->baca_telfon_resto($idresto);
+		$telfonresto = $noresto[0]->no_telp;
+
+		$saldo = $this->Model_saldo_resto->baca_saldo($idresto);
+		$saldoakhir = $saldo - $jumlah_penarikan;
+
+		$jumlahdata = $this->Model_saldo_resto_detail->jumlah_data();
+		$idsaldodetail = 'ISRD'.($jumlahdata+1);
+		$data2 = array(
+			'id_saldo_resto_detail' => $idsaldodetail,
+			'id_resto' => $idresto,
+			'id_pesanan' => 'TARIK_SALDO',
+			'jumlah_terima_saldo' => -$jumlah_penarikan,
+			'status' => 1
+		);
+		$this->Model_saldo_resto_detail->tambah_data($data2);
+
+		$data1 = array(
+			'saldo' => $saldoakhir
+		);
+		$this->Model_saldo_resto->update_saldo($idresto,$data1);
+
+		$message=urlencode("****PERMINTAAN PENARIKAN SALDO SELESAI**** Permintaan penarikan saldo restaurant anda dengan kode penarikan ".$id. " dengan jumlah Rp. ".number_format($jumlah_penarikan).",00 dikirim ke bank ".$bank." ke nomor rekening ".$rekening." telah selesai terima kasih. *pesan-meja-stts.com");
+		$curlHandle = curl_init();
+		$url="http://128.199.232.241/sms/smsreguler.php?username=taufanerlangga95&key=69e376c0d072538ba7c068a48426785e&number=$telfonresto&message=$message";
+		curl_setopt($curlHandle, CURLOPT_URL,$url);
+		curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+		curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curlHandle, CURLOPT_TIMEOUT,120);
+		$hasil = curl_exec($curlHandle);
+		curl_close($curlHandle);
+
+		$data = array(
+			'status' => 1
+		);
+		$this->Model_penarikan_saldo->update_databyid($id,$data);
+		redirect('admin/penarikan');
+	}
+
 
 	
 	

@@ -14,6 +14,11 @@ class Model_saldo_resto_detail extends CI_Model{
 		$this->db->insert('user_saldo_resto_detail', $data);
 	}
 
+	public function get_data($koderesto)
+	{
+		$hasil_data = $this->db->get_where('user_saldo_resto_detail', array('id_resto' => $koderesto));
+		return $hasil_data->result();
+	}
 }
 
 

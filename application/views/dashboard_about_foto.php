@@ -88,6 +88,12 @@
 			<div class="row">
 				<a href="<?= base_url('owner/dashboard_about') ?>"><div class="col-md-12 menu"><li >About</li></div></a>
 			</div>
+			<div class="row">
+				<a href="<?= base_url('owner/upgrade_akun') ?>"><div class="col-md-12 menu"><li >Upgrade Akun</li></div></a>
+			</div>
+			<div class="row">
+				<a href="<?= base_url('owner/pemasukan') ?>"><div class="col-md-12 menu"><li >Pemasukan Resto </li></div></a>
+			</div>
 		</div>
 		<div class="col-md-10 content_panel " style="min-height: 100%;">
 				<div class="col-md-12">

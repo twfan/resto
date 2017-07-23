@@ -81,51 +81,8 @@
 	<div style="color:red;font-style:italic;margin-top:10px;margin-bottom:25px;">	<?php echo $this->session->flashdata('pesanan_berhasil'); ?></div>
 	
 
-
-
-
-
-
-
-
-
-
-
-
-	
-
 <br>
 <br>
-
-
-	
-
-
-<!-- END OF SLIDER -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- CONTENT -->
-
-
 
 
  
@@ -141,9 +98,43 @@
     		<div class="row form search">
 				<div class="container" style="background-color:white;margin-bottom:20px;width:auto;" >
 						<div class="row">
-							<div class="col-md-12 text-center" style=""><h3>Search</h3></div>
+							<div class="col-md-12 text-center" style=""><h3>Filter</h3></div>
+						</div>
+						<?php echo form_open(base_url('utama/result')); ?>
+						<div class="row">
+							<div class="col-md-12">Kota</div>
+							<div class="col-md-12">
+								<div class="form-group">
+									<input type="checkbox" name="kota[]" value="JKT">JAKARTA </input><br>
+									<input type="checkbox" name="kota[]" value="SBY">SURABAYA </input><br>
+									<input type="checkbox" name="kota[]" value="MDN">MEDAN </input><br>
+									<input type="checkbox" name="kota[]" value="BDG">BANDUNG </input><br>
+									<input type="checkbox" name="kota[]" value="SMG">SEMARANG </input><br>
+								</div>
+							</div>
 						</div>
 						<div class="row">
+							<div class="col-md-12"></div>
+							<div class="col-md-12">
+								<div class="form-group">
+									<input type="checkbox" name="halal[]" value="1">Halal </input><br>
+									<input type="checkbox" name="halal[]" value="0">Non-Halal </input><br>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">Tipe masakan</div>
+							<div class="col-md-12">
+								<div class="form-group">
+									<input type="checkbox" name="masakan[]" value="seafood">Seafood</input><br>
+									<input type="checkbox" name="masakan[]" value="chinese">Chinese food</input><br>
+									<input type="checkbox" name="masakan[]" value="japanes">Japanese food</input><br>
+									<input type="checkbox" name="masakan[]" value="local">Local food </input><br>
+								</div>
+							</div>
+						</div>
+
+						<!-- <div class="row">
 							<div class="col-md-12" >
 								<form action="<?php echo base_url('utama/proses_search');?>" method="POST">
 									<div class="form-group has-feedback register ">
@@ -152,7 +143,7 @@
 						            </div>
 						             <div class="form-group has-feedback register">
 										<select class="combobox form-control" name="jam_acara"style="" prompt="Jumlah kursi yang dipesan">
-											<!-- INI NANTI DIKASI PENGECEKKAN JAM BUKA  -->
+											
 											<option value="" disabled selected>Jam acara</option>
 											<option value="10">10.00 AM</option>
 											<option value="11">11.00 AM</option>
@@ -172,7 +163,7 @@
 										<select class="combobox form-control" name="jumlah_kursi" prompt="Jumlah kursi yang dipesan">
 											<option value="" disabled selected>Jumlah kursi</option>
 
-											<!-- DIBERI BATAS SESUAI KAPASITAS YANG DISETTING -->
+											
 											<option value="2">2 Orang</option>
 													<option value="3">3 Orang</option>
 													<option value="4">4 Orang</option>
@@ -210,9 +201,12 @@
 							
 							
 							
-						</div>
+						</div> -->
 						
-					
+					<div class="form-group has-feedback register ">
+							            <button class="btn btn-large btn-block btn-success paling bawah" type="submit" name="daftar">Cari</button>      	
+							        </div>
+					<?php echo form_close(); ?>
 				</div>
 				
 			</div>
@@ -222,7 +216,7 @@
     		
 
 	        <div class="list-group">
-
+	        	
 	        	<?php if(!empty($record_resto)): ?>
 					<?php foreach ($record_resto as $row):?>
 			    		<a href="<?php echo base_url('utama/home_resto/'). '/'.$row->kode_resto; ?>" class="list-group-item">

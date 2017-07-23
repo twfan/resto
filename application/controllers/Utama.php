@@ -11,6 +11,40 @@ class Utama extends CI_Controller {
 		$this->load->model('Db_model');
 	}
 
+
+	public function cron()
+	{
+		$this->load->model('Model_pesanan_pelanggan');
+		$this->load->model('Model_user');
+		$data = $this->Model_pesanan_pelanggan->cari_data_notif();
+		foreach ($data as $row) {
+			$idpelanggan = $row->id_pelanggan;
+			$idpesanan = $row->id_pesanan;
+			$selisih = $row->selisih;
+			if($selisih<60)
+			{
+				/*echo "Kurang dari 1 jam";*/
+				$notelfon = $this->Model_user->baca_telfon_pelanggan_1($idpelanggan);
+				$nama = $this->Model_user-> baca_nama($idpelanggan);
+				$message=urlencode("****REMINDER PESANAN ANDA**** Hai ".  $nama.", anda mempunyai pemesanan meja dengan kode ".$idpesanan." dalam 1 jam kedepan, mohon datang tepat waktu dan tidak terlamabat terima kasih. *pesan-meja-stts.com");
+				$curlHandle = curl_init();
+				$url="http://128.199.232.241/sms/smsreguler.php?username=taufanerlangga95&key=69e376c0d072538ba7c068a48426785e&number=$notelfon&message=$message";
+				curl_setopt($curlHandle, CURLOPT_URL,$url);
+				curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+				curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($curlHandle, CURLOPT_TIMEOUT,120);
+				$hasil = curl_exec($curlHandle);
+				curl_close($curlHandle);
+
+				$data = array(
+					'notif' => 1
+				);
+				$this->Model_pesanan_pelanggan->update_notif($idpesanan,$data);
+			}
+		}
+	}
+
+
 	public function fancy()
 	{
 		$this->load->view('view_fancybox');
@@ -42,7 +76,7 @@ class Utama extends CI_Controller {
 				'id_pesanan' => $idpesanan,
 				'record_resto' =>  $this->Db_model->cari_data('about_resto',$kode_resto),
 				'record_foto' => $this->Db_model->cari_data('foto_resto',$kode_resto),
-				'record_review' => $this->Model_review->baca_data_review()
+				'record_review' => $this->Model_review->baca_data_review($kode_resto)
 			);
 			$this->load->view('pesan_makanan',$data);
 		}else
@@ -165,7 +199,10 @@ class Utama extends CI_Controller {
 				);
 				$this->Model_saldo->update_saldo($idpelanggan,$data1);
 				$this->load->model('Model_saldo_resto');
+				$this->load->model('Model_owner');
 				$this->load->model('Model_saldo_resto_detail');
+				$this->load->model('Model_saldo_website');
+				$this->load->model('Model_saldo_website_detail');
 				$this->load->model('Model_pembayaran_detail');
 				
 				$jumlahdata = $this->Model_pembayaran_detail->jumlah_data();
@@ -202,21 +239,11 @@ class Utama extends CI_Controller {
 				$this->Model_saldo_resto_detail->tambah_data($data3);
 				
 
-				//SALDO WEBSITE
-
-				$this->load->model('Model_saldo_website');
-				$hasil_model = $this->Model_saldo_website->baca_saldo();
-				foreach ($hasil_model as $row) {
-					$saldo_website = $row->saldo;
-				}
-				$total_saldo_website = $saldo_website + $potongan_website;
-				$data_saldo = array(
-						'saldo' => $total_saldo_website
-				);
-				$this->Model_saldo_website->update_saldo($data_saldo);
-
-
-				$this->load->model('Model_saldo_website_detail');
+				$bayar = $this->Model_pesanan_pelanggan->baca_bayar($idpesanan);
+				$koderesto = $this->Model_pesanan_pelanggan->baca_id_resto($idpesanan);
+				
+				$potongan_website = ((10/100)*$bayar);
+				
 				$jumlahdata = $this->Model_saldo_website_detail->jumlah_data();
 				$idsaldodetail = 'ISWD'.($jumlahdata+1);
 				$data4 = array(
@@ -226,6 +253,39 @@ class Utama extends CI_Controller {
 					'jumlah_terima' => $potongan_website
 				);
 				$this->Model_saldo_website_detail->tambah_data_terima_saldo($data4);
+
+
+				$hasil_model = $this->Model_saldo_website->baca_saldo();
+				$saldo_website = $hasil_model[0]->saldo;
+				$total_saldo_website = $saldo_website + $potongan_website;
+				$data_saldo = array(
+						'saldo' => $total_saldo_website
+				);
+				$this->Model_saldo_website->update_saldo($data_saldo);
+
+
+
+				$saldo_resto = $this->Model_saldo_resto->baca_saldo($koderesto);
+				$total_saldo_resto = $saldo_resto + $total_pendapatan_resto;
+				$data_saldo = array(
+						'saldo' => $total_saldo_resto
+				);
+				$this->Model_saldo_resto->update_saldo($koderesto,$data_saldo);
+
+
+				$tes = $this->Model_owner->baca_telfon_resto($koderesto);
+				$nama = $this->Model_owner->get_nama($koderesto);
+
+				$no_telp_admin = $tes[0]->no_telp;
+				$message=urlencode("****MENDAPATKAN PESANAN**** Hai ".  $nama.", harap membuka user anda dikarenakan ada pesanan yang masuk. Terimakasih. *pesan-meja-stts.com");
+				$curlHandle = curl_init();
+				$url="http://128.199.232.241/sms/smsreguler.php?username=taufanerlangga95&key=69e376c0d072538ba7c068a48426785e&number=$no_telp_admin&message=$message";
+				curl_setopt($curlHandle, CURLOPT_URL,$url);
+				curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+				curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($curlHandle, CURLOPT_TIMEOUT,120);
+				$hasil = curl_exec($curlHandle);
+				curl_close($curlHandle);
 				
 				//AKHIR SALDO WEBSITE
 				$this->session->set_flashdata('pesan','berhasil_bayar');
@@ -337,9 +397,9 @@ class Utama extends CI_Controller {
 					);
 					$this->Model_pesanan_pelanggan->update_bukti($idpesanan,$data_foto);
 					$this->session->set_flashdata('pesan','berhasil_bayar');
-
+					$nama_pelanggan = $this->session->userdata['user_pelanggan'];
 					//SMS PELANGGAN
-					$message=urlencode("Hai, pesanan anda dan pembayaran anda berhasil masuk mohon di tunggu konfirmasi oleh pihak admin. Terimakasih. *pesan-meja-stts.com");
+					$message=urlencode("****PEMBAYARAN PESANAN**** Hai ".$nama_pelanggan.", pesanan anda dengan kode pesanan ". $idpesanan ." dan pembayaran anda menggunakan upload bukti transfer berhasil masuk mohon di tunggu konfirmasi oleh pihak admin. Terimakasih. *pesan-meja-stts.com");
 					$curlHandle = curl_init();
 					$url="http://128.199.232.241/sms/smsreguler.php?username=taufanerlangga95&key=69e376c0d072538ba7c068a48426785e&number=$no_telp_pelanggan&message=$message";
 					curl_setopt($curlHandle, CURLOPT_URL,$url);
@@ -352,7 +412,7 @@ class Utama extends CI_Controller {
 
 					//SMS ADMIN
 					$no_telp_admin = '085732777009';
-					$message=urlencode("Admin, harap membuka user anda dikarenakan ada pembayaran yang sedang berlangsung. Terimakasih. *pesan-meja-stts.com");
+					$message=urlencode("****KONFIRMASI PEMBAYARAN PESANAN**** Admin, harap membuka user anda dikarenakan ada pembayaran yang sedang berlangsung. Terimakasih. *pesan-meja-stts.com");
 					$curlHandle = curl_init();
 					$url="http://128.199.232.241/sms/smsreguler.php?username=taufanerlangga95&key=69e376c0d072538ba7c068a48426785e&number=$no_telp_admin&message=$message";
 					curl_setopt($curlHandle, CURLOPT_URL,$url);
@@ -410,16 +470,45 @@ class Utama extends CI_Controller {
 	public function index()
 	{
 		$this->load->model('Db_model');
+		$this->load->model('Model_review');
+		$this->load->model('Model_iklan');
+		
+	/*	echo "<pre>";
+		var_dump($this->Model_iklan->cek_jumlah_iklan_aktif());
+		echo "</pre>";*/
+
+		if($this->Model_iklan->cek_jumlah_iklan_aktif()>0)
+		{
+			$iklan = [];
+			$tempiklan= $this->Model_iklan->get_iklan_aktif();
+			foreach ($tempiklan as $row) {
+				array_push($iklan, $row->path_iklan);
+			}
+		}else
+		{
+			$iklan = array(
+				"base_url('assets/img/banner/1.jpg')",
+				"base_url('assets/img/banner/2.jpg')",
+				"base_url('assets/img/banner/3.jpg')",
+			);
+			$iklan = array(
+				"assets/img/banner/1.jpg",
+				"assets/img/banner/2.jpg",
+				"assets/img/banner/3.jpg",
+			);
+		}
+		$jumlah_iklan = count($iklan);
 		$data = array(
-			'record_resto' => $this->Db_model->baca_seluruh_table('about_resto')
+				'jumlah_iklan' => $jumlah_iklan,
+				'iklan' => $iklan,
+				'record_resto' => $this->Db_model->baca_seluruh_table('about_resto'),
+				'record_vote' => $this->Model_review->baca_vote(),
+				'record_rating'=> $this->Model_review->baca_rating()
 		);
+		
 		$this->load->view('home',$data);
 	}
 
-	public function home()
-	{
-		redirect("utama/");
-	}
 
 	public function logged_in()
 	{
@@ -427,10 +516,36 @@ class Utama extends CI_Controller {
 		{
 			$this->load->model('Db_model');
 			$this->load->model('Model_review');
+			$this->load->model('Model_iklan');
+
+			if($this->Model_iklan->cek_jumlah_iklan_aktif()>0)
+			{
+				$iklan = [];
+				$tempiklan= $this->Model_iklan->get_iklan_aktif();
+				foreach ($tempiklan as $row) {
+					array_push($iklan, $row->path_iklan);
+				}
+			}else
+			{
+				$iklan = array(
+					"base_url('assets/img/banner/1.jpg')",
+					"base_url('assets/img/banner/2.jpg')",
+					"base_url('assets/img/banner/3.jpg')",
+				);
+				$iklan = array(
+					"assets/img/banner/1.jpg",
+					"assets/img/banner/2.jpg",
+					"assets/img/banner/3.jpg",
+				);
+			}
+			$jumlah_iklan = count($iklan);
 			$hasil = $this->Model_review->baca_vote();
 			$data = array(
+				'jumlah_iklan' => $jumlah_iklan,
+				'iklan' => $iklan,
 				'record_resto' => $this->Db_model->baca_seluruh_table('about_resto'),
-				'record_vote' => $this->Model_review->baca_vote()
+				'record_vote' => $this->Model_review->baca_vote(),
+				'record_rating'=> $this->Model_review->baca_rating()
 			);
 			$this->load->view('home_loggedin',$data);
 		}else
@@ -573,6 +688,7 @@ class Utama extends CI_Controller {
 					'password' =>$password_enc
 					);
 				$this->Db_model->update_data_bener($iduser,'user_login','id_user',$data);
+				$this->session->set_userdata('user_pelanggan', $post['namauser']);
 				$this->session->set_flashdata('berhasil','Update berhasil');
 				redirect('utama/pelanggan_data_diri');
 			}
@@ -762,6 +878,8 @@ class Utama extends CI_Controller {
 	public function simpan_review()
 	{
 		$this->load->model('Db_model');
+		$this->load->model('Model_review');
+		$this->load->model('Model_rating');
 		$post = $this->input->post();
 		$idpelanggan = $this->session->userdata('id_pelanggan');
 		$koderesto = $post['koderesto'];
@@ -776,7 +894,20 @@ class Utama extends CI_Controller {
 			'rating' => $post['rating'],
 			'status' => "TRUE"
 			);
+		
+		
 		$this->Db_model->tambah_data('review_pelanggan',$data);
+
+		$hasil = $this->Model_review->baca_rating();
+		foreach ($hasil as $row) {
+			$koderesto = $row->id_resto;
+			$rating = $row->rating;
+			$this->Model_rating->update_rating($koderesto,$rating);
+		}
+		/*echo "<pre>";
+		var_dump($hasil);
+		echo "</pre>";*/
+
 		$this->session->set_flashdata("terima_kasih","Terima kasih telah memberikan review, review anda akan ditampilkan pada halaman resto ini.");
 		redirect('utama/home_resto/'.$koderesto);
 	}
@@ -848,14 +979,16 @@ class Utama extends CI_Controller {
 			);
 			$this->Model_saldo_detail->request_top_up($data);
 			$this->session->set_flashdata('pesan','berhasil');
-			
+			$total = $topup + $kodeunik;
 
 			//SMS PELANGGAN
 			$hasil_telp_pelanggan = $this->Model_user-> baca_telfon_pelanggan($id_user);
 			foreach ($hasil_telp_pelanggan as $row) {
 				$hp_pelanggan = $row->no_handphone;
 			}
-			$message=urlencode("Hai, diharapkan melakukan pembayaran sesuai dengan yang tertulis di halaman pembayaran dan langsung melakukan konfirmasi kepada admin. Terimakasih. *pesan-meja-stts.com");
+			$nama_pelanggan = $this->session->userdata['user_pelanggan'];
+
+			$message=urlencode("****PERMINTAAN TOP UP PELANGGAN**** Hai ".$nama_pelanggan.", diharapkan melakukan pembayaran untuk kode pesanan ".$id_top_up." dengan total Rp.".number_format($total).",00 dan langsung melakukan konfirmasi kepada admin. Terimakasih. *pesan-meja-stts.com");
 			$curlHandle = curl_init();
 			$url="http://128.199.232.241/sms/smsreguler.php?username=taufanerlangga95&key=69e376c0d072538ba7c068a48426785e&number=$hp_pelanggan&message=$message";
 			curl_setopt($curlHandle, CURLOPT_URL,$url);
@@ -1033,6 +1166,27 @@ class Utama extends CI_Controller {
 			redirect('utama/login');
 		}
 
+	}
+
+	public function result()
+	{
+		$post = $this->input->post();
+		/*echo "<pre>";
+		var_dump($post);
+		echo "</pre>";*/
+		$this->load->model('Model_resto');
+		$this->load->model('Model_pesanan_pelanggan');
+		$this->load->model('Model_review');
+		$data = array(
+						'record_resto' =>$this->Model_resto->filter($post),
+						
+						'record_vote' => $this->Model_review->baca_vote()
+						
+					);
+		$this->load->view('view_search',$data);
+		/*echo "<pre>";
+		var_dump($hasil);
+		echo "</pre>";*/
 	}
 	
 }
